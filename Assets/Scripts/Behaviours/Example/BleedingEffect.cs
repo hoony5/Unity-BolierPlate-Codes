@@ -1,15 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBleedingEffect", menuName = "Effects/Battle/Bleeding")]
+[CreateAssetMenu(fileName = "NewBleedingEffect", menuName = "ScriptableObject/Effects/Battle/Bleeding")]
 public class BleedingEffect : ScriptableObject, IDurationEffect
 {
     [SerializeField] private float tickInterval = 1f;
-    [SerializeField] private string name = "Bleeding"; // Name of the effect
+    [SerializeField] private string effectName = "Bleeding"; // Name of the effect
     [NonSerialized] private float damagePerTick = 10f;
     [NonSerialized] private int effectIndex = -1;
 
-    public string Name => name;
+    public string Name => effectName;
 
     public void SetDamage(float damage)
     {

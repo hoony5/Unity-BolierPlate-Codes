@@ -1,4 +1,5 @@
 ﻿using System;
+using Codice.Client.Commands.CheckIn;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -11,7 +12,8 @@ public class BattleFormulaEditor : Editor
     private SerializedProperty descriptionProp;
     private ReorderableList formulaInfoList;
     private Vector2 descriptionScrollPosition;
-
+    private float propertyWidth = (EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth) * 0.4f;
+    private float labelWidth = EditorGUIUtility.labelWidth;
     private void OnEnable()
     {
         formulaNameProp = serializedObject.FindProperty("formulaName");
@@ -86,7 +88,7 @@ public class BattleFormulaEditor : Editor
                 fontSize = 20
             });
         }
-
+        
         EditorGUILayout.Space(8f);
 
         serializedObject.ApplyModifiedProperties();
@@ -115,28 +117,27 @@ private void DrawFormulaInfoListElement(Rect rect, int index, bool isActive, boo
     SerializedProperty clampRangeVector2Prop = relativeObject.FindProperty("minMaxRange");
 
     // Draw the status name field
-    float labelWidth = EditorGUIUtility.labelWidth;
     EditorGUI.LabelField(rect, "Status Name");
     Rect labelPos = rect;
     rect.x += labelWidth;
-    rect.width = (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+    rect.width = propertyWidth;
     element.objectReferenceValue =
         EditorGUI.ObjectField(rect, element.objectReferenceValue, typeof(BattleFormulaInfo), false);
     rect.x += rect.width + 5;
-    rect.width = (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+    rect.width = propertyWidth;
     EditorGUI.PropertyField(rect, statusNameProp, GUIContent.none);
     rect.x -= labelWidth + rect.width + 5;
-    rect.width = (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+    rect.width = propertyWidth;
 
     // Draw Test Value
     rect.y += EditorGUIUtility.singleLineHeight + 5;
     labelPos.y = rect.y;
     EditorGUI.LabelField(rect, $"{(useInputModeProp.boolValue ? "<color=lime>Input Directly Base Value Mode On</color>" : "<color=yellow>Using Input Directly Base Value Mode ?</color>")}", new GUIStyle(GUI.skin.label){richText = true});
     rect.x += labelWidth;
-    rect.width =  (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+    rect.width =  propertyWidth;
     useInputModeProp.boolValue = EditorGUI.Toggle(rect, useInputModeProp.boolValue);
     rect.x += rect.width;
-    rect.width = (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+    rect.width = propertyWidth;
     if (useInputModeProp.boolValue)
     {
         formulaInfo.baseValue = EditorGUI.FloatField(rect, formulaInfo.baseValue);
@@ -164,7 +165,7 @@ private void DrawFormulaInfoListElement(Rect rect, int index, bool isActive, boo
 
     // Draw the target property field (either a float field or a BattleFormulaInfo field)
     CalculationTargetType calculationTargetType = (CalculationTargetType)calculationTargetTypeProp.enumValueIndex;
-    rect.width = (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+    rect.width = propertyWidth;
     switch (calculationTargetType)
     {
         case CalculationTargetType.UseModifyValue:
@@ -194,7 +195,7 @@ private void DrawFormulaInfoListElement(Rect rect, int index, bool isActive, boo
     if (useClmapProp.boolValue)
     {
         rect.x += rect.width;
-        rect.width = (EditorGUIUtility.currentViewWidth - labelWidth) * 0.4f;
+        rect.width = propertyWidth;
         clampRangeVector2Prop.vector2Value = EditorGUI.Vector2Field(rect, GUIContent.none, clampRangeVector2Prop.vector2Value);   
         rect.x -= rect.width * 0.35f;
     }

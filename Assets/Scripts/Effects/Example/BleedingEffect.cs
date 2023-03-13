@@ -21,7 +21,7 @@ public class BleedingEffect : ScriptableObject, IDurationEffect
         effectIndex = index;
     }
 
-    [ToDo("After creating Formula System, then Update Apply Damage Method")]
+    [ToDo(@"After creating Formula System, then Update Apply Damage Method")]
     public void UpdateEffect(CharacterBehaviour character, float deltaTime)
     {
         if (effectIndex < 0)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,7 +72,10 @@ public class CustomCoroutine : MonoBehaviour
         for (var i = 0; i < _activeCoroutines?.Count; i++)
         {
             CustomCoroutineInternal behaviour = _activeCoroutines[i];
-            ProcessCoroutine(ref behaviour);    
+            if(settings.DebugMode)
+                ProcessDebugCoroutine(ref behaviour);
+            else
+                ProcessCoroutine(ref behaviour);    
         }
     }
     private async Task OnUpdateRoutinesAsync()
@@ -80,7 +84,10 @@ public class CustomCoroutine : MonoBehaviour
         {
             CustomCoroutineInternal behaviour = _activeCoroutines[index];
             await Task.Yield();
-            ProcessCoroutine(ref behaviour);
+            if(settings.DebugMode)
+                ProcessDebugCoroutine(ref behaviour);
+            else
+                ProcessCoroutine(ref behaviour);    
         }
     }
     
@@ -88,7 +95,10 @@ public class CustomCoroutine : MonoBehaviour
     {
         void ParallelBehaviours(CustomCoroutineInternal behaviour)
         {
-            ProcessCoroutine(ref behaviour);
+            if(settings.DebugMode)
+                ProcessDebugCoroutine(ref behaviour);
+            else
+                ProcessCoroutine(ref behaviour);    
         }
 
         Parallel.ForEach(_activeCoroutines, ParallelBehaviours);
@@ -291,6 +301,65 @@ public class CustomCoroutine : MonoBehaviour
 
         return true;
     }
+    bool ProcessDebugCoroutine(ref CustomCoroutineInternal behaviour)
+    {
+        try
+        {
+            do
+            {
+                if (behaviour.Routine is null)
+                    break;
+
+                if (behaviour.Token is { Pause: true, Start: false ,Stop: false})
+                    return false;
+            
+                if(behaviour.Token is {Stop: true})
+                    break;
+
+                object current = behaviour.Routine.Current;
+                
+                switch (current)
+                {
+                    case CustomYieldInstruction { keepWaiting: true }:
+                        return false;
+                    case CustomYieldInstruction:
+                        continue;
+                    case WaitForEndOfFrame or WaitForFixedUpdate or null when behaviour.Token.SyncOrAsync:
+                        return false;
+                    case WaitForEndOfFrame or WaitForFixedUpdate or null:
+                    {
+                        if (behaviour.KeepWaiting(true)) return false;
+                        continue;
+                    }
+                    case IEnumerator subRoutine when behaviour.Token.SyncOrAsync:
+                    {
+                        if (!ProcessCoroutine(subRoutine, behaviour.Token)) continue;
+                        return true;
+                    }
+                    case IEnumerator subRoutine when ProcessCoroutine(subRoutine, behaviour.Token):
+                        continue;
+                    case IEnumerator:
+                        return true;
+                }
+
+                if (current is not Task task) return false;
+                if (!behaviour.Token.SyncOrAsync) continue;
+                if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
+                    continue;
+
+                return false;
+
+            } while (behaviour.Routine.MoveNext());
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(@$"Coroutine Index : {behaviour.Index} / Token Index : {behaviour.token.Index} |
+ Exception: {e}");
+            throw;
+        }
+    }
 
     private bool ProcessCoroutine(in IEnumerator routine, CustomCoroutineToken token)
     {
@@ -350,5 +419,74 @@ public class CustomCoroutine : MonoBehaviour
 
         return true;
     }
+  
+    private bool ProcessDebugCoroutine(in IEnumerator routine, CustomCoroutineToken token)
+    {
+        try
+        {
+            do
+            {
+                if (routine is null)
+                    break;
+                if (token is { Pause: true, Start: false, Stop: false })
+                    return false;
+                if (token is { Stop: true })
+                    break;
+
+                object current = routine.Current;
+                switch (current)
+                {
+                    case WaitWhile { keepWaiting: true }:
+                        return false;
+                    case WaitWhile { keepWaiting: false }:
+                        continue;
+                    case WaitUntil { keepWaiting: true }:
+                        return false;
+                    case WaitUntil { keepWaiting: false }:
+                        continue;
+                    case CustomYieldInstruction { keepWaiting: true }:
+                        return false;
+                    case CustomYieldInstruction { keepWaiting: false }:
+                        continue;
+                    case WaitForEndOfFrame:
+                    case WaitForFixedUpdate:
+                    case null:
+                        if (token.KeepWaiting(true)) return false;
+                        continue;
+                }
+
+                if (current is Task task)
+                {
+                    if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
+                        continue;
+
+                    return false;
+                }
+
+                if (current is not IEnumerator other) continue;
+
+                if (token.SyncOrAsync)
+                {
+                    if (!ProcessCoroutine(other, token)) continue;
+
+                    return true;
+                }
+
+                if (ProcessCoroutine(other, token)) continue;
+
+                return true;
+
+            } while (routine.MoveNext());
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log($@"Sub Coroutine Index : {token.Index} |
+ Exception: {e}");
+            throw;
+        }
+    }
+
     #endregion
 }

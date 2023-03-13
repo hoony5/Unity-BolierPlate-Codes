@@ -3,7 +3,7 @@ Not using ECS, but Basic Unity System's BoilerPlate Codes . For Study
 
 ---
 ### 2023-03-14
-1 CustomCoroutine
+1. CustomCoroutine
 ---
 ### 2023-03-12 
 1. Status System.

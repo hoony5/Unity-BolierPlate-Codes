@@ -7,151 +7,192 @@ using UnityEngine;
 [System.Serializable]
 public class CustomCoroutine : MonoBehaviour
 {
-    private CustomCoroutineInternalPool _pool;
-    private CustomCoroutineSettings settings;
-    private readonly List<CustomCoroutineInternal> activeCoroutines;
-    private List<int> availableIndices;
-    private Queue<int> freeIndices;
-    private Dictionary<string, List<int>> usingIndices;
+    public CustomCoroutineSettings settings;
+    private CustomCoroutineInternalPool _coroutinePool;
+    private List<CustomCoroutineInternal> _activeCoroutines;
+    private List<int> _availableIndicesList;
+    private Queue<int> _freeIndicesQueue;
+    private Dictionary<string, List<int>> _usingIndicesDictionary;
 
+    private bool _isStart;
+    private bool _isPause;
+    private bool _isStop;
+    
     private void Start()
     {
-        usingIndices = new Dictionary<string, List<int>>(settings.MaxCoroutines);
-        _pool = new CustomCoroutineInternalPool();
+        _usingIndicesDictionary = new Dictionary<string, List<int>>(settings.MaxCoroutines);
+        _coroutinePool = new CustomCoroutineInternalPool();
         Resize(settings.MaxCoroutines);
     }
 
-    private void InitIndices(int start ,int count)
+    private void InitializeAvailableIndices(int start ,int count)
     {
         for (int i = start; i < count; i++)
         {
-            availableIndices[i] = i;
-            freeIndices.Enqueue(i);
+            _availableIndicesList[i] = i;
+            _freeIndicesQueue.Enqueue(i);
         }
     }
     
     public void Update()
     {
         if (settings.OptimizeMode) return;
-        if (activeCoroutines.Count == 0) return;
+        if (_activeCoroutines.Count == 0) return;
             
-        for (var i = 0; i < activeCoroutines?.Count; i++)
-        {
-            CustomCoroutineInternal behaviour = activeCoroutines[i];
-            ProcessCoroutine(ref behaviour);    
-        }
+        if(_isStart && !_isPause && !_isStop)
+            OnUpdateRoutines();
+        
+        if(_isStop)
+            RemoveAllRoutines();
     }
     
     private void FixedUpdate()
     {
         if (!settings.OptimizeMode) return;
-        if (activeCoroutines.Count == 0) return;
-            
-        for (var i = 0; i < activeCoroutines?.Count; i++)
+        if (_activeCoroutines.Count == 0) return;
+
+        if(_isStart && !_isPause && !_isStop)
+            OnUpdateRoutines();
+        
+        if(_isStop)
+            RemoveAllRoutines();
+    }
+
+    public void Reset()
+    {
+        _activeCoroutines.Clear();
+        _freeIndicesQueue.Clear();
+        _usingIndicesDictionary.Clear();
+        InitializeAvailableIndices(0, settings.MaxCoroutines);
+    }
+
+    private void OnUpdateRoutines()
+    {
+        for (var i = 0; i < _activeCoroutines?.Count; i++)
         {
-            CustomCoroutineInternal behaviour = activeCoroutines[i];
+            CustomCoroutineInternal behaviour = _activeCoroutines[i];
             ProcessCoroutine(ref behaviour);    
         }
     }
-    public async Task UpdateAsync()
+    private async Task OnUpdateRoutinesAsync()
     {
-        for (var index = 0; index < activeCoroutines.Count; index++)
+        for (var index = 0; index < _activeCoroutines.Count; index++)
         {
-            var behaviour = activeCoroutines[index];
+            CustomCoroutineInternal behaviour = _activeCoroutines[index];
             await Task.Yield();
             ProcessCoroutine(ref behaviour);
         }
     }
     
-    public Task UpdateInParallel()
+    private Task OnUpdateRoutinesInParallel()
     {
         void ParallelBehaviours(CustomCoroutineInternal behaviour)
         {
             ProcessCoroutine(ref behaviour);
         }
 
-        Parallel.ForEach(activeCoroutines, ParallelBehaviours);
+        Parallel.ForEach(_activeCoroutines, ParallelBehaviours);
         return Task.CompletedTask;
     }
     
     #region Accessors
+
+    public void RunRoutines()
+    {
+        _isStart = true;
+        _isStop = false;
+        _isPause = false;
+    }
+
+    public void PauseRoutines()
+    {
+        _isStart = false;
+        _isStop = false;
+        _isPause = true;
+    }
+    public void ClearRoutines()
+    {
+        _isStart = false;
+        _isStop = true;
+        _isPause = false;
+    }
     public void Resize(int capacity)
     {
-        // buffer
-        if(availableIndices is null)
-            availableIndices = new List<int>(capacity);
+        if(_availableIndicesList is null)
+            _availableIndicesList = new List<int>(capacity);
         else
-            availableIndices.AddRange(Enumerable.Range(start: availableIndices.Count, count: capacity));
+            _availableIndicesList.AddRange(Enumerable.Range(start: _availableIndicesList.Count, count: capacity));
         
-        if(freeIndices is null)
+        if(_freeIndicesQueue is null)
         {
-            freeIndices = new Queue<int>(capacity);
-            InitIndices(start: 0, count: settings.MaxCoroutines);
+            _freeIndicesQueue = new Queue<int>(capacity);
+            InitializeAvailableIndices(start: 0, count: settings.MaxCoroutines);
         }
-        // if already using previous all indices, then add new indices range.
         else
-            InitIndices(start: availableIndices.Count, count: capacity);
+            InitializeAvailableIndices(start: _availableIndicesList.Count, count: capacity);
+        
+        _activeCoroutines ??= new List<CustomCoroutineInternal>(settings.MaxCoroutines);
     }
-    public int StartRoutine(IEnumerator routine)
+    public int AddRoutine(IEnumerator routine)
     {
-        if (freeIndices.Count == 0)
+        if (_freeIndicesQueue.Count == 0)
         {
-            InitIndices(0, availableIndices.Count);
+            InitializeAvailableIndices(0, _availableIndicesList.Count);
         }
         
-        int index = freeIndices.Dequeue();
-        activeCoroutines.Add(_pool.Get().Init(index, routine, new CustomCoroutineToken(index, true, false,false,true)));
+        int index = _freeIndicesQueue.Dequeue();
+        _activeCoroutines.Add(_coroutinePool.Get().Init(index, routine, new CustomCoroutineToken(index, true, false,false,true)));
         return index;
     }
-    public int StartRoutineWithTag(string tag, IEnumerator routine)
+    public int AddRoutineWithTag(string tag, IEnumerator routine)
     {
-        if (freeIndices.Count == 0)
+        if (_freeIndicesQueue.Count == 0)
         {
-            InitIndices(0, availableIndices.Count);
+            InitializeAvailableIndices(0, _availableIndicesList.Count);
         }
         
-        int index = freeIndices.Dequeue();
-        CustomCoroutineInternal internalRoutine = _pool.Get().Init(index, routine, new CustomCoroutineToken(index, true, false,false,true));
+        int index = _freeIndicesQueue.Dequeue();
+        CustomCoroutineInternal internalRoutine = _coroutinePool.Get().Init(index, routine, new CustomCoroutineToken(index, true, false,false,true));
         
-        if(usingIndices.ContainsKey(tag))
-            usingIndices[tag].Add(index);
+        if(_usingIndicesDictionary.ContainsKey(tag))
+            _usingIndicesDictionary[tag].Add(index);
         else
-            usingIndices.Add(tag, new List<int>(settings.MaxCoroutines){index});
+            _usingIndicesDictionary.Add(tag, new List<int>(settings.MaxCoroutines){index});
         
-        activeCoroutines.Add(internalRoutine);
+        _activeCoroutines.Add(internalRoutine);
         return index;
     }
     public void ResumeRoutine(CustomCoroutineToken token)
     {
-        if (activeCoroutines.Count <= token.Index) return;
-        activeCoroutines[token.Index].OnStart();
+        if (_activeCoroutines.Count <= token.Index) return;
+        _activeCoroutines[token.Index].OnStart();
     }
     public void PauseRoutine(CustomCoroutineToken token)
     {
-        if (activeCoroutines.Count <= token.Index) return;
-        activeCoroutines[token.Index].OnPause();
+        if (_activeCoroutines.Count <= token.Index) return;
+        _activeCoroutines[token.Index].OnPause();
     }
     public void ConvertToAsync(CustomCoroutineToken token)
     {
-        if (activeCoroutines.Count <= token.Index) return;
-        activeCoroutines[token.Index].OnAsync();
+        if (_activeCoroutines.Count <= token.Index) return;
+        _activeCoroutines[token.Index].OnAsync();
     }
     public void ConvertToSync(CustomCoroutineToken token)
     {
-        if (activeCoroutines.Count <= token.Index) return;
-        activeCoroutines[token.Index].OnSync();
+        if (_activeCoroutines.Count <= token.Index) return;
+        _activeCoroutines[token.Index].OnSync();
     }
     
-    public void StopRoutine(IEnumerator routine)
+    public void RemoveRoutine(IEnumerator routine)
     {
         int GetEqualRoutineIndex()
         {
-            for (var i = 0; i < activeCoroutines.Count; i++)
+            for (var i = 0; i < _activeCoroutines.Count; i++)
             {
-                if (activeCoroutines[i].Routine == routine)
+                if (_activeCoroutines[i].Routine == routine)
                 {
-                    _pool.Return(activeCoroutines[i]);
-                    freeIndices.Enqueue(activeCoroutines[i].Index);
+                    _coroutinePool.Return(_activeCoroutines[i]);
+                    _freeIndicesQueue.Enqueue(_activeCoroutines[i].Index);
                     return i;
                 }
             }
@@ -163,28 +204,27 @@ public class CustomCoroutine : MonoBehaviour
 
         if (index is -1) return;
 
-        activeCoroutines.RemoveAt(index);
+        _activeCoroutines.RemoveAt(index);
     } 
-    public void StopRoutine(CustomCoroutineToken token)
+    public void RemoveRoutine(CustomCoroutineToken token)
     {
-        activeCoroutines[token.Index].OnStop();
+        _activeCoroutines[token.Index].OnStop();
         
-        _pool.Return(activeCoroutines[token.Index]);
-        freeIndices.Enqueue(token.Index);
-        activeCoroutines.RemoveAt(token.Index);
+        _coroutinePool.Return(_activeCoroutines[token.Index]);
+        _freeIndicesQueue.Enqueue(token.Index);
+        _activeCoroutines.RemoveAt(token.Index);
     }
 
-    public void StopAllRoutines()
+    public void RemoveAllRoutines()
     {
-        foreach (CustomCoroutineInternal activeCoroutine in activeCoroutines)
+        foreach (CustomCoroutineInternal activeCoroutine in _activeCoroutines)
         {
-            _pool.Return(activeCoroutine);
+            _coroutinePool.Return(activeCoroutine);
         }
-        activeCoroutines.Clear();
+        _activeCoroutines.Clear();
         
-        // clear and reset. 
-        availableIndices.Clear();
-        freeIndices.Clear();
+        _availableIndicesList.Clear();
+        _freeIndicesQueue.Clear();
         Resize(settings.MaxCoroutines);
     }
     #endregion
@@ -192,11 +232,11 @@ public class CustomCoroutine : MonoBehaviour
     #region Queries
     public bool AnyExist(string tag)
     {
-        return usingIndices.TryGetValue(tag, out List<int> indices) && indices.Count != 0;
+        return _usingIndicesDictionary.TryGetValue(tag, out List<int> indices) && indices.Count != 0;
     }
     public bool HasRoutine(string tag, CustomCoroutineToken token)
     {
-        return usingIndices.ContainsKey(tag) && usingIndices[tag].Contains(token.Index);
+        return _usingIndicesDictionary.ContainsKey(tag) && _usingIndicesDictionary[tag].Contains(token.Index);
     }
     #endregion
 
@@ -240,7 +280,6 @@ public class CustomCoroutine : MonoBehaviour
                     return true;
             }
 
-            // Task Area.
             if (current is not Task task) return false;
             if (!behaviour.Token.SyncOrAsync) continue;
             if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
@@ -259,14 +298,12 @@ public class CustomCoroutine : MonoBehaviour
         {
             if (routine is null)
                 break;
-
-            object current = routine.Current;
-
             if (token is { Pause: true, Start: false, Stop: false })
                 return false;
             if(token is {Stop: true})
                 break;
 
+            object current = routine.Current;
             switch (current)
             {
                 case WaitWhile{keepWaiting: true}:

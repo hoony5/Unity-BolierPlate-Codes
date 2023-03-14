@@ -1,11 +1,12 @@
 ﻿[System.Serializable]
-public readonly struct CustomCoroutineToken
+public struct CustomCoroutineToken
 {
     public int Index { get; }
     public bool Start { get; }
     public bool Pause{ get; }
     public bool Stop{ get; }
     public bool SyncOrAsync{ get; }
+    public bool ReturnNull { get; set;}
 
     public CustomCoroutineToken(int index, bool start, bool pause, bool stop, bool syncOrAsync)
     {
@@ -14,6 +15,7 @@ public readonly struct CustomCoroutineToken
         Pause = pause;
         Stop = stop;
         SyncOrAsync = syncOrAsync;
+        ReturnNull = true;
     }
     public CustomCoroutineToken OnStart() => new CustomCoroutineToken(Index, true, false, false, SyncOrAsync);
 
@@ -23,5 +25,5 @@ public readonly struct CustomCoroutineToken
     public CustomCoroutineToken OnAsync() => new CustomCoroutineToken(Index, true, false, false, false);
     public CustomCoroutineToken OnSync() => new CustomCoroutineToken(Index, true, false, false, true);
 
-    public bool KeepWaiting(bool isNull) => !Pause && !Stop && (isNull || SyncOrAsync);
+    public bool KeepWaiting() => ReturnNull = !ReturnNull;
 }

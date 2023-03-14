@@ -23,7 +23,7 @@ public class AssetsImportProcessor : AssetPostprocessor
     foreach (string importingAsset in importedAssets)
     {
         if (importingAsset is nameof(AssetsImportProcessor)) continue;
-        if (importingAsset.Contains(".meta") || importingAsset.Contains(".cs")) continue;
+        if (importingAsset.Contains(".meta") || importingAsset.Contains(".cs") || importingAsset.Contains(".asmdef")) continue;
 
         // import folder -> execute recursive import
         if (AssetDatabase.IsValidFolder(importingAsset))
@@ -70,7 +70,7 @@ public class AssetsImportProcessor : AssetPostprocessor
         }
     }
 
-    // if there is no subfolder and no asset in the folder, delete it
+    /*// if there is no subfolder and no asset in the folder, delete it
     foreach (string importingAsset in importedAssets)
     {
         if (AssetDatabase.IsValidFolder(importingAsset) && AssetDatabase.GetSubFolders(importingAsset).Length == 0 &&
@@ -78,7 +78,7 @@ public class AssetsImportProcessor : AssetPostprocessor
         {
             AssetDatabase.DeleteAsset(importingAsset);
         }
-    }
+    }*/
 }
 
 static void ProcessFolder(string folderPath, ImportAssetsInfo importAssetsInfo)
@@ -100,7 +100,7 @@ static void ProcessAsset(Object asset, ImportAssetsInfo importAssetsInfo)
 {
     if (asset is null) return;
     if (asset.name == nameof(AssetsImportProcessor)) return;
-    if (asset.name.Contains(".meta") || asset.name.Contains(".cs")) return;
+    if (asset.name.Contains(".meta") || asset.name.Contains(".cs") || asset.name.Contains(".asmdef")) return;
     
      // Load PreCached-PathInfo.
     PathInfo pathInfo = importAssetsInfo.GetPathInfo(asset.name);

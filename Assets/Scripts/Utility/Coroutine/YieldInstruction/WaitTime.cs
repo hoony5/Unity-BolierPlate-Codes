@@ -1,41 +1,35 @@
-﻿using System;
-using UnityEngine;
+﻿ using System;
+ using UnityEngine;
 
-public class WaitForTime : CustomYieldInstruction
-{
-    // Define TicksPerSecond constant for calculating end time
-    private const long TicksPerSecond = TimeSpan.TicksPerSecond;
+ public class WaitForTime : CustomYieldInstruction
+ {
+     // 1초의 틱 (고정값)
+     readonly float TicksPerSecond = TimeSpan.TicksPerSecond;
 
-    // Define seconds to wait
-    private readonly float _seconds;
+     private float seconds;
 
-    // Define the end time to wait for
-    private long _endTime;
+     // x초 후의 틱
+     long m_end;
 
-    // Constructor for WaitForTime
-    public WaitForTime(float seconds)
-    {
-        // Ensure that seconds is greater than 0
-        _seconds = Mathf.Max(0.0001f, seconds);
+     public WaitForTime(float seconds)
+     {
+         // 생성 시점 틱(가변값) + x 초 후 틱 (고정값)
+         this.seconds = seconds <= 0 ? 0.0001f : seconds;
+         UpdateTimer();
+     }
 
-        // Calculate and set the end time to wait for
-        UpdateEndTime();
-    }
+     public WaitForTime WaitForSeconds(float seconds)
+     {
+         this.seconds = seconds <= 0 ? 0.0001f : seconds;
+         UpdateTimer();
+         return this;
+     }
+     // 대기조건
 
-    // Method for updating the end time
-    private void UpdateEndTime()
-    {
-        // Calculate the end time using the current system time and TicksPerSecond
-        _endTime = DateTime.Now.Ticks + (long)(TicksPerSecond * _seconds);
-    }
+     public override bool keepWaiting => DateTime.Now.Ticks < m_end;
 
-    // Method for resetting the wait time
-    public void Reset()
-    {
-        // Update the end time to wait for
-        UpdateEndTime();
-    }
-
-    // Override the keepWaiting property to determine if the wait is complete
-    public override bool keepWaiting => DateTime.Now.Ticks < _endTime;
-}
+     private void UpdateTimer()
+     {
+         m_end = DateTime.Now.Ticks + (long)(TicksPerSecond * seconds);
+     }
+ }

@@ -10,7 +10,7 @@ public class CustomCoroutine : MonoBehaviour
 {
     public CustomCoroutineSettings settings;
     private CustomCoroutineInternalPool _coroutinePool;
-    private List<CustomCoroutineInternal> _activeCoroutines;
+    private CustomCoroutineInternal[] _activeCoroutines;
     private List<int> _availableIndicesList;
     private Queue<int> _freeIndicesQueue;
     private Dictionary<string, List<int>> _usingIndicesDictionary;
@@ -18,475 +18,509 @@ public class CustomCoroutine : MonoBehaviour
     private bool _isStart;
     private bool _isPause;
     private bool _isStop;
-    
-    private void Start()
+
+    void Start()
     {
-        _usingIndicesDictionary = new Dictionary<string, List<int>>(settings.MaxCoroutines);
         _coroutinePool = new CustomCoroutineInternalPool();
+        _usingIndicesDictionary = new Dictionary<string, List<int>>(settings.MaxCoroutines);
         Resize(settings.MaxCoroutines);
     }
 
-    private void InitializeAvailableIndices(int start ,int count)
-    {
-        for (int i = start; i < count; i++)
-        {
-            _availableIndicesList[i] = i;
-            _freeIndicesQueue.Enqueue(i);
-        }
-    }
-    
-    public void Update()
-    {
-        if (settings.OptimizeMode) return;
-        if (_activeCoroutines.Count == 0) return;
-            
-        if(_isStart && !_isPause && !_isStop)
-            OnUpdateRoutines();
-        
-        if(_isStop)
-            RemoveAllRoutines();
-    }
-    
-    private void FixedUpdate()
-    {
-        if (!settings.OptimizeMode) return;
-        if (_activeCoroutines.Count == 0) return;
-
-        if(_isStart && !_isPause && !_isStop)
-            OnUpdateRoutines();
-        
-        if(_isStop)
-            RemoveAllRoutines();
-    }
-
-    public void ResetRoutines()
-    {
-        _activeCoroutines.Clear();
-        _freeIndicesQueue.Clear();
-        _usingIndicesDictionary.Clear();
-        InitializeAvailableIndices(0, settings.MaxCoroutines);
-    }
-
-    private void OnUpdateRoutines()
-    {
-        for (var i = 0; i < _activeCoroutines?.Count; i++)
-        {
-            CustomCoroutineInternal behaviour = _activeCoroutines[i];
-            if(settings.DebugMode)
-                ProcessDebugCoroutine(ref behaviour);
-            else
-                ProcessCoroutine(ref behaviour);    
-        }
-    }
-    private async Task OnUpdateRoutinesAsync()
-    {
-        for (var index = 0; index < _activeCoroutines.Count; index++)
-        {
-            CustomCoroutineInternal behaviour = _activeCoroutines[index];
-            await Task.Yield();
-            if(settings.DebugMode)
-                ProcessDebugCoroutine(ref behaviour);
-            else
-                ProcessCoroutine(ref behaviour);    
-        }
-    }
-    
-    private Task OnUpdateRoutinesInParallel()
-    {
-        void ParallelBehaviours(CustomCoroutineInternal behaviour)
-        {
-            if(settings.DebugMode)
-                ProcessDebugCoroutine(ref behaviour);
-            else
-                ProcessCoroutine(ref behaviour);    
-        }
-
-        Parallel.ForEach(_activeCoroutines, ParallelBehaviours);
-        return Task.CompletedTask;
-    }
-    
-    #region Accessors
-
-    public void RunRoutines()
-    {
-        _isStart = true;
-        _isStop = false;
-        _isPause = false;
-    }
-
-    public void PauseRoutines()
-    {
-        _isStart = false;
-        _isStop = false;
-        _isPause = true;
-    }
-    public void ClearRoutines()
-    {
-        _isStart = false;
-        _isStop = true;
-        _isPause = false;
-    }
     public void Resize(int capacity)
     {
-        if(_availableIndicesList is null)
+        if (_availableIndicesList is null)
             _availableIndicesList = new List<int>(capacity);
         else
             _availableIndicesList.AddRange(Enumerable.Range(start: _availableIndicesList.Count, count: capacity));
-        
-        if(_freeIndicesQueue is null)
+
+        if (_freeIndicesQueue is null)
         {
             _freeIndicesQueue = new Queue<int>(capacity);
             InitializeAvailableIndices(start: 0, count: settings.MaxCoroutines);
         }
         else
             InitializeAvailableIndices(start: _availableIndicesList.Count, count: capacity);
-        
-        _activeCoroutines ??= new List<CustomCoroutineInternal>(settings.MaxCoroutines);
-    }
-    public int AddRoutine(IEnumerator routine)
-    {
-        if (_freeIndicesQueue.Count == 0)
+
+        if(_activeCoroutines is null)
         {
-            InitializeAvailableIndices(0, _availableIndicesList.Count);
-        }
-        
-        int index = _freeIndicesQueue.Dequeue();
-        _activeCoroutines.Add(_coroutinePool.Get().Init(index, routine, new CustomCoroutineToken(index, true, false,false,true)));
-        return index;
-    }
-    public int AddRoutineWithTag(string tag, IEnumerator routine)
-    {
-        if (_freeIndicesQueue.Count == 0)
-        {
-            InitializeAvailableIndices(0, _availableIndicesList.Count);
-        }
-        
-        int index = _freeIndicesQueue.Dequeue();
-        CustomCoroutineInternal internalRoutine = _coroutinePool.Get().Init(index, routine, new CustomCoroutineToken(index, true, false,false,true));
-        
-        if(_usingIndicesDictionary.ContainsKey(tag))
-            _usingIndicesDictionary[tag].Add(index);
-        else
-            _usingIndicesDictionary.Add(tag, new List<int>(settings.MaxCoroutines){index});
-        
-        _activeCoroutines.Add(internalRoutine);
-        return index;
-    }
-    public void ResumeRoutine(CustomCoroutineToken token)
-    {
-        if (_activeCoroutines.Count <= token.Index) return;
-        _activeCoroutines[token.Index].OnStart();
-    }
-    public void PauseRoutine(CustomCoroutineToken token)
-    {
-        if (_activeCoroutines.Count <= token.Index) return;
-        _activeCoroutines[token.Index].OnPause();
-    }
-    public void ConvertToAsync(CustomCoroutineToken token)
-    {
-        if (_activeCoroutines.Count <= token.Index) return;
-        _activeCoroutines[token.Index].OnAsync();
-    }
-    public void ConvertToSync(CustomCoroutineToken token)
-    {
-        if (_activeCoroutines.Count <= token.Index) return;
-        _activeCoroutines[token.Index].OnSync();
-    }
-    
-    public void RemoveRoutine(IEnumerator routine)
-    {
-        int GetEqualRoutineIndex()
-        {
-            for (var i = 0; i < _activeCoroutines.Count; i++)
+            _activeCoroutines = new CustomCoroutineInternal[settings.MaxCoroutines];
+            for (int i = 0; i < _activeCoroutines.Length; i++)
             {
-                if (_activeCoroutines[i].Routine == routine)
-                {
-                    _coroutinePool.Return(_activeCoroutines[i]);
-                    _freeIndicesQueue.Enqueue(_activeCoroutines[i].Index);
-                    return i;
-                }
+                CustomCoroutineInternal temp = _activeCoroutines[i];
+                temp.index = -1;
+                _activeCoroutines[i] = temp;
+            }
+        }
+        else
+            Array.Resize(ref _activeCoroutines, settings.MaxCoroutines * 2);
+    }
+
+    private void InitializeAvailableIndices(int start, int count)
+    {
+        for (int i = start; i < count; i++)
+        {
+            _availableIndicesList.Add(i);
+            _freeIndicesQueue.Enqueue(i);
+        }
+    }
+
+    private void OnUpdateRoutines()
+    {
+        for (int i = 0; i < _activeCoroutines.Length; i++)
+        {
+            if(_activeCoroutines[i].index != -1)
+                ProcessCoroutine(_activeCoroutines[i]);
+        }
+    }
+    private async Task OnUpdateRoutinesAsync()
+    {
+        await Task.Yield();
+        
+        for (int i = 0; i < _activeCoroutines.Length; i++)
+        {
+            if(_activeCoroutines[i].index != -1)
+                ProcessCoroutine(_activeCoroutines[i]);
+        }
+    }
+
+    private void RemoveAllRoutines()
+    {
+        for (int i = _activeCoroutines.Length - 1; i >= 0; i--)
+        {
+            CustomCoroutineInternal temp = _activeCoroutines[i];
+            temp.index = -1;
+            _activeCoroutines[i] = temp;
+            _coroutinePool.Return(_activeCoroutines[i]);
+        }
+    }
+
+    public void Update()
+    {
+        if (settings.OptimizeMode) return;
+        if (_activeCoroutines.Length == 0) return;
+
+        if (_isStart && !_isPause && !_isStop)
+            OnUpdateRoutines();
+
+        if (_isStop)
+            RemoveAllRoutines();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!settings.OptimizeMode) return;
+        if (_activeCoroutines.Length == 0) return;
+
+        if (_isStart && !_isPause && !_isStop)
+            OnUpdateRoutines();
+
+        if (_isStop)
+            RemoveAllRoutines();
+    }
+
+    private bool ProcessCoroutine(CustomCoroutineInternal behaviour)
+    {
+
+        bool ProcessNestedCoroutine(IEnumerator coroutine)
+        {
+            int nestedIndex;
+            if (_freeIndicesQueue.Count > 0)
+            {
+                nestedIndex = _freeIndicesQueue.Dequeue();
+            }
+            else
+            {
+                Resize(settings.MaxCoroutines);
+                nestedIndex = _activeCoroutines.Length;
             }
 
-            return -1;
+            CustomCoroutineInternal nestedBehaviour =
+                new CustomCoroutineInternal(nestedIndex, coroutine, new CustomCoroutineToken(), true);
+
+            do
+            {
+                object currentYieldInstruction = nestedBehaviour.routine.Current;
+
+                if (behaviour.routine is null)
+                    break;
+
+                if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
+                {
+                    behaviour.UpdateWaiting();
+                    if (behaviour.KeepWaiting())
+                        return false;
+                }
+                else if (currentYieldInstruction is WaitForTime waitForTime)
+                {
+                    if (waitForTime.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitUntil waitUntil)
+                {
+                    if (waitUntil.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitWhile waitWhile)
+                {
+                    if (waitWhile.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitUpdate waitUpdate)
+                {
+                    if (waitUpdate.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitEvent waitEvent)
+                {
+                    if (waitEvent.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is Task task)
+                {
+                    if (!task.IsCompleted && behaviour.token.SyncOrAsync)
+                    {
+                        return false;   
+                    }
+                }
+                else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
+                {
+                    if (!ProcessNestedCoroutine(nestedCoroutine.routine))
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is IEnumerator nestedRoutine)
+                {
+                    if (!ProcessNestedCoroutine(nestedRoutine))
+                    {
+                        return false;
+                    }
+                }
+            } while (coroutine.MoveNext());
+
+            _freeIndicesQueue.Enqueue(nestedIndex);
+            return !nestedBehaviour.KeepWaiting();
         }
 
-        int index = GetEqualRoutineIndex();
+        if (settings.DebugMode)
+        {
+            try
+            {
+                do
+                {
+                    if (behaviour.routine is null)
+                        break;
+                    if (behaviour.token.Stop)
+                        break;
 
-        if (index is -1) return;
+                    if (behaviour.token.Pause)
+                        return false;
 
-        _activeCoroutines.RemoveAt(index);
-    } 
-    public void RemoveRoutine(CustomCoroutineToken token)
-    {
-        _activeCoroutines[token.Index].OnStop();
-        
-        _coroutinePool.Return(_activeCoroutines[token.Index]);
-        _freeIndicesQueue.Enqueue(token.Index);
-        _activeCoroutines.RemoveAt(token.Index);
+                    // Handle the current yield instruction
+                    object currentYieldInstruction = behaviour.routine.Current;
+
+                    if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
+                    {
+                        behaviour.UpdateWaiting();
+                        if (behaviour.KeepWaiting())
+                            return false;
+                    }
+                    else if (currentYieldInstruction is WaitForTime waitForTime)
+                    {
+                        if (waitForTime.keepWaiting)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is WaitUntil waitUntil)
+                    {
+                        if (waitUntil.keepWaiting)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is WaitWhile waitWhile)
+                    {
+                        if (waitWhile.keepWaiting)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is WaitUpdate waitUpdate)
+                    {
+                        // WaitUpdate will automatically alternate between waiting and not waiting
+                        // No additional handling is needed here
+                        if (waitUpdate.keepWaiting)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is WaitEvent waitEvent)
+                    {
+                        if (waitEvent.keepWaiting)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is Task task)
+                    {
+                        // Wait for the Task to complete
+                        if (!task.IsCompleted && behaviour.token.SyncOrAsync)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
+                    {
+                        // Process the nested CustomCoroutineInternal
+                        if (!ProcessNestedCoroutine(nestedCoroutine.routine))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (currentYieldInstruction is IEnumerator nestedRoutine)
+                    {
+                        // Process the nested IEnumerator
+                        if (!ProcessNestedCoroutine(nestedRoutine))
+                        {
+                            return false;
+                        }
+                    }
+                } while (behaviour.routine.MoveNext());
+
+                _activeCoroutines[behaviour.index] = default;
+                _coroutinePool.Return(behaviour);
+                _freeIndicesQueue.Enqueue(behaviour.index);
+                return true;
+            }
+            catch (Exception e)
+            {
+                string tag = "";
+                foreach (var kvp in _usingIndicesDictionary)
+                {
+                    if (kvp.Value.Contains(behaviour.index))
+                        tag = kvp.Key;
+                }
+
+                if (string.IsNullOrEmpty(tag))
+                    Debug.Log($" Index : {behaviour.index} | IsNested : {behaviour.isNested}|");
+                else
+                    Debug.Log($" Tag : {tag} | Index : {behaviour.index} | IsNested : {behaviour.isNested}");
+                throw;
+            }
+        }
+
+        else
+        {
+            do
+            {
+                if (behaviour.routine is null)
+                    break;
+                if (behaviour.token.Stop)
+                    break;
+                if (behaviour.token.Pause)
+                    return false;
+                // Handle the current yield instruction
+                object currentYieldInstruction = behaviour.routine.Current;
+
+                if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
+                {
+                    behaviour.UpdateWaiting();
+                    if (behaviour.KeepWaiting())
+                        return false;
+                }
+                else if (currentYieldInstruction is WaitForTime waitForTime)
+                {
+                    if (waitForTime.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitUntil waitUntil)
+                {
+                    if (waitUntil.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitWhile waitWhile)
+                {
+                    if (waitWhile.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitUpdate waitUpdate)
+                {
+                    // WaitUpdate will automatically alternate between waiting and not waiting
+                    // No additional handling is needed here
+                    if (waitUpdate.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is WaitEvent waitEvent)
+                {
+                    if (waitEvent.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is Task task)
+                {
+                    // Wait for the Task to complete
+                    if (!task.IsCompleted && behaviour.token.SyncOrAsync)
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
+                {
+                    // Process the nested CustomCoroutineInternal
+                    if (!ProcessNestedCoroutine(nestedCoroutine.routine))
+                    {
+                        return false;
+                    }
+                }
+                else if (currentYieldInstruction is IEnumerator nestedRoutine)
+                {
+                    // Process the nested IEnumerator
+                    if (!ProcessNestedCoroutine(nestedRoutine))
+                    {
+                        return false;
+                    }
+                }
+            } while (behaviour.routine.MoveNext());
+        }
+
+        _activeCoroutines[behaviour.index] = default;
+        _coroutinePool.Return(behaviour);
+        _freeIndicesQueue.Enqueue(behaviour.index);
+        return true;
     }
 
-    public void RemoveAllRoutines()
+   public void StartRoutines()
+   {
+       _isStart = true;
+       _isPause = false;
+       _isStop = false;
+   }
+   public void PauseRoutines()
+   {
+       _isStart = false;
+       _isPause = true;
+       _isStop = false;
+   }
+   public void StopRoutines()
+   {
+       _isStart = false;
+       _isPause = false;
+       _isStop = true;
+   }
+
+    public CustomCoroutineToken AddRoutine(IEnumerator routine)
+    {
+        if (_freeIndicesQueue.Count == 0)
+        {
+            Resize(settings.MaxCoroutines);
+        }
+
+        int index = _freeIndicesQueue.Dequeue();
+        CustomCoroutineToken token = new CustomCoroutineToken(index, start: true, pause: false, stop: false, syncOrAsync: true);
+        CustomCoroutineInternal newBehaviour = _coroutinePool.Get().Init(index, routine, token ,false);
+        _activeCoroutines[index] = newBehaviour;
+
+        return token;
+    }
+    public CustomCoroutineToken AddRoutineWithTag(string tag, IEnumerator routine)
+    {
+        if (_freeIndicesQueue.Count == 0)
+        {
+            Resize(settings.MaxCoroutines);
+        }
+
+        int index = _freeIndicesQueue.Dequeue();
+
+        // Update the dictionary with the new index
+        if (_usingIndicesDictionary.TryGetValue(tag, out List<int> indicesList))
+        {
+            indicesList.Add(index);
+        }
+        else
+        {
+            _usingIndicesDictionary[tag] = new List<int> { index };
+        }
+
+        CustomCoroutineToken token = new CustomCoroutineToken(index, start: true, pause: false, stop: false, syncOrAsync: true);
+        CustomCoroutineInternal newBehaviour = _coroutinePool.Get().Init(index, routine, token, false);
+        _activeCoroutines[index] = newBehaviour;
+
+        return token;
+    }
+
+    public void ResumeRoutine(CustomCoroutineToken token)
+    {
+        if (_activeCoroutines.Length <= token.Index) return;
+        _activeCoroutines[token.Index].OnStart();
+    }
+
+    public void PauseRoutine(CustomCoroutineToken token)
+    {
+        if (_activeCoroutines.Length <= token.Index) return;
+        _activeCoroutines[token.Index].OnPause();
+    }
+
+    public void ConvertToAsync(CustomCoroutineToken token)
+    {
+        if (_activeCoroutines.Length <= token.Index) return;
+        _activeCoroutines[token.Index].OnAsync();
+    }
+
+    public void ConvertToSync(CustomCoroutineToken token)
+    {
+        if (_activeCoroutines.Length <= token.Index) return;
+        _activeCoroutines[token.Index].OnSync();
+    }
+    public bool AnyExist(string tag)
+    {
+        return _usingIndicesDictionary.ContainsKey(tag) && _usingIndicesDictionary[tag].Count > 0;
+    }
+
+    public bool HasRoutine(string tag, CustomCoroutineToken token)
+    {
+        if (_usingIndicesDictionary.TryGetValue(tag, out var indicesList))
+        {
+            return indicesList.Contains(token.Index);
+        }
+        return false;
+    }
+
+    public bool HasRoutine(CustomCoroutineToken token)
     {
         foreach (CustomCoroutineInternal activeCoroutine in _activeCoroutines)
         {
-            _coroutinePool.Return(activeCoroutine);
+            if (activeCoroutine.index == token.Index) return true;
         }
-        _activeCoroutines.Clear();
-        
-        _availableIndicesList.Clear();
-        _freeIndicesQueue.Clear();
-        Resize(settings.MaxCoroutines);
-    }
-    #endregion
 
-    #region Queries
-    public bool AnyExist(string tag)
-    {
-        return _usingIndicesDictionary.TryGetValue(tag, out List<int> indices) && indices.Count != 0;
+        return false;
     }
-    public bool HasRoutine(string tag, CustomCoroutineToken token)
+    public bool HasRoutine(int index)
     {
-        return _usingIndicesDictionary.ContainsKey(tag) && _usingIndicesDictionary[tag].Contains(token.Index);
-    }
-    #endregion
-
-    #region Processor
-    bool ProcessCoroutine(ref CustomCoroutineInternal behaviour)
-    {
-        do
+        foreach (CustomCoroutineInternal activeCoroutine in _activeCoroutines)
         {
-            if (behaviour.Routine is null)
-                break;
-
-            if (behaviour.Token is { Pause: true, Start: false ,Stop: false})
-                return false;
-            
-            if(behaviour.Token is {Stop: true})
-                break;
-
-            object current = behaviour.Routine.Current;
-                
-            switch (current)
-            {
-                case CustomYieldInstruction { keepWaiting: true }:
-                    return false;
-                case CustomYieldInstruction:
-                    continue;
-                case WaitForEndOfFrame or WaitForFixedUpdate or null when behaviour.Token.SyncOrAsync:
-                    return false;
-                case WaitForEndOfFrame or WaitForFixedUpdate or null:
-                {
-                    if (behaviour.KeepWaiting(true)) return false;
-                    continue;
-                }
-                case IEnumerator subRoutine when behaviour.Token.SyncOrAsync:
-                {
-                    if (!ProcessCoroutine(subRoutine, behaviour.Token)) continue;
-                    return true;
-                }
-                case IEnumerator subRoutine when ProcessCoroutine(subRoutine, behaviour.Token):
-                    continue;
-                case IEnumerator:
-                    return true;
-            }
-
-            if (current is not Task task) return false;
-            if (!behaviour.Token.SyncOrAsync) continue;
-            if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
-                continue;
-
-            return false;
-
-        } while (behaviour.Routine.MoveNext());
-
-        return true;
-    }
-    bool ProcessDebugCoroutine(ref CustomCoroutineInternal behaviour)
-    {
-        try
-        {
-            do
-            {
-                if (behaviour.Routine is null)
-                    break;
-
-                if (behaviour.Token is { Pause: true, Start: false ,Stop: false})
-                    return false;
-            
-                if(behaviour.Token is {Stop: true})
-                    break;
-
-                object current = behaviour.Routine.Current;
-                
-                switch (current)
-                {
-                    case CustomYieldInstruction { keepWaiting: true }:
-                        return false;
-                    case CustomYieldInstruction:
-                        continue;
-                    case WaitForEndOfFrame or WaitForFixedUpdate or null when behaviour.Token.SyncOrAsync:
-                        return false;
-                    case WaitForEndOfFrame or WaitForFixedUpdate or null:
-                    {
-                        if (behaviour.KeepWaiting(true)) return false;
-                        continue;
-                    }
-                    case IEnumerator subRoutine when behaviour.Token.SyncOrAsync:
-                    {
-                        if (!ProcessCoroutine(subRoutine, behaviour.Token)) continue;
-                        return true;
-                    }
-                    case IEnumerator subRoutine when ProcessCoroutine(subRoutine, behaviour.Token):
-                        continue;
-                    case IEnumerator:
-                        return true;
-                }
-
-                if (current is not Task task) return false;
-                if (!behaviour.Token.SyncOrAsync) continue;
-                if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
-                    continue;
-
-                return false;
-
-            } while (behaviour.Routine.MoveNext());
-
-            return true;
+            if (activeCoroutine.index == index) return true;
         }
-        catch (Exception e)
-        {
-            Debug.Log(@$"Coroutine Index : {behaviour.Index} / Token Index : {behaviour.token.Index} |
- Exception: {e}");
-            throw;
-        }
+
+        return false;
     }
-
-    private bool ProcessCoroutine(in IEnumerator routine, CustomCoroutineToken token)
-    {
-        do
-        {
-            if (routine is null)
-                break;
-            if (token is { Pause: true, Start: false, Stop: false })
-                return false;
-            if(token is {Stop: true})
-                break;
-
-            object current = routine.Current;
-            switch (current)
-            {
-                case WaitWhile{keepWaiting: true}:
-                    return false;
-                case WaitWhile{keepWaiting: false}:
-                    continue;
-                case WaitUntil{keepWaiting: true}:
-                    return false;
-                case WaitUntil{keepWaiting: false}:
-                    continue;
-                case CustomYieldInstruction { keepWaiting: true }:
-                    return false;
-                case CustomYieldInstruction { keepWaiting: false }:
-                    continue;
-                case WaitForEndOfFrame :
-                case WaitForFixedUpdate :
-                case null:
-                    if (token.KeepWaiting(true)) return false;
-                    continue;
-            }
-
-            if (current is Task task)
-            {
-                if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
-                    continue;
-
-                return false;
-            }
-
-            if (current is not IEnumerator other) continue;
-
-            if (token.SyncOrAsync)
-            {
-                if (!ProcessCoroutine(other, token)) continue;
-
-                return true;
-            }
-
-            if (ProcessCoroutine(other, token)) continue;
-
-            return true;
-
-        } while (routine.MoveNext());
-
-        return true;
-    }
-  
-    private bool ProcessDebugCoroutine(in IEnumerator routine, CustomCoroutineToken token)
-    {
-        try
-        {
-            do
-            {
-                if (routine is null)
-                    break;
-                if (token is { Pause: true, Start: false, Stop: false })
-                    return false;
-                if (token is { Stop: true })
-                    break;
-
-                object current = routine.Current;
-                switch (current)
-                {
-                    case WaitWhile { keepWaiting: true }:
-                        return false;
-                    case WaitWhile { keepWaiting: false }:
-                        continue;
-                    case WaitUntil { keepWaiting: true }:
-                        return false;
-                    case WaitUntil { keepWaiting: false }:
-                        continue;
-                    case CustomYieldInstruction { keepWaiting: true }:
-                        return false;
-                    case CustomYieldInstruction { keepWaiting: false }:
-                        continue;
-                    case WaitForEndOfFrame:
-                    case WaitForFixedUpdate:
-                    case null:
-                        if (token.KeepWaiting(true)) return false;
-                        continue;
-                }
-
-                if (current is Task task)
-                {
-                    if (task.IsCanceled || task.IsCompleted || task.IsCompletedSuccessfully || task.IsFaulted)
-                        continue;
-
-                    return false;
-                }
-
-                if (current is not IEnumerator other) continue;
-
-                if (token.SyncOrAsync)
-                {
-                    if (!ProcessCoroutine(other, token)) continue;
-
-                    return true;
-                }
-
-                if (ProcessCoroutine(other, token)) continue;
-
-                return true;
-
-            } while (routine.MoveNext());
-            
-            return true;
-        }
-        catch (Exception e)
-        {
-            Debug.Log($@"Sub Coroutine Index : {token.Index} |
- Exception: {e}");
-            throw;
-        }
-    }
-
-    #endregion
 }

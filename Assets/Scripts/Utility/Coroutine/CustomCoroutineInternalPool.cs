@@ -9,12 +9,15 @@ public class CustomCoroutineInternalPool
         if (_pool.TryPop(out CustomCoroutineInternal item))
             return item;
 
-        return new CustomCoroutineInternal();
+        return new CustomCoroutineInternal() { index = -1 };
     }
 
     public void Return(CustomCoroutineInternal item)
     {
-        item = item.Reset();
+        var temp = item;
+        temp.index = -1;
+        temp.routine = null;
+        temp.token = default;
         _pool.Push(item);
     }
 }

@@ -15,14 +15,18 @@ public class AllStatusInfos : ScriptableObject
     
     private void OnEnable()
     {
+#if  UNITY_EDITOR
+        // SerializedDictionary를 사용해야하나..
+#else
         ConvertToDictionary();
         ExtractIndexMapKeys();
+#endif
     }
 
     private void ConvertToDictionary()
     {
         _statusIndexMap = new Dictionary<string, int>(128);
-        _statusIndexMap = stats.ToDictionary(key => key.Name, value => value.Index);
+        _statusIndexMap = stats.ToDictionary(key => key.RawName, value => value.Index);
     }
     private void ExtractIndexMapKeys()
     {

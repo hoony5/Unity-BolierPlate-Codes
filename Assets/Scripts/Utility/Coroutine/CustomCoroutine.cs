@@ -59,7 +59,7 @@ public class CustomCoroutine : MonoBehaviour
             RemoveAllRoutines();
     }
 
-    public void Reset()
+    public void ResetRoutines()
     {
         _activeCoroutines.Clear();
         _freeIndicesQueue.Clear();

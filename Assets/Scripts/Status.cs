@@ -12,7 +12,7 @@ public class Status : MonoBehaviour
     public float GetFinalizeValue(string statusName)
     {
         //return _totalStatuses[Ability.AllStatusInfos.GetStatusIndex(statusName)].Value;
-        return _totalStatuses.Find(i => i.Name.Equals(statusName, StringComparison.Ordinal)).Value; 
+        return _totalStatuses.Find(i => i.RawName.Equals(statusName, StringComparison.Ordinal)).Value; 
     }
 
     public void UpdateTotalStatuses()
@@ -37,10 +37,10 @@ public class Status : MonoBehaviour
 
     public void SetBaseValue(string statusName, int value)
     {
-        StatusItemInfo stat = _totalStatuses.Find(i => i.Name.Equals(statusName, StringComparison.Ordinal));
+        StatusItemInfo stat = _totalStatuses.Find(i => i.RawName.Equals(statusName, StringComparison.Ordinal));
         if (stat is null)
         {
-            _totalStatuses.Add(new StatusItemInfo(){Name = statusName, Value = value});
+            _totalStatuses.Add(new StatusItemInfo(){RawName = statusName, Value = value});
             return;
         }
 

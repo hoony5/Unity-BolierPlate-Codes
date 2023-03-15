@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -19,75 +18,10 @@ public class CustomCoroutine : MonoBehaviour
     private bool _isPause;
     private bool _isStop;
 
+    #region Life Cycles
     private void Start()
     {
         Init();
-    }
-
-    public void Init()
-    {
-        _coroutinePool = new CustomCoroutineInternalPool();
-        _usingIndicesDictionary = new Dictionary<string, List<int>>(settings.MaxCoroutines);
-        Resize(settings.MaxCoroutines);
-    }
-
-    public void Resize(int addRangeLength)
-    {
-        _availableIndicesList ??= new List<int>(addRangeLength);
-        _freeIndicesQueue ??= new Queue<int>(addRangeLength);
-        InitializeAvailableIndices(start: _availableIndicesList.Count, count: addRangeLength);
-
-        if(_activeCoroutines is null)
-        {
-            _activeCoroutines = new CustomCoroutineInternal[settings.MaxCoroutines];
-            for (int i = 0; i < _activeCoroutines.Length; i++)
-            {
-                CustomCoroutineInternal temp = _activeCoroutines[i];
-                temp.index = -1;
-                _activeCoroutines[i] = temp;
-            }
-        }
-        else
-            Array.Resize(ref _activeCoroutines, settings.MaxCoroutines * 2);
-    }
-
-    private void InitializeAvailableIndices(int start, int count)
-    {
-        for (int i = start; i < count; i++)
-        {
-            _availableIndicesList.Add(i);
-            _freeIndicesQueue.Enqueue(i);
-        }
-    }
-
-    private void OnUpdateRoutines()
-    {
-        for (int i = 0; i < _activeCoroutines.Length; i++)
-        {
-            if(_activeCoroutines[i].index != -1)
-                ProcessCoroutine(_activeCoroutines[i]);
-        }
-    }
-    private async Task OnUpdateRoutinesAsync()
-    {
-        await Task.Yield();
-        
-        for (int i = 0; i < _activeCoroutines.Length; i++)
-        {
-            if(_activeCoroutines[i].index != -1)
-                ProcessCoroutine(_activeCoroutines[i]);
-        }
-    }
-
-    private void RemoveAllRoutines()
-    {
-        for (int i = _activeCoroutines.Length - 1; i >= 0; i--)
-        {
-            CustomCoroutineInternal temp = _activeCoroutines[i];
-            temp.index = -1;
-            _activeCoroutines[i] = temp;
-            _coroutinePool.Return(_activeCoroutines[i]);
-        }
     }
 
     public void Update()
@@ -113,7 +47,79 @@ public class CustomCoroutine : MonoBehaviour
         if (_isStop)
             RemoveAllRoutines();
     }
+    #endregion
 
+    #region Initialize & Resize
+    public void Init()
+    {
+        _coroutinePool = new CustomCoroutineInternalPool();
+        _usingIndicesDictionary = new Dictionary<string, List<int>>(settings.MaxCoroutines);
+        Resize(settings.MaxCoroutines);
+    }
+
+    private void InitializeAvailableIndices(int start, int count)
+    {
+        for (int i = start; i < count; i++)
+        {
+            _availableIndicesList.Add(i);
+            _freeIndicesQueue.Enqueue(i);
+        }
+    }
+
+    public void Resize(int addRangeLength)
+    {
+        _availableIndicesList ??= new List<int>(addRangeLength);
+        _freeIndicesQueue ??= new Queue<int>(addRangeLength);
+        InitializeAvailableIndices(start: _availableIndicesList.Count, count: addRangeLength);
+
+        if(_activeCoroutines is null)
+        {
+            _activeCoroutines = new CustomCoroutineInternal[settings.MaxCoroutines];
+            for (int i = 0; i < _activeCoroutines.Length; i++)
+            {
+                CustomCoroutineInternal temp = _activeCoroutines[i];
+                temp.index = -1;
+                _activeCoroutines[i] = temp;
+            }
+        }
+        else
+            Array.Resize(ref _activeCoroutines, settings.MaxCoroutines * 2);
+    }
+    #endregion
+
+    #region Update Routins
+    private void OnUpdateRoutines()
+    {
+        for (int i = 0; i < _activeCoroutines.Length; i++)
+        {
+            if(_activeCoroutines[i].index != -1)
+                ProcessCoroutine(_activeCoroutines[i]);
+        }
+    }
+    private async Task OnUpdateRoutinesAsync()
+    {
+        await Task.Yield();
+        
+        for (int i = 0; i < _activeCoroutines.Length; i++)
+        {
+            if(_activeCoroutines[i].index != -1)
+                ProcessCoroutine(_activeCoroutines[i]);
+        }
+    }
+    
+    private void RemoveAllRoutines()
+    {
+        for (int i = _activeCoroutines.Length - 1; i >= 0; i--)
+        {
+            CustomCoroutineInternal temp = _activeCoroutines[i];
+            temp.index = -1;
+            _activeCoroutines[i] = temp;
+            _coroutinePool.Return(_activeCoroutines[i]);
+        }
+    }
+    #endregion
+
+    #region Process IEnumerator
     private bool ProcessCoroutine(CustomCoroutineInternal behaviour)
     {
         bool TryProcessYieldInstructions(object currentYieldInstruction)
@@ -312,7 +318,9 @@ public class CustomCoroutine : MonoBehaviour
 
         return token;
     }
+    #endregion
 
+    #region Token Methods
     public void ResumeRoutine(CustomCoroutineToken token)
     {
         if (_activeCoroutines.Length <= token.Index) return;
@@ -336,6 +344,9 @@ public class CustomCoroutine : MonoBehaviour
         if (_activeCoroutines.Length <= token.Index) return;
         _activeCoroutines[token.Index].OnSync();
     }
+    #endregion
+
+    #region Tracking Queries
     public bool AnyExist(string tag)
     {
         return _usingIndicesDictionary.ContainsKey(tag) && _usingIndicesDictionary[tag].Count > 0;
@@ -349,7 +360,6 @@ public class CustomCoroutine : MonoBehaviour
         }
         return false;
     }
-
     public bool HasRoutine(CustomCoroutineToken token)
     {
         foreach (CustomCoroutineInternal activeCoroutine in _activeCoroutines)
@@ -368,4 +378,5 @@ public class CustomCoroutine : MonoBehaviour
 
         return false;
     }
+    #endregion
 }

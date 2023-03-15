@@ -31,17 +31,11 @@ public class CustomCoroutine : MonoBehaviour
         Resize(settings.MaxCoroutines);
     }
 
-    public void Resize(int capacity)
+    public void Resize(int addRangeLength)
     {
-        if (_availableIndicesList is null)
-            _availableIndicesList = new List<int>(capacity);
-        
-        _availableIndicesList.AddRange(Enumerable.Range(start: _availableIndicesList.Count, count: capacity));
-
-        if (_freeIndicesQueue is null)
-            _freeIndicesQueue = new Queue<int>(capacity);
-            
-        InitializeAvailableIndices(start: _availableIndicesList.Count, count: capacity);
+        _availableIndicesList ??= new List<int>(addRangeLength);
+        _freeIndicesQueue ??= new Queue<int>(addRangeLength);
+        InitializeAvailableIndices(start: _availableIndicesList.Count, count: addRangeLength);
 
         if(_activeCoroutines is null)
         {
@@ -122,101 +116,89 @@ public class CustomCoroutine : MonoBehaviour
 
     private bool ProcessCoroutine(CustomCoroutineInternal behaviour)
     {
+        bool TryProcessYieldInstructions(object currentYieldInstruction)
+        {
+            if (behaviour.token.Pause)
+                return false;
+
+            if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
+            {
+                behaviour.UpdateWaiting();
+                if (behaviour.KeepWaiting())
+                    return false;
+            }
+            else if (currentYieldInstruction is WaitForTime waitForTime)
+            {
+                if (waitForTime.keepWaiting)
+                {
+                    return false;
+                }
+
+                waitForTime.Reset();
+            }
+            else if (currentYieldInstruction is WaitUntil waitUntil)
+            {
+                if (waitUntil.keepWaiting)
+                {
+                    return false;
+                }
+            }
+            else if (currentYieldInstruction is WaitWhile waitWhile)
+            {
+                if (waitWhile.keepWaiting)
+                {
+                    return false;
+                }
+            }
+            else if (currentYieldInstruction is WaitUpdate waitUpdate)
+            {
+                if (waitUpdate.keepWaiting)
+                {
+                    return false;
+                }
+            }
+            else if (currentYieldInstruction is WaitEvent waitEvent)
+            {
+                if (waitEvent.keepWaiting)
+                {
+                    return false;
+                }
+            }
+            else if (currentYieldInstruction is Task task)
+            {
+                if (!task.IsCompleted)
+                {
+                    return false;
+                }
+            }
+            else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
+            {
+                if (!ProcessNestedCoroutine(nestedCoroutine.routine))
+                {
+                    return false;
+                }
+            }
+            else if (currentYieldInstruction is IEnumerator nestedRoutine)
+            {
+                if (!ProcessNestedCoroutine(nestedRoutine))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         bool ProcessNestedCoroutine(IEnumerator coroutine)
         {
-            int nestedIndex;
-            if (_freeIndicesQueue.Count > 0)
-            {
-                nestedIndex = _freeIndicesQueue.Dequeue();
-            }
-            else
-            {
-                Resize(settings.MaxCoroutines);
-                nestedIndex = _activeCoroutines.Length;
-            }
-
-            CustomCoroutineInternal nestedBehaviour =
-                new CustomCoroutineInternal(nestedIndex, coroutine, new CustomCoroutineToken(), true);
-
             do
             {
-                object currentYieldInstruction = nestedBehaviour.routine.Current;
+                if (behaviour.routine is null || behaviour.token.Stop) break;
+                object currentYieldInstruction = coroutine.Current;
 
-                if (behaviour.routine is null)
-                    break;
-                if (behaviour.token.Stop)
-                    break;
-
-                if (behaviour.token.Pause)
+                if (!TryProcessYieldInstructions(currentYieldInstruction))
                     return false;
-
-                if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
-                {
-                    behaviour.UpdateWaiting();
-                    if (behaviour.KeepWaiting())
-                        return false;
-                }
-                else if (currentYieldInstruction is WaitForTime waitForTime)
-                {
-                    if (waitForTime.keepWaiting)
-                    {
-                        return false;
-                    }
-                    waitForTime.Reset();
-                }
-                else if (currentYieldInstruction is WaitUntil waitUntil)
-                {
-                    if (waitUntil.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is WaitWhile waitWhile)
-                {
-                    if (waitWhile.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is WaitUpdate waitUpdate)
-                {
-                    if (waitUpdate.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is WaitEvent waitEvent)
-                {
-                    if (waitEvent.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is Task task)
-                {
-                    if (!task.IsCompleted && behaviour.token.SyncOrAsync)
-                    {
-                        return false;   
-                    }
-                }
-                else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
-                {
-                    if (!ProcessNestedCoroutine(nestedCoroutine.routine))
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is IEnumerator nestedRoutine)
-                {
-                    if (!ProcessNestedCoroutine(nestedRoutine))
-                    {
-                        return false;
-                    }
-                }
             } while (coroutine.MoveNext());
-
-            _freeIndicesQueue.Enqueue(nestedIndex);
             return true;
         }
 
@@ -226,85 +208,12 @@ public class CustomCoroutine : MonoBehaviour
             {
                 do
                 {
-                    if (behaviour.routine is null)
-                        break;
-                    if (behaviour.token.Stop)
-                        break;
-
-                    if (behaviour.token.Pause)
-                        return false;
-
-                    // Handle the current yield instruction
+                    if (behaviour.routine is null || behaviour.token.Stop) break;
                     object currentYieldInstruction = behaviour.routine.Current;
 
-                    if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
-                    {
-                        behaviour.UpdateWaiting();
-                        if (behaviour.KeepWaiting())
-                            return false;
-                    }
-                    else if (currentYieldInstruction is WaitForTime waitForTime)
-                    {
-                        if (waitForTime.keepWaiting)
-                        {
-                            return false;
-                        }
-                        waitForTime.Reset();
-                    }
-                    else if (currentYieldInstruction is WaitUntil waitUntil)
-                    {
-                        if (waitUntil.keepWaiting)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (currentYieldInstruction is WaitWhile waitWhile)
-                    {
-                        if (waitWhile.keepWaiting)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (currentYieldInstruction is WaitUpdate waitUpdate)
-                    {
-                        // WaitUpdate will automatically alternate between waiting and not waiting
-                        // No additional handling is needed here
-                        if (waitUpdate.keepWaiting)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (currentYieldInstruction is WaitEvent waitEvent)
-                    {
-                        if (waitEvent.keepWaiting)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (currentYieldInstruction is Task task && behaviour.token.SyncOrAsync)
-                    {
-                        // Wait for the Task to complete
-                        if (!task.IsCompleted && behaviour.token.SyncOrAsync)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine && behaviour.token.SyncOrAsync)
-                    {
-                        // Process the nested CustomCoroutineInternal
-                        if (!ProcessNestedCoroutine(nestedCoroutine.routine))
-                        {
-                            return false;
-                        }
-                    }
-                    else if (currentYieldInstruction is IEnumerator nestedRoutine && behaviour.token.SyncOrAsync)
-                    {
-                        // Process the nested IEnumerator
-                        if (!ProcessNestedCoroutine(nestedRoutine))
-                        {
-                            return false;
-                        }
-                    }
+                    if (!TryProcessYieldInstructions(currentYieldInstruction))
+                        return false;
+                    
                 } while (behaviour.routine.MoveNext());
 
                 _activeCoroutines[behaviour.index] = default;
@@ -329,89 +238,15 @@ public class CustomCoroutine : MonoBehaviour
             }
         }
 
-        else
+        do
         {
-            do
-            {
-                if (behaviour.routine is null)
-                    break;
-                if (behaviour.token.Stop)
-                    break;
-                if (behaviour.token.Pause)
-                    return false;
-                // Handle the current yield instruction
-                object currentYieldInstruction = behaviour.routine.Current;
+            if (behaviour.routine is null || behaviour.token.Stop) break;
+            object currentYieldInstruction = behaviour.routine.Current;
 
-                if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
-                {
-                    behaviour.UpdateWaiting();
-                    if (behaviour.KeepWaiting())
-                        return false;
-                }
-                else if (currentYieldInstruction is WaitForTime waitForTime)
-                {
-                    if (waitForTime.keepWaiting)
-                    {
-                        return false;
-                    }
-                    waitForTime.Reset();
-                }
-                else if (currentYieldInstruction is WaitUntil waitUntil)
-                {
-                    if (waitUntil.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is WaitWhile waitWhile)
-                {
-                    if (waitWhile.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is WaitUpdate waitUpdate)
-                {
-                    // WaitUpdate will automatically alternate between waiting and not waiting
-                    // No additional handling is needed here
-                    if (waitUpdate.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is WaitEvent waitEvent)
-                {
-                    if (waitEvent.keepWaiting)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is Task task)
-                {
-                    // Wait for the Task to complete
-                    if (!task.IsCompleted && behaviour.token.SyncOrAsync)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
-                {
-                    // Process the nested CustomCoroutineInternal
-                    if (!ProcessNestedCoroutine(nestedCoroutine.routine) && behaviour.token.SyncOrAsync)
-                    {
-                        return false;
-                    }
-                }
-                else if (currentYieldInstruction is IEnumerator nestedRoutine)
-                {
-                    // Process the nested IEnumerator
-                    if (!ProcessNestedCoroutine(nestedRoutine) && behaviour.token.SyncOrAsync)
-                    {
-                        return false;
-                    }
-                }
-            } while (behaviour.routine.MoveNext());
-        }
+            if (!TryProcessYieldInstructions(currentYieldInstruction))
+                return false;
+                
+        } while (behaviour.routine.MoveNext());
 
         _activeCoroutines[behaviour.index] = default;
         _coroutinePool.Return(behaviour);
@@ -444,7 +279,7 @@ public class CustomCoroutine : MonoBehaviour
         {
             Resize(settings.MaxCoroutines);
         }
-
+        Debug.Log(_freeIndicesQueue.Count);
         int index = _freeIndicesQueue.Dequeue();
         CustomCoroutineToken token = new CustomCoroutineToken(index, start: true, pause: false, stop: false, syncOrAsync: true);
         CustomCoroutineInternal newBehaviour = _coroutinePool.Get().Init(index, routine, token ,false);

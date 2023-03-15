@@ -500,4 +500,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af94f46bd8aa444409c62d1bf8cbb96f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _coroutine: {fileID: 1409953145}
+  coroutine: {fileID: 1409953145}

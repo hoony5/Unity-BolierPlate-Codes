@@ -19,7 +19,12 @@ public class CustomCoroutine : MonoBehaviour
     private bool _isPause;
     private bool _isStop;
 
-    void Start()
+    private void Start()
+    {
+        Init();
+    }
+
+    public void Init()
     {
         _coroutinePool = new CustomCoroutineInternalPool();
         _usingIndicesDictionary = new Dictionary<string, List<int>>(settings.MaxCoroutines);
@@ -30,16 +35,13 @@ public class CustomCoroutine : MonoBehaviour
     {
         if (_availableIndicesList is null)
             _availableIndicesList = new List<int>(capacity);
-        else
-            _availableIndicesList.AddRange(Enumerable.Range(start: _availableIndicesList.Count, count: capacity));
+        
+        _availableIndicesList.AddRange(Enumerable.Range(start: _availableIndicesList.Count, count: capacity));
 
         if (_freeIndicesQueue is null)
-        {
             _freeIndicesQueue = new Queue<int>(capacity);
-            InitializeAvailableIndices(start: 0, count: settings.MaxCoroutines);
-        }
-        else
-            InitializeAvailableIndices(start: _availableIndicesList.Count, count: capacity);
+            
+        InitializeAvailableIndices(start: _availableIndicesList.Count, count: capacity);
 
         if(_activeCoroutines is null)
         {
@@ -143,6 +145,11 @@ public class CustomCoroutine : MonoBehaviour
 
                 if (behaviour.routine is null)
                     break;
+                if (behaviour.token.Stop)
+                    break;
+
+                if (behaviour.token.Pause)
+                    return false;
 
                 if (currentYieldInstruction is null or WaitForFixedUpdate or WaitForEndOfFrame)
                 {
@@ -156,6 +163,7 @@ public class CustomCoroutine : MonoBehaviour
                     {
                         return false;
                     }
+                    waitForTime.Reset();
                 }
                 else if (currentYieldInstruction is WaitUntil waitUntil)
                 {
@@ -209,7 +217,7 @@ public class CustomCoroutine : MonoBehaviour
             } while (coroutine.MoveNext());
 
             _freeIndicesQueue.Enqueue(nestedIndex);
-            return !nestedBehaviour.KeepWaiting();
+            return true;
         }
 
         if (settings.DebugMode)
@@ -241,6 +249,7 @@ public class CustomCoroutine : MonoBehaviour
                         {
                             return false;
                         }
+                        waitForTime.Reset();
                     }
                     else if (currentYieldInstruction is WaitUntil waitUntil)
                     {
@@ -272,7 +281,7 @@ public class CustomCoroutine : MonoBehaviour
                             return false;
                         }
                     }
-                    else if (currentYieldInstruction is Task task)
+                    else if (currentYieldInstruction is Task task && behaviour.token.SyncOrAsync)
                     {
                         // Wait for the Task to complete
                         if (!task.IsCompleted && behaviour.token.SyncOrAsync)
@@ -280,7 +289,7 @@ public class CustomCoroutine : MonoBehaviour
                             return false;
                         }
                     }
-                    else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
+                    else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine && behaviour.token.SyncOrAsync)
                     {
                         // Process the nested CustomCoroutineInternal
                         if (!ProcessNestedCoroutine(nestedCoroutine.routine))
@@ -288,7 +297,7 @@ public class CustomCoroutine : MonoBehaviour
                             return false;
                         }
                     }
-                    else if (currentYieldInstruction is IEnumerator nestedRoutine)
+                    else if (currentYieldInstruction is IEnumerator nestedRoutine && behaviour.token.SyncOrAsync)
                     {
                         // Process the nested IEnumerator
                         if (!ProcessNestedCoroutine(nestedRoutine))
@@ -345,6 +354,7 @@ public class CustomCoroutine : MonoBehaviour
                     {
                         return false;
                     }
+                    waitForTime.Reset();
                 }
                 else if (currentYieldInstruction is WaitUntil waitUntil)
                 {
@@ -387,7 +397,7 @@ public class CustomCoroutine : MonoBehaviour
                 else if (currentYieldInstruction is CustomCoroutineInternal nestedCoroutine)
                 {
                     // Process the nested CustomCoroutineInternal
-                    if (!ProcessNestedCoroutine(nestedCoroutine.routine))
+                    if (!ProcessNestedCoroutine(nestedCoroutine.routine) && behaviour.token.SyncOrAsync)
                     {
                         return false;
                     }
@@ -395,7 +405,7 @@ public class CustomCoroutine : MonoBehaviour
                 else if (currentYieldInstruction is IEnumerator nestedRoutine)
                 {
                     // Process the nested IEnumerator
-                    if (!ProcessNestedCoroutine(nestedRoutine))
+                    if (!ProcessNestedCoroutine(nestedRoutine) && behaviour.token.SyncOrAsync)
                     {
                         return false;
                     }
@@ -426,7 +436,7 @@ public class CustomCoroutine : MonoBehaviour
        _isStart = false;
        _isPause = false;
        _isStop = true;
-   }
+   }    
 
     public CustomCoroutineToken AddRoutine(IEnumerator routine)
     {

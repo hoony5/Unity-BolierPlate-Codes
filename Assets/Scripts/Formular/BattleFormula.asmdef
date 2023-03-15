@@ -1,0 +1,16 @@
+{
+    "name": "BattleFormula",
+    "rootNamespace": "",
+    "references": [
+        "GUID:97de7a5fe5b51814f8de60e216cabc50"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

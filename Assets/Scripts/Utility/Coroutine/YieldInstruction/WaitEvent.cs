@@ -9,6 +9,7 @@ public class WaitEvent : CustomYieldInstruction
     private bool _useUntil;
     private bool _useWhile;
 
+    
     public WaitEvent()
     {
     }

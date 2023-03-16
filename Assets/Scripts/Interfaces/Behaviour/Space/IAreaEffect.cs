@@ -3,5 +3,5 @@
 /// </summary>
 public interface IAreaEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, int areaMask);
+    void UpdateEffect(Character character, Character other,int areaMask);
 }

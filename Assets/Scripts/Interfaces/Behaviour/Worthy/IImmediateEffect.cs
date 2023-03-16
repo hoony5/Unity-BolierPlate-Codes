@@ -3,5 +3,5 @@
 /// </summary>
 public interface IMotivatedEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, bool isMotivated);
+    void UpdateEffect(Character character, Character other, bool isMotivated);
 }

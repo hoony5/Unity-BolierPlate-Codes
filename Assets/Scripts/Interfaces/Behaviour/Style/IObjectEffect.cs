@@ -3,5 +3,5 @@
 /// </summary>
 public interface IObjectEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, bool isUseTheObject);
+    void UpdateEffect(Character character, Character other, bool isUseTheObject);
 }

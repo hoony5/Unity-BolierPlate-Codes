@@ -3,5 +3,5 @@
 /// </summary>
 public interface ISequenceEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, bool moveNext);
+    void UpdateEffect(Character character, Character other, bool moveNext);
 }

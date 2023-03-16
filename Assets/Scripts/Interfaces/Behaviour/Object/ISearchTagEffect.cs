@@ -3,5 +3,5 @@
 /// </summary>
 public interface ISearchTagEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, string tag);
+    void UpdateEffect(Character character, Character other, string tag);
 }

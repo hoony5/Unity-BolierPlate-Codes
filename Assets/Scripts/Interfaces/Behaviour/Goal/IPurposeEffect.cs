@@ -4,5 +4,5 @@
 [ToDo("purpose filter convert to Enum of Behaviour Type of purpose")]
 public interface IPurposeEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, string purposeFilter);
+    void UpdateEffect(Character character, Character other, string purposeFilter);
 }

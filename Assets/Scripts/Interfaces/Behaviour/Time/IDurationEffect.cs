@@ -3,5 +3,5 @@
 /// </summary>
 public interface IDurationEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, float deltaTime);
+    void UpdateEffect(Character character,Character other, float deltaTime);
 }

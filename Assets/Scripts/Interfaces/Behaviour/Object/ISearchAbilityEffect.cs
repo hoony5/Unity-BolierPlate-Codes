@@ -3,5 +3,5 @@
 /// </summary>
 public interface ISearchAbilityEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, string abilityName, float threshold);
+    void UpdateEffect(Character character, Character other, string abilityName, float threshold);
 }

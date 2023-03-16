@@ -3,5 +3,5 @@
 /// </summary>
 public interface IDistanceEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, float distanceThreshold);
+    void UpdateEffect(Character character, Character other, float distanceThreshold);
 }

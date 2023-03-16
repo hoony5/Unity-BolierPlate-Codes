@@ -5,14 +5,38 @@ using UnityEngine;
 [Serializable]
 public class Status : MonoBehaviour
 {
-    [field: SerializeField] private CharacterAbility Ability { get; set; }
+    [field: SerializeField] public CharacterAbility Ability { get; set; }
 
     [SerializeField] private List<StatusItemInfo> _totalStatuses = new List<StatusItemInfo>(128);
 
     public float GetFinalizeValue(string statusName)
     {
-        //return _totalStatuses[Ability.AllStatusInfos.GetStatusIndex(statusName)].Value;
-        return _totalStatuses.Find(i => i.RawName.Equals(statusName, StringComparison.Ordinal)).Value; 
+        foreach (StatusItemInfo stat in _totalStatuses)
+        {
+            if (stat.RawName.Equals(statusName, StringComparison.Ordinal))
+            {
+                return stat.Value;
+            }
+        }
+
+        return 0;
+    }
+
+    public float GetStatusValue(string statusName)
+    {
+        foreach (StatusItemInfo stat in _totalStatuses)
+        {
+            if (stat.RawName.Equals(statusName, StringComparison.Ordinal))
+            {
+                return stat.Value;
+            }
+        }
+
+        return 0;
+    }
+    public float GetStatusValue(int index)
+    {
+        return _totalStatuses[index].Value;
     }
 
     public void UpdateTotalStatuses()
@@ -37,13 +61,12 @@ public class Status : MonoBehaviour
 
     public void SetBaseValue(string statusName, int value)
     {
-        StatusItemInfo stat = _totalStatuses.Find(i => i.RawName.Equals(statusName, StringComparison.Ordinal));
-        if (stat is null)
+        foreach (StatusItemInfo stat in _totalStatuses)
         {
-            _totalStatuses.Add(new StatusItemInfo(){RawName = statusName, Value = value});
-            return;
+            if (stat.RawName.Equals(statusName))
+            {
+                stat.Value = value;
+            }
         }
-
-        stat.Value = value;
     }
 }

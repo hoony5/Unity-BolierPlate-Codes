@@ -3,5 +3,5 @@
 /// </summary>
 public interface ITeamEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, int count);
+    void UpdateEffect(Character character, Character other, int count);
 }

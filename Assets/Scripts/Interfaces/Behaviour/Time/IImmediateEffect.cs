@@ -3,5 +3,5 @@
 /// </summary>
 public interface IImmediateEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character);
+    void UpdateEffect(Character character, Character other);
 }

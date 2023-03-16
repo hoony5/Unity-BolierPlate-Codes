@@ -4,5 +4,5 @@
 [ToDo("state filter convert to Enum of Behaviour Type of state")]
 public interface ISearchStateEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, string state);
+    void UpdateEffect(Character character, Character other, string state);
 }

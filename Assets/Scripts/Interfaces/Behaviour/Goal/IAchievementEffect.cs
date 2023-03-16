@@ -3,5 +3,5 @@
 /// </summary>
 public interface IAchievementEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, bool isAchieved);
+    void UpdateEffect(Character character, Character other, bool isAchieved);
 }

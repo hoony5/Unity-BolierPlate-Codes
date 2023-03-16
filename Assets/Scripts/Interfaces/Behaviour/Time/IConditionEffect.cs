@@ -3,5 +3,5 @@
 /// </summary>
 public interface IConditionEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, bool condition);
+    void UpdateEffect(Character character, Character other, bool condition);
 }

@@ -3,5 +3,5 @@
 /// </summary>
 public interface ICombinedEffect : IEffect
 {
-    void UpdateEffect(CharacterBehaviour character, bool isCombined);
+    void UpdateEffect(Character character, Character other, bool isCombined);
 }

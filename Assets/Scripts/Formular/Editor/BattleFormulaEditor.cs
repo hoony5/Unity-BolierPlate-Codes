@@ -1,5 +1,4 @@
 ﻿using System;
-using Codice.Client.Commands.CheckIn;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

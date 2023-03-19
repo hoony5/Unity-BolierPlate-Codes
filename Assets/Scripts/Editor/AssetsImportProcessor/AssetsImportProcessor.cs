@@ -9,6 +9,15 @@ using Object = UnityEngine.Object;
 
 public class AssetsImportProcessor : AssetPostprocessor
 {
+    private static bool CheckExcludeExtensions(string name)
+    {
+        return name.Contains(".meta")
+               || name.Contains(".cs")
+               || name.Contains(".asset")
+               || name.Contains(".dll")
+               || name.Contains(".asmdef")
+               || name.Equals(nameof(AssetsImportProcessor));
+    }
    static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 {
     ImportAssetsInfo importAssetsInfo = AssetDatabase.LoadAssetAtPath<ImportAssetsInfo>("Assets/Resources/AssetImportSetting/ImportAssetsInfo.asset");
@@ -22,8 +31,7 @@ public class AssetsImportProcessor : AssetPostprocessor
 
     foreach (string importingAsset in importedAssets)
     {
-        if (importingAsset is nameof(AssetsImportProcessor)) continue;
-        if (importingAsset.Contains(".meta") || importingAsset.Contains(".cs") || importingAsset.Contains(".asmdef")) continue;
+        if (CheckExcludeExtensions(importingAsset)) continue;
 
         // import folder -> execute recursive import
         if (AssetDatabase.IsValidFolder(importingAsset))
@@ -99,8 +107,7 @@ static void ProcessFolder(string folderPath, ImportAssetsInfo importAssetsInfo)
 static void ProcessAsset(Object asset, ImportAssetsInfo importAssetsInfo)
 {
     if (asset is null) return;
-    if (asset.name == nameof(AssetsImportProcessor)) return;
-    if (asset.name.Contains(".meta") || asset.name.Contains(".cs") || asset.name.Contains(".asmdef")) return;
+    if (CheckExcludeExtensions(asset.name)) return;
     
      // Load PreCached-PathInfo.
     PathInfo pathInfo = importAssetsInfo.GetPathInfo(asset.name);

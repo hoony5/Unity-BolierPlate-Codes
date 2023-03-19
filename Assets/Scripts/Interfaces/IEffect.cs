@@ -7,5 +7,5 @@
 
 public interface IEffect
 {
-    string Name { get;}
+    string Description { get;}
 }

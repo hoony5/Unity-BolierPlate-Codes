@@ -2,42 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable,CreateAssetMenu(fileName = "New Formula", menuName = "ScriptableObject/Calculate/BattleFormula")]
-public class BattleFormula : ScriptableObject
+namespace BattleFormulaCore
 {
-    [SerializeField] private string formulaName;
-    [SerializeField] private List<BattleFormulaInfo> formulaInfoList;
-    [SerializeField] private string description;
-    public List<BattleFormulaInfo> FormulaInfoList { get => formulaInfoList; set => formulaInfoList = value; }
-
-    public void PreCalculateValue(Status status)
+    [Serializable, CreateAssetMenu(fileName = "New Formula", menuName = "ScriptableObject/Calculate/BattleFormula")]
+    public class BattleFormula : ScriptableObject
     {
-        // Pre-calculate values for performance optimization
-        foreach (BattleFormulaInfo formulaInfo in formulaInfoList)
+        [SerializeField] private string formulaName;
+        [SerializeField] private List<BattleFormulaInfo> formulaInfoList;
+        [SerializeField] private string description;
+
+        public List<BattleFormulaInfo> FormulaInfoList
         {
-            formulaInfo.CalculatePreCalculatedValue(status);
+            get => formulaInfoList;
+            set => formulaInfoList = value;
         }
-    }
-    
-    public float CalculateFinalValue()
-    {
-        float finalValue = 0f;
 
-        // Calculate final value using pre-calculated values
-        foreach (BattleFormulaInfo formulaInfo in formulaInfoList)
+        // first
+        public void PreCalculateValue(Status status)
         {
-            float calculatedValue = formulaInfo.GetPreCalculatedValue();
-
-            // Check if value is valid
-            if (float.IsNaN(calculatedValue) || float.IsInfinity(calculatedValue))
+            // Pre-calculate values for performance optimization
+            foreach (BattleFormulaInfo formulaInfo in formulaInfoList)
             {
-                Debug.LogError($"Invalid or missing value detected in formula: {formulaName}, formula info: {formulaInfo.name}!");
-                continue;
+                formulaInfo.CalculatePreCalculatedValue(status);
+            }
+        }
+
+        //Second
+        public float CalculateFinalValue()
+        {
+            float finalValue = 0f;
+
+            // Calculate final value using pre-calculated values
+            foreach (BattleFormulaInfo formulaInfo in formulaInfoList)
+            {
+                float calculatedValue = formulaInfo.GetPreCalculatedValue();
+
+                // Check if value is valid
+                if (float.IsNaN(calculatedValue) || float.IsInfinity(calculatedValue))
+                {
+                    Debug.LogError(
+                        $"Invalid or missing value detected in formula: {formulaName}, formula info: {formulaInfo.name}!");
+                    continue;
+                }
+
+                // Update Latest Value
+                finalValue = calculatedValue;
             }
 
-            finalValue = calculatedValue;
+            return finalValue;
         }
-
-        return finalValue;
     }
 }

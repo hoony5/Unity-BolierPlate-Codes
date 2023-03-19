@@ -59,13 +59,32 @@ public class Status : MonoBehaviour
                                       + Ability.SkillStatus.GetStatuses()[index].Value;
     }
 
-    public void SetBaseValue(string statusName, int value)
+    public void SetBaseValue(string statusName, float value)
     {
         foreach (StatusItemInfo stat in _totalStatuses)
         {
             if (stat.RawName.Equals(statusName))
             {
                 stat.Value = value;
+            }
+        }
+    }public void AddBaseValue(string statusName, float value)
+    {
+        foreach (StatusItemInfo stat in _totalStatuses)
+        {
+            if (stat.RawName.Equals(statusName))
+            {
+                stat.Value += value;
+            }
+        }
+    }
+    public void MultiplyBaseValue(string statusName, float value)
+    {
+        foreach (StatusItemInfo stat in _totalStatuses)
+        {
+            if (stat.RawName.Equals(statusName))
+            {
+                stat.Value *= value;
             }
         }
     }

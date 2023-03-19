@@ -4,5 +4,5 @@
 public interface IDurationEffect : IEffect
 {
     public float Duration { get; set; }
-    void UpdateEffect(Character character,Character other, float deltaTime);
+    bool TryCheckTime(float currentDuration);
 }

@@ -5,5 +5,5 @@
 public interface ISearchStateEffect : IEffect
 {
     string SearchState { get; set; }
-    void UpdateEffect(Character character, Character other, string state);
+    bool TryCheckState(Character character, string stateName);
 }

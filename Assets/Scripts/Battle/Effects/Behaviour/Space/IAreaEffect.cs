@@ -4,5 +4,5 @@
 public interface IAreaEffect : IEffect
 {
     public float Range { get; set; }
-    void UpdateEffect(Character character, Character other,int areaMask);
+    bool TryCheckArea(Character character, int areaMask);
 }

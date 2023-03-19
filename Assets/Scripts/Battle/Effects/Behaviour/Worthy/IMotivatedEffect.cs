@@ -5,6 +5,6 @@
 /// </summary>
 public interface IMotivatedEffect : IEffect
 {
-    public List<EffectAbility> Effects { get; set; }
-    void UpdateEffect(Character character, Character other, bool isMotivated);
+    public List<EffectAbility> EffectAbilities { get; set; }
+    bool TryCheckMotivation(bool isMotivated);
 }

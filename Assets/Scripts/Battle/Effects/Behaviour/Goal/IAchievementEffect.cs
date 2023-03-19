@@ -7,5 +7,5 @@ using UnityEngine.TextCore.Text;
 public interface IAchievementEffect : IEffect
 {
     List<EffectAbility> Effects { get; set; }
-    void UpdateEffect(Character character, Character other, bool isAchieved);
+    bool TryCheckAchievement(Character character, bool isAchieved);
 }

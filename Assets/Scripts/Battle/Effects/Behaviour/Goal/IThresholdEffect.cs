@@ -4,5 +4,5 @@
 public interface IThresholdEffect : IEffect
 {
     float Threshold { get; set; }
-    void UpdateEffect(Character character, Character other, float threshold);
+    bool TryCheckThreshold(float threshold);
 }

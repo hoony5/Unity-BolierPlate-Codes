@@ -4,5 +4,5 @@
 public interface ISearchTagEffect : IEffect
 {
     string SearchTag { get; set; }
-    void UpdateEffect(Character character, Character other, string tag);
+    bool TryCheckTag(Character other, string tag);
 }

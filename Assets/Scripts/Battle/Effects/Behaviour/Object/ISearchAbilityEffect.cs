@@ -6,5 +6,5 @@
 public interface ISearchAbilityEffect : IEffect
 {
     List<StatusItemInfo> SearchStats { get; set; }
-    void UpdateEffect(Character character, Character other, string abilityName, float threshold);
+    bool TryUpdateEffect(Character character, string abilityName, float threshold, float value);
 }

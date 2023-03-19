@@ -6,6 +6,6 @@
 public interface ITeamEffect : IEffect
 {
     bool BuffOrDebuff { get; set; }
-    List<EffectAbility> Effects { get; set; }
-    void UpdateEffect(Character character, Character other, int count);
+    List<EffectAbility> EffectAbilities { get; set; }
+    void UpdateAbility(Character[] characters);
 }

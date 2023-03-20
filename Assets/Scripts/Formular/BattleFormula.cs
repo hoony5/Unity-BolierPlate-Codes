@@ -16,12 +16,12 @@ public class BattleFormula : ScriptableObject
     }
 
     // first
-    public void PreCalculateValue(Status status)
+    public void PreCalculateValue(Character me, Character other)
     {
         // Pre-calculate values for performance optimization
         foreach (BattleFormulaInfo formulaInfo in formulaInfoList)
         {
-            formulaInfo.CalculatePreCalculatedValue(status);
+            formulaInfo.CalculatePreCalculatedValue(me, other);
         }
     }
 

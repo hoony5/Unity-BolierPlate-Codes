@@ -11,8 +11,7 @@ public class BattleFormulaEditor : UnityEditor.Editor
     private SerializedProperty descriptionProp;
     private ReorderableList formulaInfoList;
     private Vector2 descriptionScrollPosition;
-    private float propertyWidth = (EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth) * 0.4f;
-    private float labelWidth = EditorGUIUtility.labelWidth;
+
 
     private void OnEnable()
     {
@@ -120,7 +119,9 @@ public class BattleFormulaEditor : UnityEditor.Editor
         SerializedProperty useInputModeProp = relativeObject.FindProperty("useInputMode");
         SerializedProperty useClmapProp = relativeObject.FindProperty("useClamp");
         SerializedProperty clampRangeVector2Prop = relativeObject.FindProperty("minMaxRange");
-
+        float propertyWidth = (EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth) * 0.4f;
+        float labelWidth = EditorGUIUtility.labelWidth + 5f;
+        
         // Draw the status name field
         EditorGUI.LabelField(rect, "Status Name");
         Rect labelPos = rect;
@@ -139,7 +140,7 @@ public class BattleFormulaEditor : UnityEditor.Editor
         labelPos.y = rect.y;
         EditorGUI.LabelField(rect,
             $"{(useInputModeProp.boolValue ? "<color=lime>Input Directly Base Value Mode On</color>" : "<color=yellow>Using Input Directly Base Value Mode ?</color>")}",
-            new GUIStyle(GUI.skin.label) { richText = true });
+            new GUIStyle(GUI.skin.label) { richText = true});
         rect.x += labelWidth;
         rect.width = propertyWidth;
         useInputModeProp.boolValue = EditorGUI.Toggle(rect, useInputModeProp.boolValue);
@@ -273,7 +274,7 @@ public class BattleFormulaEditor : UnityEditor.Editor
         string description = "";
         SerializedObject relativeObject = new SerializedObject(element.objectReferenceValue);
         SerializedProperty statusNameProp = relativeObject.FindProperty("statusName");
-        SerializedProperty calculationTypeProp = relativeObject.FindProperty("calculationType");
+        SerializedProperty formulaCalculationTypeProp = relativeObject.FindProperty("formulaCalculationType");
         SerializedProperty calculationTargetTypeProp = relativeObject.FindProperty("calculationTargetType");
         SerializedProperty modifyValueProp = relativeObject.FindProperty("modifyValue");
         SerializedProperty modifyBattleFormulaInfoProp = relativeObject.FindProperty("modifyBattleFormulaInfo");
@@ -282,7 +283,7 @@ public class BattleFormulaEditor : UnityEditor.Editor
 
         string formulaDescription = $"{statusNameProp.stringValue} => ";
 
-        FormulaCalculationType formulaCalculationType = (FormulaCalculationType)calculationTypeProp.enumValueIndex;
+        FormulaCalculationType formulaCalculationType = (FormulaCalculationType)formulaCalculationTypeProp.enumValueIndex;
         switch (formulaCalculationType)
         {
             case FormulaCalculationType.None:

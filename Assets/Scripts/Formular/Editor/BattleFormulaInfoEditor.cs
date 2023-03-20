@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleFormulaInfoEditor : UnityEditor.Editor
 {
     private SerializedProperty statusNameProp;
+    private SerializedProperty statusReferenceTargetProp;
     private SerializedProperty calculationTargetTypeProp;
     private SerializedProperty modifyBattleFormulaInfoProp;
     private SerializedProperty calculationTypeProp;
@@ -19,6 +20,7 @@ public class BattleFormulaInfoEditor : UnityEditor.Editor
     private void OnEnable()
     {
         statusNameProp = serializedObject.FindProperty("statusName");
+        statusReferenceTargetProp = serializedObject.FindProperty("statusReferenceTarget");
         calculationTargetTypeProp = serializedObject.FindProperty("calculationTargetType");
         modifyBattleFormulaInfoProp = serializedObject.FindProperty("modifyBattleFormulaInfo");
         calculationTypeProp = serializedObject.FindProperty("formulaCalculationType");
@@ -36,6 +38,9 @@ public class BattleFormulaInfoEditor : UnityEditor.Editor
         EditorGUILayout.Space(8f);
         EditorGUILayout.PropertyField(statusNameProp);
 
+        // Show the Reference Target field
+        EditorGUILayout.Space(8f);
+        EditorGUILayout.PropertyField(statusReferenceTargetProp);
         // Show the calculation type field
         EditorGUILayout.Space(8f);
         EditorGUILayout.PropertyField(calculationTypeProp);

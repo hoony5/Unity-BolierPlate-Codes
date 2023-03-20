@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleFormulaInfo : ScriptableObject
 {
     [SerializeField] private string statusName;
+    [SerializeField] private StatusReferenceTarget statusReferenceTarget;
     [SerializeField] private CalculationTargetType calculationTargetType;
     [SerializeField] private BattleFormulaInfo modifyBattleFormulaInfo;
     [SerializeField] private FormulaCalculationType formulaCalculationType;
@@ -46,9 +47,13 @@ public class BattleFormulaInfo : ScriptableObject
         set => modifyValue = value;
     }
 
-    public void CalculatePreCalculatedValue(Status status)
+    public void CalculatePreCalculatedValue(Character me, Character other)
     {
-        baseValue = status.GetFinalizeValue(statusName);
+        baseValue = statusReferenceTarget switch
+        {
+             StatusReferenceTarget.Me => me.StatusAbility.GetFinalizeValue(statusName),
+             StatusReferenceTarget.Other => other.StatusAbility.GetFinalizeValue(statusName)
+        };
         calculatedValue = formulaCalculationType switch
         {
             FormulaCalculationType.None => 0f,
@@ -84,7 +89,7 @@ public class BattleFormulaInfo : ScriptableObject
 #if UNITY_EDITOR
                 result = modifyBattleFormulaInfo.GetEditorCalculatedValue();
 #else
-                return = modifyBattleFormulaInfo.GetPreCalculatedValue();
+                result = modifyBattleFormulaInfo.GetPreCalculatedValue();
 #endif
                 return result;
             case CalculationTargetType.UseFormulaInfoValue:
@@ -111,12 +116,13 @@ public class BattleFormulaInfo : ScriptableObject
 
     public string ToFormulaString()
     {
+#if UNITY_EDITOR
         string modifier = calculationTargetType switch
         {
             CalculationTargetType.UseModifyValue => modifyValue.ToString(),
             CalculationTargetType.UseSelfValue => baseValue.ToString(),
             CalculationTargetType.UseFormulaInfoValue => modifyBattleFormulaInfo is null
-                ? "Please, assign BattleFormulaInfo"
+                ? "Please, assign BattleFormulaInfo"    
                 : modifyBattleFormulaInfo.GetEditorCalculatedValue().ToString(),
             _ => throw new ArgumentOutOfRangeException()
         };
@@ -146,5 +152,8 @@ public class BattleFormulaInfo : ScriptableObject
 
         resultValue = $"{baseValue} {@operator} {modifier}";
         return $"{(useClamp ? $"{clampedValue} : {resultValue}" : $"{clampedValue}")}";
+#else
+        return string.Empty;
+#endif
     }
 }

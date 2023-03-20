@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,12 +14,13 @@ public class AssetsImportProcessor : AssetPostprocessor
                || name.Contains(".cs")
                || name.Contains(".asset")
                || name.Contains(".dll")
-               || name.Contains(".asmdef")
+               || (name.Contains(".asmdef") && !name.Contains("ImportAssetsInfo.asset"))
                || name.Equals(nameof(AssetsImportProcessor));
     }
    static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 {
     ImportAssetsInfo importAssetsInfo = AssetDatabase.LoadAssetAtPath<ImportAssetsInfo>("Assets/Resources/AssetImportSetting/ImportAssetsInfo.asset");
+    if(importAssetsInfo is null) return;
     string[] importPaths = importAssetsInfo.GetAllPaths();
 
     // if any of the import paths doesn't exist, create it

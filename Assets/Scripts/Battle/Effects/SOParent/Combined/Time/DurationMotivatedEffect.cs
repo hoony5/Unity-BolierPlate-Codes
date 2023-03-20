@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new DurationMotivatedEffect", menuName = "ScriptableObject/Battle/Combined/Time/DurationMotivatedEffect", order = 0)]
-public class DurationMotivatedEffect : EffectInfoBase, IDurationEffect, IMotivatedEffect
+public class DurationMotivatedEffect : EffectInfoBase, IDurationMotivatedEffect
 {
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }

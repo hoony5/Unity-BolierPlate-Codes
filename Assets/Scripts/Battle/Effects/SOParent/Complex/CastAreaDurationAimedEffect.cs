@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new CastAreaDurationAimedEffect", menuName = "ScriptableObject/Battle/Complex/CastAreaDurationAimedEffect", order = 0)]
-public class CastAreaDurationAimedEffect : EffectInfoBase, IAreaEffect, ISearchAbilityEffect, ISearchStateEffect, IDurationEffect,IThresholdEffect
+public class CastAreaDurationAimedEffect : EffectInfoBase, ICastAreaDurationAimedEffect
 {
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public float Range { get; set; }

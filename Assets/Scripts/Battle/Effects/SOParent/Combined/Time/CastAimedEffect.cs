@@ -3,7 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "new CastAimedEffect",
     menuName = "ScriptableObject/Battle/Combined/Time/CastAimedEffect", order = 0)]
-public class CastAimedEffect : EffectInfoBase, IThresholdEffect, ISearchAbilityEffect,ISearchStateEffect
+public class CastAimedEffect : EffectInfoBase, ICastAimedEffect
 {
     [field:SerializeField] public float Threshold { get; set; }
     [field:SerializeField] public string SearchState { get; set; }

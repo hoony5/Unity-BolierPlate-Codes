@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaAimedEffect", menuName = "ScriptableObject/Battle/Combined/Area/AreaAimedEffect", order = 0)]
-public class AreaTeamEffect : EffectInfoBase, IAreaEffect, ITeamEffect
+public class AreaTeamEffect : EffectInfoBase, IAreaTeamEffect
 {
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public bool BuffOrDebuff { get; set; }

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaMotivatedEffect", menuName = "ScriptableObject/Battle/Combined/Area/AreaMotivatedEffect", order = 0)]
-public class AreaMotivatedEffect : EffectInfoBase, IAreaEffect, IMotivatedEffect
+public class AreaMotivatedEffect : EffectInfoBase, IAreaMotivatedEffect
 {
     [field:SerializeField] public float Range { get; set; }
 

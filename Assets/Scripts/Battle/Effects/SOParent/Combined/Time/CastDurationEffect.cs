@@ -3,7 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "new CastDurationEffect",
     menuName = "ScriptableObject/Battle/Combined/Time/CastDurationEffect", order = 0)]
-public class CastDurationEffect : EffectInfoBase, IDurationEffect, IThresholdEffect
+public class CastDurationEffect : EffectInfoBase, ICastDurationEffect
 {
     [field: SerializeField] public float Duration { get; set; }
     [field: SerializeField] public float Threshold { get; set; }

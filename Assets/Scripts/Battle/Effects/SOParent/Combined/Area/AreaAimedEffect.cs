@@ -2,13 +2,13 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaAimedEffect", menuName = "ScriptableObject/Battle/Combined/Area/AreaAimedEffect", order = 0)]
-public class AreaAimedEffect : EffectInfoBase, IAreaEffect, ISearchAbilityEffect, ISearchStateEffect,ISearchTagEffect
+public class AreaAimedEffect : EffectInfoBase, IAreaAimedEffect
 {
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
-   
+    
     public bool TryUpdateEffect(Character other, string abilityName, float threshold, float value)
     {
         throw new System.NotImplementedException();

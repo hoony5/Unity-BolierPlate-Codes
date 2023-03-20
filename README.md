@@ -2,6 +2,12 @@
 Not using ECS, but Basic Unity System's BoilerPlate Codes . For Study
 
 ---
+### 2023-03-20
+1. Effect Interfaaces
+   - for Creating Skill, Item, Attack Effect.
+2. Battle Formula
+   - add reference target Type,  whether other status or mine. 
+---
 ### 2023-03-14
 1. AssetImportPorcessor
    - for managing Resources

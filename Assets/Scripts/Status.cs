@@ -6,6 +6,7 @@ using UnityEngine;
 public class Status : MonoBehaviour
 {
     [field: SerializeField] public CharacterAbility Ability { get; set; }
+    [field: SerializeField] public EffectStatus EffectStatus { get; set; }
 
     [SerializeField] private List<StatusItemInfo> _totalStatuses = new List<StatusItemInfo>(128);
 

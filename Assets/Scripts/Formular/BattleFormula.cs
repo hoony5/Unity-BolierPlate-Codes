@@ -16,17 +16,17 @@ public class BattleFormula : ScriptableObject
     }
 
     // first
-    public void PreCalculateValue(Character me, Character other)
+    public void PreCalculateValue(Character refMine, Character refOther)
     {
         // Pre-calculate values for performance optimization
         foreach (BattleFormulaInfo formulaInfo in formulaInfoList)
         {
-            formulaInfo.CalculatePreCalculatedValue(me, other);
+            formulaInfo.CalculatePreCalculatedValue(refMine, refOther);
         }
     }
 
     //Second
-    public float CalculateFinalValue()
+    public float ExecuteFormula()
     {
         float finalValue = 0f;
 

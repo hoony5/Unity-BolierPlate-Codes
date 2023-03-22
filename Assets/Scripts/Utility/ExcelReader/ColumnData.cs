@@ -5,4 +5,5 @@ public class ColumnData
 {
     public string Header; // key
     public List<string> Values; // value
+    public int RowMergeCount;
 }

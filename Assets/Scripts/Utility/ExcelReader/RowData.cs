@@ -4,5 +4,6 @@
 public class RowData
 {
     public string FirstColumnValue; // key
-    public List<(string header, string value)> columns; // values
+    public List<string> columnHeaders;
+    public List<string> columnValues;
 }

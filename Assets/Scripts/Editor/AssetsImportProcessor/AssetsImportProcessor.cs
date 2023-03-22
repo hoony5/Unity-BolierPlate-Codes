@@ -12,6 +12,7 @@ public class AssetsImportProcessor : AssetPostprocessor
     {
         return name.Contains(".meta")
                || name.Contains(".cs")
+               || name.Contains(".prefab")
                || name.Contains(".asset")
                || name.Contains(".dll")
                || (name.Contains(".asmdef") && !name.Contains("ImportAssetsInfo.asset"))
@@ -44,7 +45,7 @@ public class AssetsImportProcessor : AssetPostprocessor
         // import asset file
         if (AssetDatabase.GetMainAssetTypeAtPath(importingAsset) != typeof(DefaultAsset))
         {
-            ProcessAsset(asset, importAssetsInfo);
+            ProcessAsset(importingAsset,asset, importAssetsInfo);
             continue;
         }
 
@@ -100,15 +101,14 @@ static void ProcessFolder(string folderPath, ImportAssetsInfo importAssetsInfo)
     Object[] subAssets = AssetDatabase.LoadAllAssetsAtPath(folderPath);
     foreach (Object subAsset in subAssets)
     {
-        ProcessAsset(subAsset, importAssetsInfo);
+        ProcessAsset(folderPath, subAsset, importAssetsInfo);
     }
 }
 
-static void ProcessAsset(Object asset, ImportAssetsInfo importAssetsInfo)
+static void ProcessAsset( string folderPath,Object asset, ImportAssetsInfo importAssetsInfo)
 {
     if (asset is null) return;
-    if (CheckExcludeExtensions(asset.name)) return;
-    
+    if (CheckExcludeExtensions(folderPath)) return;
      // Load PreCached-PathInfo.
     PathInfo pathInfo = importAssetsInfo.GetPathInfo(asset.name);
 

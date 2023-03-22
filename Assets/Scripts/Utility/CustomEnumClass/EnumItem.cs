@@ -1,3 +1,5 @@
+using UnityEngine;
+
 [System.Serializable]
 public class EnumItem<T>
 {
@@ -8,7 +10,7 @@ public class EnumItem<T>
         Order = order;       
     }
 
-    public string Key { get; set; }
-    public T Value { get; set; }
-    public int Order { get; set; }        
+    [field: SerializeField] public string Key { get; set; }
+    [field: SerializeField] public T Value { get; set; }
+    [field: SerializeField] public int Order { get; set; }        
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ChangedValue : MonoBehaviour
+public class CharacterLifeCycleValue : MonoBehaviour
 {
     [SerializeField] private ChangedValueType changedValueType;
     [SerializeField] private float minValue;
@@ -9,19 +9,19 @@ public class ChangedValue : MonoBehaviour
     [SerializeField] private float adjustmentMaxValue;
     [SerializeField] private float previousValue;
     [SerializeField] private float currentValue;
-    [SerializeField] private UnityEvent<ChangedValue> onChangedValue;
+    [SerializeField] private UnityEvent<CharacterLifeCycleValue> onChangedValue;
 
     private void OnEnable()
     {
         previousValue = currentValue = adjustmentMaxValue = maxValue;
     }
 
-    public void AddListener(UnityAction<ChangedValue> listener)
+    public void AddListener(UnityAction<CharacterLifeCycleValue> listener)
     {
         onChangedValue.RemoveListener(listener);
         onChangedValue.AddListener(listener);
     }
-    public void RemoveListener(UnityAction<ChangedValue> listener)
+    public void RemoveListener(UnityAction<CharacterLifeCycleValue> listener)
     {
         onChangedValue.RemoveListener(listener);
     }

@@ -8,6 +8,7 @@ public class LifeCycleValue : MonoBehaviour
     [SerializeField] private float maxValue;
     [SerializeField] private float adjustmentMaxValue;
     [SerializeField] private float previousValue;
+    [SerializeField] private float threshold = 0.001f;
     [SerializeField] private float currentValue;
     [SerializeField] private UnityEvent<LifeCycleValue> onChangedValue;
 
@@ -52,7 +53,8 @@ public class LifeCycleValue : MonoBehaviour
     }
     public void SetValue(float value)
     {
-        previousValue = currentValue;
+        if (Mathf.Abs(previousValue - value) > threshold) return;
+        
         onChangedValue?.Invoke(this);
         currentValue = value;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,9 +13,9 @@ public class CustomEnum<T>
         _items.Clear();
     }
 
-    public void Add(string key, T value, int order)
+    public void Add(string key, T value, int order, bool hasFlag)
     {
-        _items.Add(new EnumItem<T>(key, value, order));
+        _items.Add(new EnumItem<T>(key, value, order, hasFlag));
     }
 
     public void Add(EnumItem<T> item)
@@ -35,6 +36,34 @@ public class CustomEnum<T>
     public EnumItem<T> GetItemByOrder(int order)
     {
         return _items.FirstOrDefault(item => item.Order == order);
+    }
+    public void SetFlag(string key, bool setFlag)
+    {
+        foreach (EnumItem<T> item in _items)
+        {
+            if (item.Key.Equals(key, StringComparison.Ordinal))
+                item.HasFlag = setFlag;
+        }
+    }
+
+    public void SetFlag(T value, bool setFlag)
+    {
+        foreach (EnumItem<T> item in _items)
+        {
+            if (Equals(item.Value,value))
+                item.HasFlag = setFlag;
+        }
+    }
+
+    public void SetFlag(int order, bool setFlag)
+    {
+        if (order >= _items.Count)
+        {
+            Debug.Assert(order >= _items.Count, "order is out of range");
+            return;
+        }
+
+        _items[order].HasFlag = setFlag;
     }
 
     public IEnumerable<EnumItem<T>> GetItemsByOrder()

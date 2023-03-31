@@ -3,7 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "new CastTeamEffect",
     menuName = "ScriptableObject/Battle/Combined/Time/CastTeamEffect", order = 0)]
-public class CastTeamAbility : EffectItem, ICastTeamAbility
+public class CastTeamAbility : EffectReferenceInfo, ICastTeamAbility
 {
     [field:SerializeField] public float Threshold { get; set; }
     [field:SerializeField] public bool BuffOrDebuff { get; set; }

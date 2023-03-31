@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaDurationEffect", menuName = "ScriptableObject/Battle/Combined/Area/AreaDurationEffect", order = 0)]
-public class AreaDurationAbility : EffectItem, IAreaDurationAbility
+public class AreaDurationAbility : EffectReferenceInfo, IAreaDurationAbility
 {
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Duration { get; set; }

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new DurationTeamEffect", menuName = "ScriptableObject/Battle/Combined/Time/DurationTeamEffect", order = 0)]
-public class DurationTeamAbility : EffectItem, IDurationTeamAbility
+public class DurationTeamAbility : EffectReferenceInfo, IDurationTeamAbility
 {
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public bool BuffOrDebuff { get; set; }

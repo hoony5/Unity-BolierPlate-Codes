@@ -1,5 +1,6 @@
 ﻿public enum ApplyTargetType
 {
+    None,
     Player,
     PlayerTeam,
     Enemy,

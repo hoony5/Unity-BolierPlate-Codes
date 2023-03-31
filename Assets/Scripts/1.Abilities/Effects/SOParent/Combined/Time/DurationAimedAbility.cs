@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new DurationAimedEffect", menuName = "ScriptableObject/Battle/Combined/Time/DurationAimedEffect", order = 0)]
-public class DurationAimedAbility : EffectItem, IDurationAimedAbility
+public class DurationAimedAbility : EffectReferenceInfo, IDurationAimedAbility
 {
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public string SearchState { get; set; }

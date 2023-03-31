@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaDurationTeamEffect", menuName = "ScriptableObject/Battle/Complex/AreaDurationTeamEffect", order = 0)]
-public class AreaDurationTeamAbility : EffectItem, IAreaDurationTeamAbility
+public class AreaDurationTeamAbility : EffectReferenceInfo, IAreaDurationTeamAbility
 {
     public float Duration { get; set; }
     public float Range { get; set; }

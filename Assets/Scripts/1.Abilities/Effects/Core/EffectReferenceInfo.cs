@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 
 [System.Serializable]
-public abstract class EffectItem : ScriptableObject
+public abstract class EffectReferenceInfo : ScriptableObject
 {
     [SerializeField] private string effectName;
     [SerializeField] private string description;

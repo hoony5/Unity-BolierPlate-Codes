@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaCastEffect", menuName = "ScriptableObject/Battle/Combined/Area/AreaCastEffect", order = 0)]
-public class AreaCastAbility : EffectItem, IAreaCastAbility
+public class AreaCastAbility : EffectReferenceInfo, IAreaCastAbility
 {
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Threshold { get; set; }

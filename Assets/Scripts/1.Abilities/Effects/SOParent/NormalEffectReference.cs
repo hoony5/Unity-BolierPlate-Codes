@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class NormalEffect : EffectItem
+public class NormalEffectReference : EffectReferenceInfo
 {
     [SerializeField] private CalculationType calculationType;
     [SerializeField] private ApplyTargetType applyTargetType;

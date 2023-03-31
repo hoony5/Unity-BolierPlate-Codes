@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -9,7 +10,7 @@ public class Status : MonoBehaviour
     [field: SerializeField] public EffectDashBoard EffectDashBoard { get; set; }
 
     [SerializeField] private List<StatusItemInfo> _totalStatuses = new List<StatusItemInfo>(128);
-
+    
     public float GetFinalizeValue(string statusName)
     {
         foreach (StatusItemInfo stat in _totalStatuses)

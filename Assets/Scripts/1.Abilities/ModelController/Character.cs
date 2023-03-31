@@ -1,8 +1,24 @@
 ﻿using UnityEngine;
 
-public class Character : ModuleController
+public class Character : ModuleController, ICharacter
 {
-    [field: SerializeField] public int Level { get; }
-    [field: SerializeField] public Status StatusAbility { get; }
-    [field: SerializeField] public CharacterBehaviour Behaviour { get; }
+    [field: SerializeField] public int Level { get; private set; }
+    [field: SerializeField] public Status StatusAbility { get; private set; }
+    [field: SerializeField] public CharacterBehaviour Behaviour { get; private set; }
+    
+    [ToDo("Need Ability Name, type by type")]
+    public float GetDamage(AbilityType abilityType)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public float GetLifeValue(LifeValueType lifeValueType)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public float GetArmor(AbilityType abilityType)
+    {
+        throw new System.NotImplementedException();
+    }
 }

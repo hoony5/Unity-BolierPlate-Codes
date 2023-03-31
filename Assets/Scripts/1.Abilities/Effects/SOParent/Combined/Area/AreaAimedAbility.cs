@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AreaAimedEffect", menuName = "ScriptableObject/Battle/Combined/Area/AreaAimedEffect", order = 0)]
-public class AreaAimedAbility : EffectItem, IAreaAimedAbility
+public class AreaAimedAbility : EffectReferenceInfo, IAreaAimedAbility
 {
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }

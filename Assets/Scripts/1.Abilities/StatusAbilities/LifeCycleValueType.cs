@@ -1,4 +1,4 @@
-public enum ChangedValueType
+public enum LifeValueType
 {
     Level,
     HP,

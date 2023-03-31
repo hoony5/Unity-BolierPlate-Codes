@@ -8,7 +8,7 @@ public class BattleFormula : ScriptableObject
     [SerializeField] private string formulaName;
     [SerializeField] private List<BattleFormulaInfo> formulaInfoList;
     [SerializeField] private string description;
-
+    public string FormulaName => formulaName;
     public List<BattleFormulaInfo> FormulaInfoList
     {
         get => formulaInfoList;

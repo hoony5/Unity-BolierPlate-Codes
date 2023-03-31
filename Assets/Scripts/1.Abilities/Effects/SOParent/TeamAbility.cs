@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new TeamEffect", menuName = "ScriptableObject/Battle/TeamEffect", order = 0)]
-public class TeamAbility : EffectItem, ITeamAbility
+public class TeamAbility : EffectReferenceInfo, ITeamAbility
 {
     [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }

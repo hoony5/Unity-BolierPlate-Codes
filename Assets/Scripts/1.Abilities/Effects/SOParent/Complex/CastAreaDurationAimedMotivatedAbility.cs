@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new CastAreaDurationAimedMotivatedEffect", menuName = "ScriptableObject/Battle/Complex/CastAreaDurationAimedMotivatedEffect", order = 0)]
-public class CastAreaDurationAimedMotivatedAbility : EffectItem, ICastAreaDurationAimedMotivatedAbility
+public class CastAreaDurationAimedMotivatedAbility : EffectReferenceInfo, ICastAreaDurationAimedMotivatedAbility
 {
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public float Range { get; set; }

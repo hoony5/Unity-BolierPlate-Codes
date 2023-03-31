@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class LifeCycleValue : MonoBehaviour
 {
-    [SerializeField] private ChangedValueType changedValueType;
+    [SerializeField] private LifeValueType lifeValueType;
     [SerializeField] private float minValue;
     [SerializeField] private float maxValue;
     [SerializeField] private float adjustmentMaxValue;

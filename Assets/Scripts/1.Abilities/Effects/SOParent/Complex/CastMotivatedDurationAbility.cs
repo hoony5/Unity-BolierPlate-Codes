@@ -3,7 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "new CastMotivatedDurationEffect",
     menuName = "ScriptableObject/Battle/Combined/Time/CastMotivatedDurationEffect", order = 0)]
-public class CastMotivatedDurationAbility : EffectItem, ICastMotivatedDurationAbility
+public class CastMotivatedDurationAbility : EffectReferenceInfo, ICastMotivatedDurationAbility
 {
     [field: SerializeField] public float Duration { get; set; }
     [field: SerializeField] public float Threshold { get; set; }

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new NormalEffect", menuName = "ScriptableObject/Battle/NormalEffect", order = 0)]
-public class PassiveAbility : EffectItem, ITeamAbility
+public class PassiveAbility : EffectReferenceInfo, ITeamAbility
 {
     [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }

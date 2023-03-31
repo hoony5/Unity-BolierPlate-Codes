@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new SearchAbilityEffect", menuName = "ScriptableObject/Battle/SearchAbilityEffect", order = 0)]
-public class SearchAbilityAbility : EffectItem, ISearchAbilityAbility,ISearchStateAbility,ISearchTagAbility
+public class SearchAbilityAbility : EffectReferenceInfo, ISearchAbilityAbility,ISearchStateAbility,ISearchTagAbility
 {
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
     [field:SerializeField] public string SearchState { get; set; }

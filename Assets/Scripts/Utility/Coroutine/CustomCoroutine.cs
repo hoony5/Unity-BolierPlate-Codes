@@ -344,6 +344,41 @@ public class CustomCoroutine : MonoBehaviour
         if (_activeCoroutines.Length <= token.Index) return;
         _activeCoroutines[token.Index].OnSync();
     }
+    public void ResumeRoutine(CustomCoroutineToken[] tokens)
+    {
+        foreach (CustomCoroutineToken token in tokens)
+        {
+            if (_activeCoroutines.Length <= token.Index) return;
+            _activeCoroutines[token.Index].OnStart();   
+        }
+    }
+
+    public void PauseRoutine(CustomCoroutineToken[] tokens)
+    {
+        foreach (CustomCoroutineToken token in tokens)
+        {
+            if (_activeCoroutines.Length <= token.Index) return;
+            _activeCoroutines[token.Index].OnPause();
+        }
+    }
+
+    public void ConvertToAsync(CustomCoroutineToken[] tokens)
+    {
+        foreach (CustomCoroutineToken token in tokens)
+        {
+            if (_activeCoroutines.Length <= token.Index) return;
+            _activeCoroutines[token.Index].OnAsync();
+        }
+    }
+
+    public void ConvertToSync(CustomCoroutineToken[] tokens)
+    {
+        foreach (CustomCoroutineToken token in tokens)
+        {
+            if (_activeCoroutines.Length <= token.Index) return;
+            _activeCoroutines[token.Index].OnSync();
+        }
+    }
     #endregion
 
     #region Tracking Queries

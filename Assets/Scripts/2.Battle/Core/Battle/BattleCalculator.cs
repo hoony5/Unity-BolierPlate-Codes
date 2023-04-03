@@ -1,4 +1,7 @@
-﻿public static class BattleCalculator
+﻿using System.Collections;
+using UnityEngine;
+
+public static class BattleCalculator
 {
     #region Basic Calculation
     // try hit
@@ -55,4 +58,15 @@
     }
     #endregion
 
+    public static IEnumerator ApplyRawDot(float hp, float inputRawValue, float inputResistance, float maxTimes, float deltaTime)
+    {
+        float currentTimes = 0;
+        while(currentTimes <= maxTimes)
+        {
+            yield return CoroutineYield.customTimes.WaitForSeconds(deltaTime);
+            currentTimes += deltaTime;
+            hp -= inputRawValue * (1 - inputResistance);
+            Debug.Log($"hp : {hp}");
+        }
+    }
 }

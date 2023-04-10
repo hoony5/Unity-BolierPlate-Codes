@@ -1,32 +1,32 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
 [System.Serializable]
 public class Timer
 {
-    public bool IsDebugOn { get; set; }
-    public Object Owner { get; set; }
-    public bool IsLoop { get; set; }
-    public bool IsPause { get; set; }
-    public ushort Index { get; set; }
+    [field:SerializeField]public bool IsDebugOn { get; set; }
+    [field:SerializeField]public Object Owner { get; set; }
+    [field:SerializeField]public bool IsLoop { get; set; }
+    [field:SerializeField]public bool IsPause { get; set; }
+    [field:SerializeField]public ushort Index { get; set; }
     
-    private float _runningTime;
-    private float _chasingTime;
-    private float _threshold;
+    [SerializeField]private float _runningTime;
+    [SerializeField]private float _chasingTime;
+    [SerializeField]private float _threshold;
     /// <summary>
     /// limited time, when effect time is over
     /// </summary>
-    public float MaxTime { get; private set; }
+    [field:SerializeField] public float MaxTime { get; private set; }
     
     public float CurrentTime => _chasingTime;
     /// <summary>
     /// effect time
     /// </summary>
-    public float Duration { get; private set; }
+    [field:SerializeField] public float Duration { get; private set; }
 
-    [SerializeField] private UnityEvent<Object> onTime;
+    private List<Action<Object>> onTime;
     
     public Timer(ushort index, float maxTime, float duration, bool isLoop)
     {
@@ -38,6 +38,7 @@ public class Timer
         IsLoop = isLoop;
         IsPause = false;
         Index = index;
+        onTime = new List<Action<Object>>(32);
     }
 
     private bool checkLimitedTimers()
@@ -70,14 +71,27 @@ public class Timer
     private bool keepCountingTime()
     {
         if (Owner is null) return false;
-        
-        if(IsPause)
-        {
-            _chasingTime = _runningTime;
-            return false;
-        }
 
-        return checkLimitedTimers();
+        if (!IsPause) return checkLimitedTimers();
+        
+        _chasingTime = _runningTime;
+        return false;
+    }
+
+    private void executeEvents()
+    {
+        if(Owner is null || onTime is null || onTime.Count == 0) return;
+
+        for(var i = 0 ; i < onTime?.Count; i++)
+            onTime[i]?.Invoke(Owner);
+    }
+    public void AddOnTime(Action<Object> action)
+    {
+        onTime.Add(action);
+    }
+    public void RemoveOnTime(Action<Object> action)
+    {
+        onTime.Remove(action);
     }
     public bool CheckCountPerSecond(float deltaTime)
     {
@@ -92,20 +106,21 @@ public class Timer
         if(IsDebugOn)
             Debug.Log($"currentTime =  {_chasingTime}");
         
-        onTime?.Invoke(Owner);
+        executeEvents();
         return true;
     }
-    public void RegisterOnTime(UnityAction<Object> action)
+
+    public bool IsEnd()
     {
-        onTime.AddListener(action);
-    }
-    public void UnRegisterOnTime(UnityAction<Object> action)
-    {
-        onTime.RemoveListener(action);
+        return ((int)_chasingTime == (int)Duration || (int)_chasingTime == (int)MaxTime) && !IsLoop;
     }
     public void SetOwner(Object owner)
     {
         Owner = owner;
+    }
+    public void ReleaseOwner()
+    {
+        Owner = null;
     }
     public void AddMaxTime(float maxTime)
     {
@@ -142,6 +157,11 @@ public class Timer
     public void Reset()
     {
         _runningTime = _chasingTime = 0;
-        onTime.RemoveAllListeners();
+        IsPause = true;
+        
+        if(onTime is null) 
+            onTime = new List<Action<Object>>(32);
+        else
+            onTime.Clear();
     }
 }

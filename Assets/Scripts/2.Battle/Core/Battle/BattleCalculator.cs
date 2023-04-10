@@ -36,7 +36,7 @@ public static class BattleCalculator
     }
     
     // Penetration attack or defense raw Value
-    public static float AddRawValue(float baseValue, float rawValue, float min = 0, float max = float.MaxValue)
+    public static float AddedRawValue(float baseValue, float rawValue, float min = 0, float max = float.MaxValue)
     {
         float result = baseValue + rawValue;
         if(result < min)
@@ -55,20 +55,9 @@ public static class BattleCalculator
         return !isDead && baselineValue >= thresholdValue;
     }
     // check dead
-    public static bool IsDead(float hp)
+    public static bool IsZero(float value)
     {
-        return hp <= 0;
+        return value <= 0;
     }
     #endregion
-
-    public static IEnumerator ApplyDotDamage(Action action,float maxTime)
-    {
-        float currentTime = 0;
-        while (currentTime < maxTime)
-        {
-            yield return CoroutineYield.customTimes.WaitForSeconds(1);
-            currentTime++;
-            action.Invoke();
-        }
-    }
 }

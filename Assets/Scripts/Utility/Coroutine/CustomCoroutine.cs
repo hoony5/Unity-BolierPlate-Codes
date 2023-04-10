@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class CustomCoroutine : MonoBehaviour
     private List<int> _availableIndicesList;
     private Queue<int> _freeIndicesQueue;
     private Dictionary<string, List<int>> _usingIndicesDictionary;
+    List<Task> tasks = new List<Task>(32);
 
     private bool _isStart;
     private bool _isPause;
@@ -222,7 +224,7 @@ public class CustomCoroutine : MonoBehaviour
                     
                 } while (behaviour.routine.MoveNext());
 
-                _activeCoroutines[behaviour.index] = default;
+                _activeCoroutines[behaviour.index] = new CustomCoroutineInternal(-1, null, new CustomCoroutineToken(-1,false,false,false,false), false);
                 _coroutinePool.Return(behaviour);
                 _freeIndicesQueue.Enqueue(behaviour.index);
                 return true;
@@ -237,7 +239,7 @@ public class CustomCoroutine : MonoBehaviour
                 }
 
                 if (string.IsNullOrEmpty(tag))
-                    Debug.Log($" Index : {behaviour.index} | IsNested : {behaviour.isNested}|");
+                    Debug.Log($" Index : {behaviour.index} | IsNested : {behaviour.isNested}|"); 
                 else
                     Debug.Log($" Tag : {tag} | Index : {behaviour.index} | IsNested : {behaviour.isNested}");
                 throw;
@@ -254,7 +256,7 @@ public class CustomCoroutine : MonoBehaviour
                 
         } while (behaviour.routine.MoveNext());
 
-        _activeCoroutines[behaviour.index] = default;
+        _activeCoroutines[behaviour.index] = new CustomCoroutineInternal(-1, null, new CustomCoroutineToken(-1,false,false,false,false), false);
         _coroutinePool.Return(behaviour);
         _freeIndicesQueue.Enqueue(behaviour.index);
         return true;
@@ -285,7 +287,6 @@ public class CustomCoroutine : MonoBehaviour
         {
             Resize(settings.MaxCoroutines);
         }
-        Debug.Log(_freeIndicesQueue.Count);
         int index = _freeIndicesQueue.Dequeue();
         CustomCoroutineToken token = new CustomCoroutineToken(index, start: true, pause: false, stop: false, syncOrAsync: true);
         CustomCoroutineInternal newBehaviour = _coroutinePool.Get().Init(index, routine, token ,false);
@@ -353,7 +354,7 @@ public class CustomCoroutine : MonoBehaviour
         }
     }
 
-    public void PauseRoutine(CustomCoroutineToken[] tokens)
+    public void PauseRoutines(CustomCoroutineToken[] tokens)
     {
         foreach (CustomCoroutineToken token in tokens)
         {
@@ -362,7 +363,7 @@ public class CustomCoroutine : MonoBehaviour
         }
     }
 
-    public void ConvertToAsync(CustomCoroutineToken[] tokens)
+    public void ConvertToAsyncs(CustomCoroutineToken[] tokens)
     {
         foreach (CustomCoroutineToken token in tokens)
         {
@@ -371,7 +372,7 @@ public class CustomCoroutine : MonoBehaviour
         }
     }
 
-    public void ConvertToSync(CustomCoroutineToken[] tokens)
+    public void ConvertToSyncs(CustomCoroutineToken[] tokens)
     {
         foreach (CustomCoroutineToken token in tokens)
         {
@@ -382,6 +383,15 @@ public class CustomCoroutine : MonoBehaviour
     #endregion
 
     #region Tracking Queries
+
+    public void DebugActiveCoroutines()
+    {
+        for (var index = 0; index < _activeCoroutines?.Length; index++)
+        {
+            var c = _activeCoroutines[index];
+            Debug.Log($"{index} | {c.index} | {c.routine is null}");
+        }
+    }
     public bool AnyExist(string tag)
     {
         return _usingIndicesDictionary.ContainsKey(tag) && _usingIndicesDictionary[tag].Count > 0;

@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public static class BattleCalculator
 {
@@ -58,15 +61,14 @@ public static class BattleCalculator
     }
     #endregion
 
-    public static IEnumerator ApplyRawDot(float hp, float inputRawValue, float inputResistance, float maxTimes, float deltaTime)
+    public static IEnumerator ApplyDotDamage(Action action,float maxTime)
     {
-        float currentTimes = 0;
-        while(currentTimes <= maxTimes)
+        float currentTime = 0;
+        while (currentTime < maxTime)
         {
-            yield return CoroutineYield.customTimes.WaitForSeconds(deltaTime);
-            currentTimes += deltaTime;
-            hp -= inputRawValue * (1 - inputResistance);
-            Debug.Log($"hp : {hp}");
+            yield return CoroutineYield.customTimes.WaitForSeconds(1);
+            currentTime++;
+            action.Invoke();
         }
     }
 }

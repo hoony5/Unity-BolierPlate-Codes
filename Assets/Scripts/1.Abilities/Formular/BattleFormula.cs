@@ -26,7 +26,7 @@ public class BattleFormula : ScriptableObject
     }
 
     //Second
-    public float ExecuteFormula()
+    public float GetResult()
     {
         float finalValue = 0f;
 

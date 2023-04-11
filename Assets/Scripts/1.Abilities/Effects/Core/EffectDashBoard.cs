@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+[ToDo("이곳은 UI에서 보여지는 Effect 정보를 관리하는 공간 - 총 26개")]
 public class EffectDashBoard : MonoBehaviour
 {
     public List<string> PositiveBattleEffect {get; private set;}

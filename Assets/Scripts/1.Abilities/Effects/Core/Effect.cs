@@ -3,10 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public class Effect
 {
-    [SerializeField] private string _effectName;
-    [SerializeField] private AllEffectInfos _allEffectInfos;
-    [SerializeField] private EffectReferenceInfo _referenceInfo;
-    [SerializeField] private EffectValueInfo _valueInfo;
+    [SerializeField] protected string _effectName;
+    [SerializeField] protected AllStatusInfos _allStatusInfos;
+    [SerializeField] protected AllEffectInfos _allEffectInfos;
+    [SerializeField] protected EffectReferenceInfo _referenceInfo;
+    [SerializeField] protected EffectValueInfo _valueInfo;
 
     public void SetAllEffectInfo(string path)
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class AreaTeamAbility : EffectReferenceInfo, IAreaTeamAbility
+public class AreaTeamAbility : Effect, IAreaTeamAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }

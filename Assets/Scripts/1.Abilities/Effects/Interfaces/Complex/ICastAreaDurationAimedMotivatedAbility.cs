@@ -1,4 +1,4 @@
-public interface ICastAreaDurationAimedMotivatedAbility : IAreaAbility, ISearchAbilityAbility, ISearchStateAbility, IDurationAbility,IMotivatedAbility, IThresholdAbility
+public interface ICastAreaDurationAimedMotivatedAbility : IAreaAbility,ISearchTagAbility, ISearchAbilityAbility, ISearchStateAbility, IDurationAbility,IMotivatedAbility, IThresholdAbility
 {
         
 }

@@ -27,6 +27,10 @@ public class AreaDurationAimedMotivatedAbility : Effect, IAreaDurationAimedMotiv
         throw new System.NotImplementedException();
     }
 
+    public bool TryCheckTag(Character other, string tag)
+    {
+        throw new System.NotImplementedException();
+    }
     public bool TryCheckTime(float currentDuration)
     {
         throw new System.NotImplementedException();

@@ -1,4 +1,4 @@
-public interface IAreaDurationAimedMotivatedAbility : IAreaAbility, ISearchAbilityAbility, ISearchStateAbility, IDurationAbility,IMotivatedAbility
+public interface IAreaDurationAimedMotivatedAbility : IAreaAbility, ISearchAbilityAbility, ISearchTagAbility, ISearchStateAbility, IDurationAbility,IMotivatedAbility
 {
         
 }

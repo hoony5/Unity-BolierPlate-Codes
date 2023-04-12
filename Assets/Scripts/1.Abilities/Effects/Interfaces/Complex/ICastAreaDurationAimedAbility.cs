@@ -1,4 +1,4 @@
-public interface ICastAreaDurationAimedAbility : IAreaAbility, ISearchAbilityAbility, ISearchStateAbility, IDurationAbility,IThresholdAbility
+public interface ICastAreaDurationAimedAbility : IAreaAbility,ISearchTagAbility, ISearchAbilityAbility, ISearchStateAbility, IDurationAbility,IThresholdAbility
 {
         
 }

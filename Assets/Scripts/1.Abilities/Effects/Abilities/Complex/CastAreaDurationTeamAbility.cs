@@ -5,10 +5,10 @@ public class CastAreaDurationTeamAbility : Effect, ICastAreaDurationTeamAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
+    [field:SerializeField] public bool BuffOrDebuff { get; set; }
+    [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Threshold { get; set; }
-    [field:SerializeField] public float Duration { get; set; }
-    [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     

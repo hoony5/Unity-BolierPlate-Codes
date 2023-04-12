@@ -6,6 +6,5 @@ using UnityEngine.TextCore.Text;
 /// </summary>
 public interface IAchievementAbility : IAbility
 {
-    List<EffectAbility> Effects { get; set; }
     bool TryCheckAchievement(Character character, bool isAchieved);
 }

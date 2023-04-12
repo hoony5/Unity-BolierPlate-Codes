@@ -5,6 +5,5 @@
 /// </summary>
 public interface IMotivatedAbility : IAbility
 {
-    public List<EffectAbility> EffectAbilities { get; set; }
     bool TryCheckMotivation(bool isMotivated);
 }

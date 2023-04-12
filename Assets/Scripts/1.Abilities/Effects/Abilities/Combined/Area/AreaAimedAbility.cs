@@ -6,9 +6,10 @@ public class AreaAimedAbility : Effect, IAreaAimedAbility
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Range { get; set; }
-    [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
+    [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
+    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     
     public bool TryUpdateEffect(Character other, string abilityName, float threshold, float value)

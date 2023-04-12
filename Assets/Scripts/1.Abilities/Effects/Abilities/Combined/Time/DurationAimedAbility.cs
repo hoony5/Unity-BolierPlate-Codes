@@ -9,6 +9,7 @@ public class DurationAimedAbility : Effect, IDurationAimedAbility
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
+    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     
     public bool TryCheckTime(float currentDuration)
@@ -17,6 +18,11 @@ public class DurationAimedAbility : Effect, IDurationAimedAbility
     }
 
     public bool TryUpdateEffect(Character other, string abilityName, float threshold, float value)
+    {
+        throw new System.NotImplementedException();
+    }
+    
+    public bool TryCheckTag(Character other, string tag)
     {
         throw new System.NotImplementedException();
     }

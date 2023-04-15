@@ -5,7 +5,7 @@ public class OneAbilityResourcesManager : MonoBehaviour
 {
     public AbilityResourceInfo[] abilityResourceInfos;
     private readonly int Capacity = 5;
-    
+    /// Values is RowDatas from CSV or Excel file
     public List<AreaAbility> LoadAreaAbility(List<string[]> values)
     {
         List<AreaAbility> areaAbilities = new List<AreaAbility>(values.Count);

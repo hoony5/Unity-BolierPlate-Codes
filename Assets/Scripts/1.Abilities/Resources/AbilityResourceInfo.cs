@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class AbilityResourceInfo
 {
     public string typeName;
     public string path;
-    public string description;
     // Row Data - adapted from RowData.cs
-    public List<AbilityDataInfo> abilityDataInfos = new List<AbilityDataInfo>(32);
+    [FormerlySerializedAs("baseInfos")] public List<AbilityDataInfo> infos = new List<AbilityDataInfo>(32);
 
     public void SetAbilityDataInfo(string firstColumnValue , string[] columnHeaders, string[] columnValues)
     {
-        if (abilityDataInfos.Exists(i => i.firstColumnValue == firstColumnValue)) return;
+        if (infos.Exists(i => i.firstColumnValue == firstColumnValue)) return;
         
         AbilityDataInfo newData = new AbilityDataInfo()
         {
@@ -20,14 +20,14 @@ public class AbilityResourceInfo
             columnValues = columnValues
         };
         
-        abilityDataInfos.Add(newData);
+        infos.Add(newData);
     }
 
-    public List<string[]> GetAbilityValues()
+    public List<string[]> GetInfo()
     {
         List<string[]> result = new List<string[]>(32);
         
-        foreach (AbilityDataInfo info in abilityDataInfos)
+        foreach (AbilityDataInfo info in infos)
         {
             result.Add(info.columnValues);
         }

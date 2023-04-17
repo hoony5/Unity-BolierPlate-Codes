@@ -5,7 +5,6 @@ public class OneAbilityResourcesManager : MonoBehaviour
 {
     public AbilityResourceInfo[] abilityResourceInfos;
     private readonly int EffectAbilitiesCapacity = 5;
-
     public List<Effect> LoadAllOneAbilities()
     {
         List<Effect> result = new List<Effect>(128);
@@ -17,25 +16,25 @@ public class OneAbilityResourcesManager : MonoBehaviour
                     Debug.Log($"{info.typeName} is not supported on the this script");
                     break;
                 case "AreaAbility":
-                     result.AddRange(LoadAreaAbility(info.GetAbilityValues()));
+                     result.AddRange(LoadAreaAbility(info.GetInfo()));
                     break;
                 case "CastAbility":
-                     result.AddRange(LoadCastAbility(info.GetAbilityValues()));
+                     result.AddRange(LoadCastAbility(info.GetInfo()));
                     break;
                 case "DurationAbility":
-                     result.AddRange(LoadDurationAbility(info.GetAbilityValues()));
+                     result.AddRange(LoadDurationAbility(info.GetInfo()));
                     break;
                 case "MotivateAbility":
-                    result.AddRange(LoadMotivateAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadMotivateAbility(info.GetInfo()));
                     break;
                 case "PassiveAbility":
-                    result.AddRange(LoadPassiveAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadPassiveAbility(info.GetInfo()));
                     break;
                 case "TeamAbility":
-                    result.AddRange(LoadTeamAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadTeamAbility(info.GetInfo()));
                     break;
                 case "SearchAbility":
-                    result.AddRange(LoadSearchAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadSearchAbility(info.GetInfo()));
                     break;
             }
         }
@@ -50,11 +49,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             AreaAbility effect = new AreaAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
-                Description = rowDatas[2],
+                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                Description = rowDatas[3],
             };
             if (areaAbilities.Contains(effect)) continue;
             areaAbilities.Add(effect);
@@ -69,11 +68,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             CastAbility effect = new CastAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Threshold = float.TryParse(rowDatas[1], out float range) ? range : 1,
-                Description = rowDatas[2],
+                Threshold = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                Description = rowDatas[3],
             };
             if (castAbilities.Contains(effect)) continue;
             castAbilities.Add(effect);
@@ -88,11 +87,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             DurationAbility effect = new DurationAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float range) ? range : 1,
+                Duration = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[2],
+                Description = rowDatas[3],
             };
             if (durationAbilities.Contains(effect)) continue;
             durationAbilities.Add(effect);
@@ -107,10 +106,10 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             MotivateAbility effect = new MotivateAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[1],
+                Description = rowDatas[2],
             };
             if (motivationAbilities.Contains(effect)) continue;
             motivationAbilities.Add(effect);
@@ -125,11 +124,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             PassiveAbility effect = new PassiveAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                BuffOrDebuff = bool.TryParse(rowDatas[1], out bool buffOrDebuff) && buffOrDebuff,
+                BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[2],
+                Description = rowDatas[3],
             };
             if (passiveAbilities.Contains(effect)) continue;
             passiveAbilities.Add(effect);
@@ -144,13 +143,13 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             SearchAbility effect = new SearchAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable, 
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable, 
                 StackCount = 1, 
-                SearchState = rowDatas[1], 
-                SearchTag = rowDatas[2], 
+                SearchState = rowDatas[2], 
+                SearchTag = rowDatas[3], 
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity), 
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity), 
-                Description = rowDatas[3],
+                Description = rowDatas[4],
             };
             if (searchAbilities.Contains(effect)) continue;
             searchAbilities.Add(effect);
@@ -165,11 +164,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
         {
             TeamAbility effect = new TeamAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                BuffOrDebuff = bool.TryParse(rowDatas[1], out bool buffOrDebuff) && buffOrDebuff,
+                BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[2],
+                Description = rowDatas[3],
             };
             if (teamAbilities.Contains(effect)) continue;
             teamAbilities.Add(effect);

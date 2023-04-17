@@ -7,7 +7,7 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
     public AbilityResourceInfo[] abilityResourceInfos;
     private readonly int EffectAbilitiesCapacity = 5;
     /// Values is RowDatas from CSV or Excel file
-    
+  
     public List<Effect> LoadAllCombineAbilities()
     {
         List<Effect> result = new List<Effect>(128);
@@ -19,37 +19,37 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                     Debug.Log($"{info.typeName} is not supported on the this script");
                     break;
                 case "AreaAimedAbility":
-                    result.AddRange(LoadAreaAimedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaAimedAbility(info.GetInfo()));
                     break;
                 case "AreaCastAbility":
-                    result.AddRange(LoadAreaCastAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaCastAbility(info.GetInfo()));
                     break;
                 case "AreaDurationAbility":
-                    result.AddRange(LoadAreaDurationAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaDurationAbility(info.GetInfo()));
                     break;
                 case "AreaMotivatedAbility":
-                    result.AddRange(LoadAreaMotivatedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaMotivatedAbility(info.GetInfo()));
                     break;
                 case "AreaTeamAbility":
-                    result.AddRange(LoadAreaTeamAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaTeamAbility(info.GetInfo()));
                     break;
                 case "CastAimedAbility":
-                    result.AddRange(LoadCastAimedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastAimedAbility(info.GetInfo()));
                     break;
                 case "CastDurationAbility":
-                    result.AddRange(LoadCastDurationAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastDurationAbility(info.GetInfo()));
                     break;
                 case "CastTeamAbility":
-                    result.AddRange(LoadCastTeamAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastTeamAbility(info.GetInfo()));
                     break;
                 case "DurationAimedAbility":
-                    result.AddRange(LoadDurationAimedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadDurationAimedAbility(info.GetInfo()));
                     break;
                 case "DurationMotivatedAbility":
-                    result.AddRange(LoadDurationMotivatedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadDurationMotivatedAbility(info.GetInfo()));
                     break;
                 case "DurationTeamAbility":
-                    result.AddRange(LoadDurationTeamAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadDurationTeamAbility(info.GetInfo()));
                     break;
             }
         }
@@ -63,14 +63,14 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             AreaAimedAbility effect = new AreaAimedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
-                SearchState = rowDatas[2],
-                SearchTag = rowDatas[3],
+                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                SearchState = rowDatas[3],
+                SearchTag = rowDatas[4],
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[4],
+                Description = rowDatas[5],
             };
             if (areaAimedAbilities.Contains(effect)) continue;
             areaAimedAbilities.Add(effect);
@@ -86,12 +86,12 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             AreaCastAbility effect = new AreaCastAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
-                Threshold = float.TryParse(rowDatas[2], out float threshold) ? threshold : 0,
+                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                Threshold = float.TryParse(rowDatas[3], out float threshold) ? threshold : 0,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[3],
+                Description = rowDatas[4],
             };
             if (areaCastAbilities.Contains(effect)) continue;
             areaCastAbilities.Add(effect);
@@ -107,12 +107,12 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             AreaDurationAbility effect = new AreaDurationAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
-                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                Duration = float.TryParse(rowDatas[3], out float duration) ? duration : 0,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[3],
+                Description = rowDatas[4],
             };
             if (areaDurationAbilities.Contains(effect)) continue;
             areaDurationAbilities.Add(effect);
@@ -128,11 +128,11 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             AreaMotivatedAbility effect = new AreaMotivatedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
+                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[2]
+                Description = rowDatas[3]
             };
             if (areaMotivatedAbilities.Contains(effect)) continue;
             areaMotivatedAbilities.Add(effect);
@@ -194,12 +194,12 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             CastDurationAbility effect = new CastDurationAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                Threshold = float.TryParse(rowDatas[2], out float threshold) ? threshold : 0,
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Threshold = float.TryParse(rowDatas[3], out float threshold) ? threshold : 0,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[3],
+                Description = rowDatas[4],
             };
             if (castDurationAbility.Contains(effect)) continue;
             castDurationAbility.Add(effect);
@@ -236,14 +236,14 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             DurationAimedAbility effect = new DurationAimedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                SearchState = rowDatas[2],
-                SearchTag = rowDatas[3],
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                SearchState = rowDatas[3],
+                SearchTag = rowDatas[4],
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[4],
+                Description = rowDatas[5],
             };
             if (durationAimedAbilities.Contains(effect)) continue;
             durationAimedAbilities.Add(effect);
@@ -279,12 +279,12 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         {
             DurationTeamAbility effect = new DurationTeamAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
-                BuffOrDebuff = bool.TryParse(rowDatas[1], out bool buffOrDebuff) && buffOrDebuff,
+                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                BuffOrDebuff = bool.TryParse(rowDatas[3], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[2]
+                Description = rowDatas[4]
             };
             if (durationTeamAbilities.Contains(effect)) continue;
             durationTeamAbilities.Add(effect);

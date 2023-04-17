@@ -3,6 +3,8 @@
 [System.Serializable]
 public class EffectAbility
 {
+    [UnityEngine.SerializeField] private string effectName;
+    [UnityEngine.SerializeField] private string abilityName;
     [UnityEngine.SerializeField] private string statRawName;
     [UnityEngine.SerializeField] private ApplyTargetType applyTargetType;
     [UnityEngine.SerializeField] private CalculationType calculationType;
@@ -17,8 +19,10 @@ public class EffectAbility
     public CalculationType CalculationType => calculationType;
     public ApplyTargetType ApplyTargetType => applyTargetType;
     
-    public EffectAbility(string statRawName, float value, float min, float max, string calculationType, string applyTargetType)
+    public EffectAbility(string effectName,string abilityName,string statRawName, float value, float min, float max, string calculationType, string applyTargetType)
     {
+        this.effectName = effectName;
+        this.abilityName = abilityName;
         this.statRawName = statRawName;
         this.value = value;
         this.min = min;

@@ -6,7 +6,6 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
     public AbilityResourceInfo[] abilityResourceInfos;
     private readonly int EffectAbilitiesCapacity = 5;
     /// Values is RowDatas from CSV or Excel file
-    
     public List<Effect> LoadAllComplexAbilities()
     {
         List<Effect> result = new List<Effect>(128);
@@ -18,25 +17,25 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                     Debug.Log($"{info.typeName} is not supported on the this script");
                     break;
                 case "AreaDurationAimedAbility":
-                    result.AddRange(LoadAreaDurationAimedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaDurationAimedAbility(info.GetInfo()));
                     break;
                 case "AreaDurationAimedMotivatedAbility":
-                    result.AddRange(LoadAreaDurationAimedMotivatedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaDurationAimedMotivatedAbility(info.GetInfo()));
                     break;
                 case "AreaDurationTeamAbility":
-                    result.AddRange(LoadAreaDurationTeamAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadAreaDurationTeamAbility(info.GetInfo()));
                     break;
                 case "CastAreaDurationAimedAbility":
-                    result.AddRange(LoadCastAreaDurationAimedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastAreaDurationAimedAbility(info.GetInfo()));
                     break;
                 case "CastAreaDurationAimedMotivatedAbility":
-                    result.AddRange(LoadCastAreaDurationAimedMotivatedAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastAreaDurationAimedMotivatedAbility(info.GetInfo()));
                     break;
                 case "CastAreaDurationTeamAbility":
-                    result.AddRange(LoadCastAreaDurationTeamAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastAreaDurationTeamAbility(info.GetInfo()));
                     break;
                 case "CastMotivatedDurationAbility":
-                    result.AddRange(LoadCastMotivatedDurationAbility(info.GetAbilityValues()));
+                    result.AddRange(LoadCastMotivatedDurationAbility(info.GetInfo()));
                     break;
             }
         }
@@ -50,15 +49,15 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
         {
             AreaDurationAimedAbility effect = new AreaDurationAimedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
-                SearchState = rowDatas[3],
-                SearchTag = rowDatas[4],
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Range = float.TryParse(rowDatas[3], out float range) ? range : 1,
+                SearchState = rowDatas[4],
+                SearchTag = rowDatas[5],
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[5],
+                Description = rowDatas[6],
             };
             if (areaDurationAimedAbilities.Contains(effect)) continue;
             areaDurationAimedAbilities.Add(effect);
@@ -73,15 +72,15 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
         {
             AreaDurationAimedMotivatedAbility effect = new AreaDurationAimedMotivatedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
-                SearchState = rowDatas[3],
-                SearchTag = rowDatas[4],
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Range = float.TryParse(rowDatas[3], out float range) ? range : 1,
+                SearchState = rowDatas[4],
+                SearchTag = rowDatas[5],
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[5],
+                Description = rowDatas[6],
             };
             if (areaDurationAimedMotivatedAbilities.Contains(effect)) continue;
             areaDurationAimedMotivatedAbilities.Add(effect);
@@ -117,16 +116,16 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
         {
             CastAreaDurationAimedAbility effect = new CastAreaDurationAimedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                Range = float.TryParse(rowDatas[2], out float range) ? range : 1 ,
-                SearchState = rowDatas[3],
-                SearchTag = rowDatas[4],
-                Threshold = float.TryParse(rowDatas[5], out float threshold) ? threshold : 0,
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Range = float.TryParse(rowDatas[3], out float range) ? range : 1 ,
+                SearchState = rowDatas[4],
+                SearchTag = rowDatas[5],
+                Threshold = float.TryParse(rowDatas[6], out float threshold) ? threshold : 0,
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[6],
+                Description = rowDatas[7],
             };
             if (castAreaDurationAimedAbilities.Contains(effect)) continue;
             castAreaDurationAimedAbilities.Add(effect);
@@ -141,16 +140,16 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
         {
             CastAreaDurationAimedMotivatedAbility effect = new CastAreaDurationAimedMotivatedAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                Range = float.TryParse(rowDatas[2], out float range) ? range : 1 ,
-                SearchState = rowDatas[3],
-                SearchTag = rowDatas[4],
-                Threshold = float.TryParse(rowDatas[5], out float threshold) ? threshold : 0,
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Range = float.TryParse(rowDatas[3], out float range) ? range : 1 ,
+                SearchState = rowDatas[4],
+                SearchTag = rowDatas[5],
+                Threshold = float.TryParse(rowDatas[6], out float threshold) ? threshold : 0,
                 SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[6],
+                Description = rowDatas[7],
             };
             if (castAreaDurationAimedMotivatedAbilities.Contains(effect)) continue;
             castAreaDurationAimedMotivatedAbilities.Add(effect);
@@ -165,14 +164,14 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
         {
             CastAreaDurationTeamAbility effect = new CastAreaDurationTeamAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable, 
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable, 
                 StackCount = 1, 
-                BuffOrDebuff = bool.TryParse(rowDatas[1], out bool buffOrDebuff) && buffOrDebuff, 
-                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0, 
-                Range = float.TryParse(rowDatas[3], out float range) ? range : 1 , 
-                Threshold = float.TryParse(rowDatas[4], out float threshold) ? threshold : 0, 
+                BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff, 
+                Duration = float.TryParse(rowDatas[3], out float duration) ? duration : 0, 
+                Range = float.TryParse(rowDatas[4], out float range) ? range : 1 , 
+                Threshold = float.TryParse(rowDatas[5], out float threshold) ? threshold : 0, 
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[5],
+                Description = rowDatas[6],
             };
             if (castAreaDurationTeamAbilities.Contains(effect)) continue;
             castAreaDurationTeamAbilities.Add(effect);
@@ -187,12 +186,12 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
         {
             CastMotivatedDurationAbility effect = new CastMotivatedDurationAbility()
             {
-                IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
+                IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
-                Threshold = float.TryParse(rowDatas[2], out float threshold) ? threshold : 0,
+                Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
+                Threshold = float.TryParse(rowDatas[3], out float threshold) ? threshold : 0,
                 EffectAbilities = new List<EffectAbility>(EffectAbilitiesCapacity),
-                Description = rowDatas[3],
+                Description = rowDatas[4],
             };
             if (castMotivatedDurationAbilities.Contains(effect)) continue;
             castMotivatedDurationAbilities.Add(effect);

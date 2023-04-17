@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [ToDo("싱글톤으로 해야하나?")]
@@ -12,6 +13,12 @@ public class Clock : MonoBehaviour
     [SerializeField] private List<Timer> timers = new List<Timer>(64);
     [SerializeField] private ushort maxCount;
 
+    public async Task DispathcerTest()
+    {
+        Debug.Log($"before");
+        await Task.Yield();
+        Debug.Log($"after");
+    }
     [ToDo("싱글톤에 대한 고민이 필요하다.")]
     private void Awake()
     {
@@ -31,7 +38,7 @@ public class Clock : MonoBehaviour
     }
 
     private void Update()
-    {
+    {   
         if (!isRunning || timers.Count == 0) return;
 
         int timersCount = timers.Count;

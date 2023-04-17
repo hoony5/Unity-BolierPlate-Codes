@@ -2,7 +2,8 @@
     "name": "Status",
     "rootNamespace": "",
     "references": [
-        "GUID:f14dc7fc1aff9ff43922caf0d7b0dd0f"
+        "GUID:f14dc7fc1aff9ff43922caf0d7b0dd0f",
+        "GUID:870f05f79e1a5df4f9526b627661064e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

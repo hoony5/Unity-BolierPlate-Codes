@@ -15,6 +15,8 @@ public class AssetsImportProcessor : AssetPostprocessor
                || name.Contains(".prefab")
                || name.Contains(".asset")
                || name.Contains(".dll")
+               || name.Contains(".xlsx")
+               || name.Contains(".csv")
                || (name.Contains(".asmdef") && !name.Contains("ImportAssetsInfo.asset"))
                || name.Equals(nameof(AssetsImportProcessor));
     }

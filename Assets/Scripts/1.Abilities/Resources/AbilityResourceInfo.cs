@@ -23,7 +23,7 @@ public class AbilityResourceInfo
         infos.Add(newData);
     }
 
-    public List<string[]> GetInfo()
+    public List<string[]> GetAbilityDatas()
     {
         List<string[]> result = new List<string[]>(32);
         

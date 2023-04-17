@@ -17,25 +17,25 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                     Debug.Log($"{info.typeName} is not supported on the this script");
                     break;
                 case "AreaDurationAimedAbility":
-                    result.AddRange(LoadAreaDurationAimedAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaDurationAimedAbility(info.GetAbilityDatas()));
                     break;
                 case "AreaDurationAimedMotivatedAbility":
-                    result.AddRange(LoadAreaDurationAimedMotivatedAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaDurationAimedMotivatedAbility(info.GetAbilityDatas()));
                     break;
                 case "AreaDurationTeamAbility":
-                    result.AddRange(LoadAreaDurationTeamAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaDurationTeamAbility(info.GetAbilityDatas()));
                     break;
                 case "CastAreaDurationAimedAbility":
-                    result.AddRange(LoadCastAreaDurationAimedAbility(info.GetInfo()));
+                    result.AddRange(LoadCastAreaDurationAimedAbility(info.GetAbilityDatas()));
                     break;
                 case "CastAreaDurationAimedMotivatedAbility":
-                    result.AddRange(LoadCastAreaDurationAimedMotivatedAbility(info.GetInfo()));
+                    result.AddRange(LoadCastAreaDurationAimedMotivatedAbility(info.GetAbilityDatas()));
                     break;
                 case "CastAreaDurationTeamAbility":
-                    result.AddRange(LoadCastAreaDurationTeamAbility(info.GetInfo()));
+                    result.AddRange(LoadCastAreaDurationTeamAbility(info.GetAbilityDatas()));
                     break;
                 case "CastMotivatedDurationAbility":
-                    result.AddRange(LoadCastMotivatedDurationAbility(info.GetInfo()));
+                    result.AddRange(LoadCastMotivatedDurationAbility(info.GetAbilityDatas()));
                     break;
             }
         }

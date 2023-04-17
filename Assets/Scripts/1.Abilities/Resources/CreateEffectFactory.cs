@@ -22,7 +22,7 @@ public class CreateEffectFactory : MonoBehaviour
        
         foreach (Effect ability in allOneAbilities)
         {
-            
+
         }
     }
 }

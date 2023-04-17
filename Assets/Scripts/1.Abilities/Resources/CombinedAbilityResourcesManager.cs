@@ -19,37 +19,37 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                     Debug.Log($"{info.typeName} is not supported on the this script");
                     break;
                 case "AreaAimedAbility":
-                    result.AddRange(LoadAreaAimedAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaAimedAbility(info.GetAbilityDatas()));
                     break;
                 case "AreaCastAbility":
-                    result.AddRange(LoadAreaCastAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaCastAbility(info.GetAbilityDatas()));
                     break;
                 case "AreaDurationAbility":
-                    result.AddRange(LoadAreaDurationAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaDurationAbility(info.GetAbilityDatas()));
                     break;
                 case "AreaMotivatedAbility":
-                    result.AddRange(LoadAreaMotivatedAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaMotivatedAbility(info.GetAbilityDatas()));
                     break;
                 case "AreaTeamAbility":
-                    result.AddRange(LoadAreaTeamAbility(info.GetInfo()));
+                    result.AddRange(LoadAreaTeamAbility(info.GetAbilityDatas()));
                     break;
                 case "CastAimedAbility":
-                    result.AddRange(LoadCastAimedAbility(info.GetInfo()));
+                    result.AddRange(LoadCastAimedAbility(info.GetAbilityDatas()));
                     break;
                 case "CastDurationAbility":
-                    result.AddRange(LoadCastDurationAbility(info.GetInfo()));
+                    result.AddRange(LoadCastDurationAbility(info.GetAbilityDatas()));
                     break;
                 case "CastTeamAbility":
-                    result.AddRange(LoadCastTeamAbility(info.GetInfo()));
+                    result.AddRange(LoadCastTeamAbility(info.GetAbilityDatas()));
                     break;
                 case "DurationAimedAbility":
-                    result.AddRange(LoadDurationAimedAbility(info.GetInfo()));
+                    result.AddRange(LoadDurationAimedAbility(info.GetAbilityDatas()));
                     break;
                 case "DurationMotivatedAbility":
-                    result.AddRange(LoadDurationMotivatedAbility(info.GetInfo()));
+                    result.AddRange(LoadDurationMotivatedAbility(info.GetAbilityDatas()));
                     break;
                 case "DurationTeamAbility":
-                    result.AddRange(LoadDurationTeamAbility(info.GetInfo()));
+                    result.AddRange(LoadDurationTeamAbility(info.GetAbilityDatas()));
                     break;
             }
         }

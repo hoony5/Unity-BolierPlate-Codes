@@ -3,23 +3,53 @@ using UnityEngine;
 
 public class EffectSearchStatInfoManager : MonoBehaviour
 {
-    [ToDo("모든 데이터를 설정함에 있어서, 이미 로드 되어있는 기존의 Effect 데이터에 적확하게 개입되어야한다. 인수로 Effect 리스트를 받는편이 좋을 것 같다.")]
-    public List<StatusItemInfo> LoadStatusItemInfo(List<string[]> values)
+    public AbilityResourceInfo[] abilityResourceInfos;
+
+    public void LoadAllSearchStatusItemInfo()
     {
-        List<StatusItemInfo> statusItemInfos = new List<StatusItemInfo>(values.Count);
-        foreach (string[] rowDatas in values)
+        foreach (AbilityResourceInfo info in abilityResourceInfos)
         {
+            
+        }
+    }
+    private List<SearchStatusItem> LoadSearchStatusItemInfo(List<string[]> values)
+    {
+        List<SearchStatusItem> result = new List<SearchStatusItem>(5);
+        List<StatusItemInfo> statusItemInfos = new List<StatusItemInfo>(values.Count);
+        string currentEffectName = string.Empty;
+        string nextEffectName = string.Empty;
+        for (int i = 0; i < values.Count; i++)
+        {
+            string[] rowDatas = values[i];
+            
+            if(i == 0)
+            {
+                currentEffectName = rowDatas[0];
+            }
+
+            nextEffectName = i <= values.Count - 1 ? values[i + 1][0] : currentEffectName;
+            
             StatusItemInfo statusItem = new StatusItemInfo()
             {
-                RawName = rowDatas[2],
-                DisplayName = rowDatas[3],
-                Value = float.TryParse(rowDatas[4], out float value) ? value : 0,
+                RawName = rowDatas[1],
+                DisplayName = rowDatas[2],
+                Value = float.TryParse(rowDatas[3], out float value) ? value : 0,
                 Index = int.TryParse(rowDatas[5], out int index) ? index : 0
             };
             if (statusItemInfos.Contains(statusItem)) continue;
             statusItemInfos.Add(statusItem);
+            
+            if(string.IsNullOrEmpty(nextEffectName) || (currentEffectName == string.Empty && nextEffectName == string.Empty) ) continue;
+
+            SearchStatusItem searchStatusItem = new SearchStatusItem(currentEffectName, statusItemInfos);
+         
+            if(!result.Exists(i => i.effectName == searchStatusItem.effectName))
+                result.Add(searchStatusItem);
+            
+            statusItemInfos.Clear();
+            currentEffectName = nextEffectName;
         }
 
-        return statusItemInfos;
+        return result;
     }
 }

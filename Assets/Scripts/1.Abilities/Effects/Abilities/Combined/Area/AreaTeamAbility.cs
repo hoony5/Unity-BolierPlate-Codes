@@ -8,7 +8,6 @@ public class AreaTeamAbility : Effect, IAreaTeamAbility
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public bool IsPassive { get; set; }
-    [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
 

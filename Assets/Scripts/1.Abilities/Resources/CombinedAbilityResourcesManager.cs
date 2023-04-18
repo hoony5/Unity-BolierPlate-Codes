@@ -166,7 +166,6 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                 Range = float.TryParse(rowDatas[1], out float range) ? range : 1,
                 BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 IsPassive = bool.TryParse(rowDatas[3], out bool isPassive) && isPassive,
-                SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
                 Description = rowDatas[4],
             };

@@ -32,6 +32,7 @@ public class AllEffectAbilities : ScriptableObject
     }
     public EffectAbility GetEffectAbility(string effectName)
     {
+        
         if (EffectAbilityMap is null || EffectAbilityMap.Count == 0) return EmptyAbility;
         if (string.IsNullOrEmpty(effectName) || !EffectAbilityMap.ContainsKey(effectName)) return EmptyAbility;
 

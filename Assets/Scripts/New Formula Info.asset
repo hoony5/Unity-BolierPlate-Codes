@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: New Formula Info
   m_EditorClassIdentifier: 
   statusName: 
+  statusReferenceTarget: 0
   calculationTargetType: 0
   modifyBattleFormulaInfo: {fileID: 0}
   formulaCalculationType: 0

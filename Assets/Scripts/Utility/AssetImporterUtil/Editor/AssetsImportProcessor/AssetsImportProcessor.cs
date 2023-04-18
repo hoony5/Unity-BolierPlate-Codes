@@ -12,6 +12,10 @@ public class AssetsImportProcessor : AssetPostprocessor
     {
         return name.Contains(".meta")
                || name.Contains(".cs")
+               || name.Contains(".pdf")
+               || name.Contains(".docx")
+               || name.Contains(".txt")
+               || name.Contains(".md")
                || name.Contains(".prefab")
                || name.Contains(".asset")
                || name.Contains(".dll")

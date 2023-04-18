@@ -28,7 +28,7 @@ public class EffectAbilityManager : MonoBehaviour
         string currentAbilityName = string.Empty;
         string nextAbilityName = string.Empty;
 
-        for (int index = 0; index < values.Count - 1; index++)
+        for (int index = 0; index < values.Count; index++)
         {
             string[] rowDatas = values[index];
 
@@ -40,8 +40,9 @@ public class EffectAbilityManager : MonoBehaviour
                 effectAbilityStats = new List<EffectAbilityStat>(values.Count);
             }
             
-            nextEffectName = values[index + 1][0];
-            nextAbilityName = values[index + 1][1];
+            nextEffectName = index <= values.Count - 1 ? values[index + 1][0] : currentEffectName;
+            nextAbilityName = index <= values.Count - 1 ? values[index + 1][1] : currentEffectName;
+            
             // Add Status 
             EffectAbilityStat effectAbilityStat = new EffectAbilityStat(
                 statRawName: rowDatas[2],
@@ -57,7 +58,7 @@ public class EffectAbilityManager : MonoBehaviour
             // Is Next AbilityInfo
 
             if (string.IsNullOrEmpty(nextAbilityName) ||
-                currentAbilityName == nextAbilityName) continue;
+                (currentAbilityName == string.Empty && nextAbilityName == string.Empty)) continue;
             
             // Add AbilityInfo
             EffectAbilityInfo abilityInfo = new EffectAbilityInfo(currentAbilityName)
@@ -76,7 +77,7 @@ public class EffectAbilityManager : MonoBehaviour
             
             // Is Next EffectAbility
             if (string.IsNullOrEmpty(nextEffectName) ||
-                currentEffectName == nextEffectName) continue;
+                (currentAbilityName == string.Empty && nextAbilityName == string.Empty)) continue;
             
             // Add EffectAbility
             EffectAbility ability = new EffectAbility(currentAbilityName, resultAbilityInfos);

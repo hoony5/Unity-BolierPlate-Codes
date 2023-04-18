@@ -7,7 +7,7 @@ public class AreaCastAbility : Effect, IAreaCastAbility
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Threshold { get; set; }
-    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
+    [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
    
     public bool TryCheckArea(Character character, int areaMask)

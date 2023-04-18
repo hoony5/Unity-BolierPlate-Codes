@@ -11,7 +11,7 @@ public class CastAreaDurationAimedAbility : Effect, ICastAreaDurationAimedAbilit
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public float Threshold { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
-    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
+    [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
    
     public bool TryUpdateEffect(Character other, string abilityName, float threshold, float value)

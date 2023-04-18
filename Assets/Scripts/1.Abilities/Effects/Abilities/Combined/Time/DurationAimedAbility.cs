@@ -9,7 +9,7 @@ public class DurationAimedAbility : Effect, IDurationAimedAbility
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
-    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
+    [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     
     public bool TryCheckTime(float currentDuration)

@@ -8,7 +8,7 @@ public class SearchAbility : Effect, ISearchAbilityAbility,ISearchStateAbility,I
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
-    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
+    [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     
     public bool TryUpdateEffect(Character other, string abilityName, float threshold, float value)

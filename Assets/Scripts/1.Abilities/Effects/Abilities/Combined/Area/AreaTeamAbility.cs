@@ -9,7 +9,7 @@ public class AreaTeamAbility : Effect, IAreaTeamAbility
     [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public bool IsPassive { get; set; }
     [field:SerializeField] public List<StatusItemInfo> SearchStats { get; set; }
-    [field:SerializeField] public List<EffectAbility> EffectAbilities { get; set; }
+    [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
 
     public bool TryCheckArea(Character character, int areaMask)

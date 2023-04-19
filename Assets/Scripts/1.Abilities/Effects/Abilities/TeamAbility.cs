@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class TeamAbility : Effect, ITeamAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }

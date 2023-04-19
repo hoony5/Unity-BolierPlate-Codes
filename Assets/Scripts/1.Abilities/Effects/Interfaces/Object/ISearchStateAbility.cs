@@ -5,5 +5,5 @@
 public interface ISearchStateAbility : IAbility
 {
     string SearchState { get; set; }
-    bool TryCheckState(Character character, string stateName);
+    bool FindCharacterState(Character character, string stateName);
 }

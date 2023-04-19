@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EffectSearchStatInfoManager : MonoBehaviour
 {
+    public AllEffectSearchStatuses allEffectSearchStatuses;
     public AbilityResourceInfo[] abilityResourceInfos;
 
     public void LoadAllSearchStatusItemInfo()
     {
         foreach (AbilityResourceInfo info in abilityResourceInfos)
         {
-            
+            SearchStatusInfo[] loadedData = LoadSearchStatusItemInfo(info.GetAbilityDatas()).ToArray();
+            allEffectSearchStatuses.SetEffectInfomations(loadedData);
         }
     }
-    private List<SearchStatusItem> LoadSearchStatusItemInfo(List<string[]> values)
+    private List<SearchStatusInfo> LoadSearchStatusItemInfo(List<string[]> values)
     {
-        List<SearchStatusItem> result = new List<SearchStatusItem>(5);
-        List<StatusItemInfo> statusItemInfos = new List<StatusItemInfo>(values.Count);
+        List<SearchStatusInfo> result = new List<SearchStatusInfo>(5);
+        List<SearchStatusItem> statusItemInfos = new List<SearchStatusItem>(values.Count);
         string currentEffectName = string.Empty;
         string nextEffectName = string.Empty;
         for (int i = 0; i < values.Count; i++)
@@ -34,17 +37,21 @@ public class EffectSearchStatInfoManager : MonoBehaviour
                 RawName = rowDatas[1],
                 DisplayName = rowDatas[2],
                 Value = float.TryParse(rowDatas[3], out float value) ? value : 0,
-                Index = int.TryParse(rowDatas[5], out int index) ? index : 0
+                Min = int.TryParse(rowDatas[4], out int min) ? min : 0,
+                Max = int.TryParse(rowDatas[5], out int max) ? max : 0,
+                Index = int.TryParse(rowDatas[7], out int index) ? index : 0
             };
-            if (statusItemInfos.Contains(statusItem)) continue;
-            statusItemInfos.Add(statusItem);
+            bool exist = Enum.TryParse(rowDatas[6], out DataUnit unitType);
+            SearchStatusItem searchStatusItem = new SearchStatusItem(statusItem,unitType);
+            if (statusItemInfos.Contains(searchStatusItem)) continue;
+            statusItemInfos.Add(searchStatusItem);
             
             if(string.IsNullOrEmpty(nextEffectName) || (currentEffectName == string.Empty && nextEffectName == string.Empty) ) continue;
 
-            SearchStatusItem searchStatusItem = new SearchStatusItem(currentEffectName, statusItemInfos);
+            SearchStatusInfo searchStatusInfo = new SearchStatusInfo(currentEffectName, statusItemInfos);
          
-            if(!result.Exists(i => i.effectName == searchStatusItem.effectName))
-                result.Add(searchStatusItem);
+            if(!result.Exists(i => i.effectName == searchStatusInfo.effectName))
+                result.Add(searchStatusInfo);
             
             statusItemInfos.Clear();
             currentEffectName = nextEffectName;

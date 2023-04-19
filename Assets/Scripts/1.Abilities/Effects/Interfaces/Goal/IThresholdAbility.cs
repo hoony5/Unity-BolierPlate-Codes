@@ -6,5 +6,5 @@
 public interface IThresholdAbility : IAbility
 {
     float Threshold { get; set; }
-    bool TryCheckThreshold(float threshold);
+    bool HasThresholdPassed(float threshold);
 }

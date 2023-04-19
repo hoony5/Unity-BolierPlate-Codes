@@ -51,8 +51,8 @@ public class BattleFormulaInfo : ScriptableObject
     {
         baseValue = statusReferenceTarget switch
         {
-             StatusReferenceTarget.Me => me.StatusAbility.GetFinalizeValue(statusName),
-             StatusReferenceTarget.Other => other.StatusAbility.GetFinalizeValue(statusName)
+             StatusReferenceTarget.Me => me.StatusAbility.GetStatusValue(statusName),
+             StatusReferenceTarget.Other => other.StatusAbility.GetStatusValue(statusName)
         };
         calculatedValue = formulaCalculationType switch
         {

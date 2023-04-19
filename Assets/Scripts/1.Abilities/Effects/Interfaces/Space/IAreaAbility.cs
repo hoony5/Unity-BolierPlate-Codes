@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// if character is on the Area, the effect will be applied. 
@@ -6,5 +7,5 @@
 public interface IAreaAbility : IAbility
 {
     float Range { get; set; }
-    bool TryCheckArea(Character character, int areaMask);
+    bool DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result);
 }

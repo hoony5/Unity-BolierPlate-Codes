@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class SearchStatusItem
 {
-    public string effectName;
-    public List<StatusItemInfo>  statusItemInfos;
+    public StatusItemInfo statusItemInfo;
+    public DataUnit  searchUnit;
+    public bool isMeetCondition;
 
-    public SearchStatusItem(string effectName, List<StatusItemInfo> statusItemInfos)
+    public SearchStatusItem(StatusItemInfo statusItemInfo, DataUnit searchUnit)
     {
-        this.effectName = effectName;
-        this.statusItemInfos = statusItemInfos;
+        this.statusItemInfo = statusItemInfo;
+        this.searchUnit = searchUnit;
     }
 }

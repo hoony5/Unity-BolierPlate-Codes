@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class CastTeamAbility : Effect, ICastTeamAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
@@ -14,7 +15,7 @@ public class CastTeamAbility : Effect, ICastTeamAbility
     {
         throw new System.NotImplementedException();
     }
-    public bool TryCheckThreshold(float threshold)
+    public bool HasThresholdPassed(float threshold)
     {
         throw new System.NotImplementedException();
     }

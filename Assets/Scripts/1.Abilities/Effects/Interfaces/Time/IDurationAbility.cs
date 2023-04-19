@@ -6,5 +6,5 @@
 public interface IDurationAbility : IAbility
 {
     float Duration { get; set; }
-    bool TryCheckTime(float currentDuration);
+    bool HasTimePassed(float currentDuration);
 }

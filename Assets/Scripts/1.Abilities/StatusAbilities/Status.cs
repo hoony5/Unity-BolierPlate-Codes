@@ -11,19 +11,6 @@ public class Status : MonoBehaviour
 
     [SerializeField] private List<StatusItemInfo> _totalStatuses = new List<StatusItemInfo>(128);
     
-    public float GetFinalizeValue(string statusName)
-    {
-        foreach (StatusItemInfo stat in _totalStatuses)
-        {
-            if (stat.RawName.Equals(statusName, StringComparison.Ordinal))
-            {
-                return stat.Value;
-            }
-        }
-
-        return 0;
-    }
-
     public float GetStatusValue(string statusName)
     {
         foreach (StatusItemInfo stat in _totalStatuses)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class CastAbility : Effect, IThresholdAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
@@ -8,8 +9,8 @@ public class CastAbility : Effect, IThresholdAbility
     [field:SerializeField] public float Threshold { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
-    public bool TryCheckThreshold(float threshold)
+    public bool HasThresholdPassed(float threshold)
     {
-        throw new System.NotImplementedException();
+        return  threshold >= Threshold;
     }
 }

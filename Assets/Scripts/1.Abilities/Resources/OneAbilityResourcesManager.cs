@@ -118,7 +118,8 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[2],
+                Motivation = float.TryParse(rowDatas[2], out float motivation) ? motivation : -1,
+                Description = rowDatas[3],
             };
             if (motivationAbilities.Contains(effect)) continue;
             motivationAbilities.Add(effect);
@@ -147,20 +148,20 @@ public class OneAbilityResourcesManager : MonoBehaviour
 
         return passiveAbilities;
     }
-    public List<SearchAbility> LoadSearchAbility(List<string[]> values)
+    public List<SearchStatusAbility> LoadSearchAbility(List<string[]> values)
     {
-        List<SearchAbility> searchAbilities = new List<SearchAbility>(values.Count);
+        List<SearchStatusAbility> searchAbilities = new List<SearchStatusAbility>(values.Count);
         foreach (string[] rowDatas in values)
         {
             EffectAbility ability = allEffectAbilities.GetEffectAbility(rowDatas[0]);
-            SearchAbility effect = new SearchAbility()
+            SearchStatusAbility effect = new SearchStatusAbility()
             {
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable, 
                 StackCount = 1, 
                 SearchState = rowDatas[2], 
                 SearchTag = rowDatas[3], 
-                SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity), 
+                SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity), 
                 EffectAbilities = ability.abilityInfos, 
                 Description = rowDatas[4],
             };

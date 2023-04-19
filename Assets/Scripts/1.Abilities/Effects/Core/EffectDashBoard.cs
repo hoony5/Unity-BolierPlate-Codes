@@ -24,6 +24,48 @@ public class EffectDashBoard : MonoBehaviour
         Init();
     }
 
+    public bool ExistPositiveBattleEffect(string effectName)
+    {
+        for(var i = 0 ; i < PositiveBattleEffect.Count; i++)
+        {
+            if (PositiveBattleEffect[i] == effectName)
+                return true;
+        }
+        return false;
+    }
+
+    public bool ExistNegativeBattleEffect(string effectName)
+    {
+        for(var i = 0 ; i < NegativeBattleEffect.Count; i++)
+        {
+            if (NegativeBattleEffect[i] == effectName)
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool ExistPositiveGlobalEffect(string effectName)
+    {
+        for(var i = 0 ; i < PositiveGlobalEffect.Count; i++)
+        {
+            if (PositiveGlobalEffect[i] == effectName)
+                return true;
+        }
+
+        return false;
+    }
+    public bool ExistNegativeGlobalEffect(string effectName)
+    {
+        for(var i = 0 ; i < NegativeGlobalEffect.Count; i++)
+        {
+            if (NegativeGlobalEffect[i] == effectName)
+                return true;
+        }
+
+        return false;
+    }
+
     public void AddGlobalEffect(EffectType effectType, string effectName)
     {
         switch (effectType)

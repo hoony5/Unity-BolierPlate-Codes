@@ -4,5 +4,5 @@
 public interface ISearchTagAbility : IAbility
 {
     string SearchTag { get; set; }
-    bool TryCheckTag(Character other, string tag);
+    bool FindTag(Character other);
 }

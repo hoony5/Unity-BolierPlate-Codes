@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class DurationTeamAbility : Effect, IDurationTeamAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
@@ -15,8 +16,11 @@ public class DurationTeamAbility : Effect, IDurationTeamAbility
         throw new System.NotImplementedException();
     }
 
-    public bool TryCheckArea(Character character, int areaMask)
+    public bool DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result)
     {
-        throw new System.NotImplementedException();
+        Transform transform = character.transform;
+        Vector3 position = transform.position;
+        Vector3 detectorSize = new Vector3(Range, position.y, Range) * 0.5f;
+        return Physics.OverlapBoxNonAlloc(position,  detectorSize, result, Quaternion.identity, areaMask) > 0;
     }
 }

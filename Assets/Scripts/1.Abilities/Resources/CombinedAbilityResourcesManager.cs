@@ -58,14 +58,14 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
 
         return result;
     }
-    public List<AreaAimedAbility> LoadAreaAimedAbility(List<string[]> values)
+    public List<AreaAimedStatusAbility> LoadAreaAimedAbility(List<string[]> values)
     {
-        List<AreaAimedAbility> areaAimedAbilities = new List<AreaAimedAbility>(values.Count);
+        List<AreaAimedStatusAbility> areaAimedAbilities = new List<AreaAimedStatusAbility>(values.Count);
         foreach (string[] rowDatas in values)
         {
             EffectAbility ability = allEffectAbilities.GetEffectAbility(rowDatas[0]);
                 
-            AreaAimedAbility effect = new AreaAimedAbility()
+            AreaAimedStatusAbility effect = new AreaAimedStatusAbility()
             {
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
@@ -73,7 +73,7 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                 Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 SearchState = rowDatas[3],
                 SearchTag = rowDatas[4],
-                SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
+                SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
                 Description = rowDatas[5],
             };
@@ -142,8 +142,9 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
                 Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                Motivation = float.TryParse(rowDatas[3], out float motivation) ? motivation : -1,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[3]
+                Description = rowDatas[4]
             };
             if (areaMotivatedAbilities.Contains(effect)) continue;
             areaMotivatedAbilities.Add(effect);
@@ -176,13 +177,13 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         return areaTeamAbilities;
     }
 
-    public List<CastAimedAbility> LoadCastAimedAbility(List<string[]> values)
+    public List<CastAimedStatusAbility> LoadCastAimedAbility(List<string[]> values)
     {
-        List<CastAimedAbility> castAimedAbilities = new List<CastAimedAbility>(values.Count);
+        List<CastAimedStatusAbility> castAimedAbilities = new List<CastAimedStatusAbility>(values.Count);
         foreach (string[] rowDatas in values)
         {
             EffectAbility ability = allEffectAbilities.GetEffectAbility(rowDatas[0]);
-            CastAimedAbility effect = new CastAimedAbility()
+            CastAimedStatusAbility effect = new CastAimedStatusAbility()
             {
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
@@ -190,7 +191,7 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                 Threshold = float.TryParse(rowDatas[1], out float threshold) ? threshold : 0,
                 SearchState = rowDatas[2],
                 SearchTag = rowDatas[3],
-                SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
+                SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
                 Description = rowDatas[4],
             };
@@ -247,13 +248,13 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         return castTeamAbilities;
     }
 
-    public List<DurationAimedAbility> LoadDurationAimedAbility(List<string[]> values)
+    public List<DurationAimedStatusAbility> LoadDurationAimedAbility(List<string[]> values)
     {
-        List<DurationAimedAbility> durationAimedAbilities = new List<DurationAimedAbility>(values.Count);
+        List<DurationAimedStatusAbility> durationAimedAbilities = new List<DurationAimedStatusAbility>(values.Count);
         foreach (string[] rowDatas in values)
         {
             EffectAbility ability = allEffectAbilities.GetEffectAbility(rowDatas[0]);
-            DurationAimedAbility effect = new DurationAimedAbility()
+            DurationAimedStatusAbility effect = new DurationAimedStatusAbility()
             {
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
@@ -261,7 +262,7 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                 Duration = float.TryParse(rowDatas[2], out float duration) ? duration : 0,
                 SearchState = rowDatas[3],
                 SearchTag = rowDatas[4],
-                SearchStats = new List<StatusItemInfo>(EffectAbilitiesCapacity),
+                SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
                 Description = rowDatas[5],
             };
@@ -284,8 +285,9 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
                 IsStackable = bool.TryParse(rowDatas[0], out bool isStackable) && isStackable,
                 StackCount = 1,
                 Duration = float.TryParse(rowDatas[1], out float duration) ? duration : 0,
+                Motivation = float.TryParse(rowDatas[2], out float motivation) ? motivation : -1,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[2],
+                Description = rowDatas[3],
             };
             if (durationMotivatedAbilities.Contains(effect)) continue;
             durationMotivatedAbilities.Add(effect);

@@ -9,6 +9,7 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public List<SearchStatusItem> SearchStats { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
@@ -19,9 +20,12 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
         {
             SearchStatusItem stat = SearchStats[i];
             stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
-        }
         
-        return SearchStats.All(x => x.isMeetCondition);
+            if (!stat.isMeetCondition)
+                return false;
+        }
+
+        return true;
     }
 
     public bool FindCharacterState(Character character, string stateName)
@@ -37,5 +41,9 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
     public bool FindTag(Character other)
     {
         return other.CompareTag(SearchTag);
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

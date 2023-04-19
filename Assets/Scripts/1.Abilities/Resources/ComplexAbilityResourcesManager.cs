@@ -60,7 +60,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 SearchTag = rowDatas[5],
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[6],
+                Chance = float.TryParse(rowDatas[6], out float chance) ? chance : 1,
+                Description = rowDatas[7],
             };
             if (areaDurationAimedAbilities.Contains(effect)) continue;
             areaDurationAimedAbilities.Add(effect);
@@ -86,7 +87,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 SearchTag = rowDatas[6],
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[7],
+                Chance = float.TryParse(rowDatas[7], out float chance) ? chance : 1,
+                Description = rowDatas[8],
             };
             if (areaDurationAimedMotivatedAbilities.Contains(effect)) continue;
             areaDurationAimedMotivatedAbilities.Add(effect);
@@ -109,7 +111,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 Range = float.TryParse(rowDatas[2], out float range) ? range : 1 ,
                 BuffOrDebuff = bool.TryParse(rowDatas[3], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[4],
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                Description = rowDatas[5],
             };
             if (areaDurationTeamAbilities.Contains(effect)) continue;
             areaDurationTeamAbilities.Add(effect);
@@ -135,7 +138,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 Threshold = float.TryParse(rowDatas[6], out float threshold) ? threshold : 0,
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[7],
+                Chance = float.TryParse(rowDatas[7], out float chance) ? chance : 1,
+                Description = rowDatas[8],
             };
             if (castAreaDurationAimedAbilities.Contains(effect)) continue;
             castAreaDurationAimedAbilities.Add(effect);
@@ -162,7 +166,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 Threshold = float.TryParse(rowDatas[7], out float threshold) ? threshold : 0,
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity),
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[8],
+                Chance = float.TryParse(rowDatas[8], out float chance) ? chance : 1,
+                Description = rowDatas[9],
             };
             if (castAreaDurationAimedMotivatedAbilities.Contains(effect)) continue;
             castAreaDurationAimedMotivatedAbilities.Add(effect);
@@ -186,7 +191,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 Range = float.TryParse(rowDatas[4], out float range) ? range : 1 , 
                 Threshold = float.TryParse(rowDatas[5], out float threshold) ? threshold : 0, 
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[6],
+                Chance = float.TryParse(rowDatas[6], out float chance) ? chance : 1,
+                Description = rowDatas[7],
             };
             if (castAreaDurationTeamAbilities.Contains(effect)) continue;
             castAreaDurationTeamAbilities.Add(effect);
@@ -209,7 +215,8 @@ public class ComplexAbilityResourcesManager : MonoBehaviour
                 Threshold = float.TryParse(rowDatas[3], out float threshold) ? threshold : 0,
                 Motivation = float.TryParse(rowDatas[4], out float motivation) ? motivation : -1,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[5],
+                Chance = float.TryParse(rowDatas[5], out float chance) ? chance : 1,
+                Description = rowDatas[6],
             };
             if (castMotivatedDurationAbilities.Contains(effect)) continue;
             castMotivatedDurationAbilities.Add(effect);

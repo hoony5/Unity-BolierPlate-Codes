@@ -6,9 +6,15 @@ public class AreaAbility : Effect, IAreaAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
+
     [field:SerializeField] public float Range { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
+    }
     
     public bool DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result)
     {

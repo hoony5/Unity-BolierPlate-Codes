@@ -56,7 +56,8 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 EffectAbilities = ability.abilityInfos,
                 Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
-                Description = rowDatas[3],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                Description = rowDatas[4],
             };
             if (areaAbilities.Contains(effect)) continue;
             areaAbilities.Add(effect);
@@ -77,7 +78,8 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 EffectAbilities = ability.abilityInfos,
                 Threshold = float.TryParse(rowDatas[2], out float range) ? range : 1,
-                Description = rowDatas[3],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                Description = rowDatas[4],
             };
             if (castAbilities.Contains(effect)) continue;
             castAbilities.Add(effect);
@@ -98,7 +100,8 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 Duration = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[3],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                Description = rowDatas[4],
             };
             if (durationAbilities.Contains(effect)) continue;
             durationAbilities.Add(effect);
@@ -119,7 +122,8 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 EffectAbilities = ability.abilityInfos,
                 Motivation = float.TryParse(rowDatas[2], out float motivation) ? motivation : -1,
-                Description = rowDatas[3],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                Description = rowDatas[4],
             };
             if (motivationAbilities.Contains(effect)) continue;
             motivationAbilities.Add(effect);
@@ -140,6 +144,7 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
                 Description = rowDatas[3],
             };
             if (passiveAbilities.Contains(effect)) continue;
@@ -162,8 +167,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 SearchState = rowDatas[2], 
                 SearchTag = rowDatas[3], 
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity), 
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
                 EffectAbilities = ability.abilityInfos, 
-                Description = rowDatas[4],
+                Description = rowDatas[5],
             };
             if (searchAbilities.Contains(effect)) continue;
             searchAbilities.Add(effect);
@@ -184,7 +190,8 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
-                Description = rowDatas[3],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                Description = rowDatas[4],
             };
             if (teamAbilities.Contains(effect)) continue;
             teamAbilities.Add(effect);

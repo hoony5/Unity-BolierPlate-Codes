@@ -8,6 +8,7 @@ public class DurationAimedStatusAbility : Effect, IDurationAimedStatusAbility
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Duration { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public List<SearchStatusItem> SearchStats { get; set; }
@@ -24,9 +25,12 @@ public class DurationAimedStatusAbility : Effect, IDurationAimedStatusAbility
         {
             SearchStatusItem stat = SearchStats[i];
             stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
-        }
         
-        return SearchStats.All(x => x.isMeetCondition);
+            if (!stat.isMeetCondition)
+                return false;
+        }
+
+        return true;
     }
     public bool FindTag(Character other)
     {
@@ -40,5 +44,9 @@ public class DurationAimedStatusAbility : Effect, IDurationAimedStatusAbility
         bool negativeGlobalEffect = character.StatusAbility.EffectDashBoard.ExistNegativeGlobalEffect(stateName);
         
         return positiveGlobalEffect || negativeGlobalEffect || positiveBattleEffect || negativeBattleEffect;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

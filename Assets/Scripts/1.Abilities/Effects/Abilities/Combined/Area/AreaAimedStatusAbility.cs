@@ -8,6 +8,7 @@ public class AreaAimedStatusAbility : Effect, IAreaAimedStatusAbility
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Range { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public List<SearchStatusItem> SearchStats { get; set; }
@@ -20,8 +21,12 @@ public class AreaAimedStatusAbility : Effect, IAreaAimedStatusAbility
         {
             SearchStatusItem stat = SearchStats[i];
             stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
+
+            if (!stat.isMeetCondition)
+                return false;
         }
-        return SearchStats.All(x => x.isMeetCondition);
+
+        return true;
     }
     public bool FindTag(Character other)
     {
@@ -42,5 +47,9 @@ public class AreaAimedStatusAbility : Effect, IAreaAimedStatusAbility
         bool negativeGlobalEffect = character.StatusAbility.EffectDashBoard.ExistNegativeGlobalEffect(stateName);
         
         return positiveGlobalEffect || negativeGlobalEffect || positiveBattleEffect || negativeBattleEffect;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

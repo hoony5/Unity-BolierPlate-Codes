@@ -9,6 +9,7 @@ public class CastMotivatedDurationAbility : Effect, ICastMotivatedDurationAbilit
     [field: SerializeField] public float Duration { get; set; }
     [field: SerializeField] public float Threshold { get; set; }
     [field: SerializeField] public float Motivation { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field: SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
 
@@ -31,5 +32,9 @@ public class CastMotivatedDurationAbility : Effect, ICastMotivatedDurationAbilit
     public bool IsMotivatedWhenApproximately(float motivation, float threshold = 0.01f)
     {
         return motivation - Motivation <= threshold;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

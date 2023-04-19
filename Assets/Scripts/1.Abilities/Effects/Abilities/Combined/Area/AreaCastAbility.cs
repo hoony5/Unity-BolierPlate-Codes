@@ -8,6 +8,7 @@ public class AreaCastAbility : Effect, IAreaCastAbility
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Threshold { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
    
@@ -22,5 +23,9 @@ public class AreaCastAbility : Effect, IAreaCastAbility
     public bool HasThresholdPassed(float threshold)
     {
         return  threshold >= Threshold;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

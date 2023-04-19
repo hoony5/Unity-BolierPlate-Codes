@@ -9,6 +9,7 @@ public class AreaTeamAbility : Effect, IAreaTeamAbility
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public bool IsPassive { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
 
@@ -22,5 +23,9 @@ public class AreaTeamAbility : Effect, IAreaTeamAbility
     public void UpdateAbility(Character[] characters)
     {
         throw new System.NotImplementedException();
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

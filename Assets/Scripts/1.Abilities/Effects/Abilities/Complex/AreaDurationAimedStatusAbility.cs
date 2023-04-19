@@ -9,6 +9,7 @@ public class AreaDurationAimedStatusAbility : Effect, IAreaDurationAimedStatusAb
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public float Range { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
 
@@ -22,9 +23,12 @@ public class AreaDurationAimedStatusAbility : Effect, IAreaDurationAimedStatusAb
         {
             SearchStatusItem stat = SearchStats[i];
             stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
-        }
         
-        return SearchStats.All(x => x.isMeetCondition);
+            if (!stat.isMeetCondition)
+                return false;
+        }
+
+        return true;
     }
     public bool DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result)
     {
@@ -51,5 +55,9 @@ public class AreaDurationAimedStatusAbility : Effect, IAreaDurationAimedStatusAb
     public bool HasTimePassed(float currentDuration)
     {
         return currentDuration >= Duration;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

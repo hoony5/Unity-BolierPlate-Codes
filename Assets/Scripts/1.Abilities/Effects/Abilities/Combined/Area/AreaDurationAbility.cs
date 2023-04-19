@@ -8,6 +8,7 @@ public class AreaDurationAbility : Effect, IAreaDurationAbility
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Duration { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     
@@ -21,5 +22,9 @@ public class AreaDurationAbility : Effect, IAreaDurationAbility
         Vector3 position = transform.position;
         Vector3 detectorSize = new Vector3(Range, position.y * 0.5f, Range);
         return Physics.OverlapBoxNonAlloc(position,  detectorSize, result, Quaternion.identity, areaMask) > 0;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

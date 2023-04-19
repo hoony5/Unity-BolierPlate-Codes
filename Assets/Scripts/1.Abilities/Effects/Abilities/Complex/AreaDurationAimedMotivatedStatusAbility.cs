@@ -10,6 +10,7 @@ public class AreaDurationAimedMotivatedStatusAbility : Effect, IAreaDurationAime
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public float Range { get; set; }
     [field:SerializeField] public float Motivation { get; set; }
+    [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
 
@@ -23,9 +24,12 @@ public class AreaDurationAimedMotivatedStatusAbility : Effect, IAreaDurationAime
         {
             SearchStatusItem stat = SearchStats[i];
             stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
-        }
         
-        return SearchStats.All(x => x.isMeetCondition);
+            if (!stat.isMeetCondition)
+                return false;
+        }
+
+        return true;
     }
     public bool DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result)
     {
@@ -65,5 +69,9 @@ public class AreaDurationAimedMotivatedStatusAbility : Effect, IAreaDurationAime
     public bool IsMotivatedWhenApproximately(float motivation, float threshold = 0.01f)
     {
         return motivation - Motivation < threshold;
+    }
+    public bool HitTheChance(float tryChance)
+    {
+        return  tryChance <= Chance;
     }
 }

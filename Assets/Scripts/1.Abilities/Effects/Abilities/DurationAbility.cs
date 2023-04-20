@@ -8,6 +8,8 @@ public class DurationAbility : Effect, IDurationAbility
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Duration { get; set; }
     [field:SerializeField] public float Chance { get; set; }
+    [field:SerializeField] public int ApplyTargetCount { get; set; }
+    [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
     public bool HasTimePassed(float currentDuration)

@@ -6,5 +6,8 @@
 public interface ITeamAbility : IAbility
 {
     bool BuffOrDebuff { get; set; }
-    void UpdateAbility(Character[] characters);
+    void CalculateTeamStatus(Character character, EffectAbilityStat stat);
+    void UpdateAbility(Character[] ourTeam, Character[] enemyTeam);
+    void UpdateAbility(Character player, Character enemy);
+    void UpdateForTeam(Character[] team, EffectAbilityStat stat);
 }

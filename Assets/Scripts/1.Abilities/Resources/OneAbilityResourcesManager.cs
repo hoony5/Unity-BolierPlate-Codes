@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +58,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 EffectAbilities = ability.abilityInfos,
                 Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                Description = rowDatas[4],
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (areaAbilities.Contains(effect)) continue;
             areaAbilities.Add(effect);
@@ -79,7 +82,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 EffectAbilities = ability.abilityInfos,
                 Threshold = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                Description = rowDatas[4],
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (castAbilities.Contains(effect)) continue;
             castAbilities.Add(effect);
@@ -101,7 +106,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 Duration = float.TryParse(rowDatas[2], out float range) ? range : 1,
                 EffectAbilities = ability.abilityInfos,
                 Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                Description = rowDatas[4],
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (durationAbilities.Contains(effect)) continue;
             durationAbilities.Add(effect);
@@ -123,7 +130,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 EffectAbilities = ability.abilityInfos,
                 Motivation = float.TryParse(rowDatas[2], out float motivation) ? motivation : -1,
                 Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                Description = rowDatas[4],
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (motivationAbilities.Contains(effect)) continue;
             motivationAbilities.Add(effect);
@@ -144,8 +153,10 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
-                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
-                Description = rowDatas[3],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (passiveAbilities.Contains(effect)) continue;
             passiveAbilities.Add(effect);
@@ -169,7 +180,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity), 
                 Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
                 EffectAbilities = ability.abilityInfos, 
-                Description = rowDatas[5],
+                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[7],
             };
             if (searchAbilities.Contains(effect)) continue;
             searchAbilities.Add(effect);
@@ -191,7 +204,9 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
                 Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                Description = rowDatas[4],
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (teamAbilities.Contains(effect)) continue;
             teamAbilities.Add(effect);

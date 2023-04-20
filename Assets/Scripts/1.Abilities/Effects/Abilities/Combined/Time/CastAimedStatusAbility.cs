@@ -9,6 +9,8 @@ public class CastAimedStatusAbility : Effect, ICastAimedStatusAbility
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public float Threshold { get; set; }
     [field:SerializeField] public float Chance { get; set; }
+    [field:SerializeField] public int ApplyTargetCount { get; set; }
+    [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public List<SearchStatusItem> SearchStats { get; set; }

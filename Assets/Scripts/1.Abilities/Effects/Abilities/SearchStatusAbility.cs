@@ -10,6 +10,8 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public float Chance { get; set; }
+    [field:SerializeField] public int ApplyTargetCount { get; set; }
+    [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
     [field:SerializeField] public List<SearchStatusItem> SearchStats { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }

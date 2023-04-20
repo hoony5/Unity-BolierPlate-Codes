@@ -82,22 +82,21 @@ public static class BattleLogicUtil
     /// 1. Check Only Battle or Global
     /// 2. Apply it content type by content type
     [ToDo("For switch, create method for each case")]
-    public static bool ApplyEffect(this Character from, Character to, IAbility effect, EffectOption option)
+    public static bool ApplyEffect(this Character from, Character to, IAbility effect, BattleEnvironment current)
     {
         switch (effect)
         {
             /// Complex Effect
             case CastAreaDurationAimedMotivatedStatusAbility castAreaDurationAimedMotivatedStatusAbility:
-                bool isDetected = castAreaDurationAimedMotivatedStatusAbility.DetectObjectOnValidateArea(to,
-                    option.areaMask,
-                    ref option.effectTargets);
-                if (isDetected)
-                {
-                    if (castAreaDurationAimedMotivatedStatusAbility.HasThresholdPassed(option.threshold))
-                    {
-                        
-                    }
-                }
+                bool hasTimePassed = castAreaDurationAimedMotivatedStatusAbility.HasThresholdPassed(current.threshold);
+                if (!hasTimePassed) return false;
+                
+                int detectedObjectsCount = castAreaDurationAimedMotivatedStatusAbility.DetectObjectOnValidateArea(to,
+                    current.areaMask,
+                    ref current.effectTargets);
+
+                if (detectedObjectsCount == 0) return false;
+                
                 break;
             case CastAreaDurationAimedStatusAbility castAreaDurationAimedStatusAbility:
                 break;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class EffectOption
+public class BattleEnvironment
 {
     public int areaMask;
     public float duration;

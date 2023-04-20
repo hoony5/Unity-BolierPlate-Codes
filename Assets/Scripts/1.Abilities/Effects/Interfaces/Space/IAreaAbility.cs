@@ -7,5 +7,5 @@ using UnityEngine;
 public interface IAreaAbility : IAbility
 {
     float Range { get; set; }
-    bool DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result);
+    int DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result);
 }

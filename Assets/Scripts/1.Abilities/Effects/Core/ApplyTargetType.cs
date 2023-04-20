@@ -3,7 +3,10 @@
     None,
     Player,
     PlayerTeam,
+    RandomPlayerTeam,
     Enemy,
     EnemyTeam,
-    All
+    RandomEnemyTeam,
+    All,
+    RandomAll,
 }

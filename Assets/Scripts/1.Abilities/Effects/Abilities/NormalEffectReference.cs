@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-[System.Serializable]
+[System.Serializable,Obsolete]
 public class NormalEffectReference : EffectReferenceInfo
 {
     [SerializeField] private CalculationType calculationType;

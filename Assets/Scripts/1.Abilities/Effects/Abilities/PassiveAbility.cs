@@ -7,13 +7,13 @@ public class PassiveAbility : Effect, ITeamAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
+    [field:SerializeField] public int MaxStackCount { get; set; }
     [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public int ApplyTargetCount { get; set; }
     [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
-    
     
     public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
@@ -40,10 +40,29 @@ public class PassiveAbility : Effect, ITeamAbility
         }
     }
 
-    public void UpdateForTeam(Character[] team, EffectAbilityStat stat)
+   public void UpdateForTeam(Character[] team, EffectAbilityStat stat , ApplyTargetType targetType)
     {
-        foreach (Character member in team)
+        if(team is null || team.Length == 0) return;
+        
+        bool lengthValidation = team.Length >= ApplyTargetCount;
+        int teamLength;
+        
+        teamLength = !lengthValidation ? team.Length : ApplyTargetCount;
+        
+        for (var index = 0; index < teamLength; index++)
         {
+            Character member = null;
+            if (targetType is ApplyTargetType.RandomAll or ApplyTargetType.RandomEnemyTeam
+                or ApplyTargetType.RandomPlayerTeam)
+            {
+                int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+                UnityEngine.Random.InitState(seed);
+                int randomMemberIndex = UnityEngine.Random.Range(0, teamLength);
+                member = team[randomMemberIndex];
+                CalculateTeamStatus(member, stat);
+                continue;
+            }
+            member = team[index];
             CalculateTeamStatus(member, stat);
         }
     }
@@ -59,15 +78,18 @@ public class PassiveAbility : Effect, ITeamAbility
                 {
                     case ApplyTargetType.None:
                         break;
+                    case ApplyTargetType.RandomPlayerTeam:
                     case ApplyTargetType.PlayerTeam:
-                        UpdateForTeam(ourTeam, stat);
+                        UpdateForTeam(ourTeam, stat, ApplyTargetType);
                         break;
+                    case ApplyTargetType.RandomEnemyTeam:
                     case ApplyTargetType.EnemyTeam:
-                        UpdateForTeam(enemyTeam, stat);
+                        UpdateForTeam(enemyTeam, stat, ApplyTargetType);
                         break;
+                    case ApplyTargetType.RandomAll:
                     case ApplyTargetType.All:
-                        UpdateForTeam(ourTeam, stat);
-                        UpdateForTeam(enemyTeam, stat);
+                        UpdateForTeam(ourTeam, stat, ApplyTargetType);
+                        UpdateForTeam(enemyTeam, stat, ApplyTargetType);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

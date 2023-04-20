@@ -7,6 +7,7 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
+    [field:SerializeField] public int MaxStackCount { get; set; }
     [field:SerializeField] public string SearchState { get; set; }
     [field:SerializeField] public string SearchTag { get; set; }
     [field:SerializeField] public float Chance { get; set; }

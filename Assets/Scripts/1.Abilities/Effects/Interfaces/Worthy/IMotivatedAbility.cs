@@ -6,6 +6,7 @@
 public interface IMotivatedAbility : IAbility
 {
     float Motivation { get; set; }
+    string MotivationStat { get; set; }
     bool IsMotivatedWhenGreater(float motivation);
     bool IsMotivatedWhenLess(float motivation);
     bool IsMotivatedWhenApproximately(float motivation, float threshold = 0.01f);

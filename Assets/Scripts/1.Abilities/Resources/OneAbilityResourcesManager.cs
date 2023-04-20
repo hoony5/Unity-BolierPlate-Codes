@@ -55,12 +55,13 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
                 EffectAbilities = ability.abilityInfos,
-                Range = float.TryParse(rowDatas[2], out float range) ? range : 1,
-                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[6],
+                Range = float.TryParse(rowDatas[3], out float range) ? range : 1,
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[7],
             };
             if (areaAbilities.Contains(effect)) continue;
             areaAbilities.Add(effect);
@@ -79,12 +80,13 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
                 EffectAbilities = ability.abilityInfos,
-                Threshold = float.TryParse(rowDatas[2], out float range) ? range : 1,
-                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[6],
+                Threshold = float.TryParse(rowDatas[3], out float range) ? range : 1,
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[7],
             };
             if (castAbilities.Contains(effect)) continue;
             castAbilities.Add(effect);
@@ -102,13 +104,14 @@ public class OneAbilityResourcesManager : MonoBehaviour
             {
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
                 StackCount = 1,
-                Duration = float.TryParse(rowDatas[2], out float range) ? range : 1,
+                Duration = float.TryParse(rowDatas[3], out float range) ? range : 1,
                 EffectAbilities = ability.abilityInfos,
-                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[6],
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[7],
             };
             if (durationAbilities.Contains(effect)) continue;
             durationAbilities.Add(effect);
@@ -127,12 +130,14 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
                 EffectAbilities = ability.abilityInfos,
-                Motivation = float.TryParse(rowDatas[2], out float motivation) ? motivation : -1,
-                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[6],
+                Motivation = float.TryParse(rowDatas[3], out float motivation) ? motivation : -1,
+                MotivationStat = rowDatas[4],
+                Chance = float.TryParse(rowDatas[5], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[6], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[7], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[8],
             };
             if (motivationAbilities.Contains(effect)) continue;
             motivationAbilities.Add(effect);
@@ -151,12 +156,13 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
+                BuffOrDebuff = bool.TryParse(rowDatas[3], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
-                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[6],
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[7],
             };
             if (passiveAbilities.Contains(effect)) continue;
             passiveAbilities.Add(effect);
@@ -175,14 +181,15 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable, 
                 StackCount = 1, 
-                SearchState = rowDatas[2], 
-                SearchTag = rowDatas[3], 
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
+                SearchState = rowDatas[3], 
+                SearchTag = rowDatas[4], 
                 SearchStats = new List<SearchStatusItem>(EffectAbilitiesCapacity), 
-                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                Chance = float.TryParse(rowDatas[5], out float chance) ? chance : 1,
                 EffectAbilities = ability.abilityInfos, 
-                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[7],
+                ApplyTargetCount = int.TryParse(rowDatas[6], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[7], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[8],
             };
             if (searchAbilities.Contains(effect)) continue;
             searchAbilities.Add(effect);
@@ -201,12 +208,13 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 _effectName = rowDatas[0],
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
-                BuffOrDebuff = bool.TryParse(rowDatas[2], out bool buffOrDebuff) && buffOrDebuff,
+                MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
+                BuffOrDebuff = bool.TryParse(rowDatas[3], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
-                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[6],
+                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[7],
             };
             if (teamAbilities.Contains(effect)) continue;
             teamAbilities.Add(effect);

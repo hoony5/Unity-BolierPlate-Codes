@@ -6,6 +6,7 @@ public class CastDurationAbility : Effect, ICastDurationAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
+    [field:SerializeField] public int MaxStackCount { get; set; }
     [field: SerializeField] public float Duration { get; set; }
     [field: SerializeField] public float Threshold { get; set; }
     [field:SerializeField] public float Chance { get; set; }

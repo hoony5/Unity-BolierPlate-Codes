@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-
 public static class BattleLogicUtil
 {
     #region Basic Calculation
@@ -81,13 +76,21 @@ public static class BattleLogicUtil
     /// Passive
     /// 1. Check Only Battle or Global
     /// 2. Apply it content type by content type
-    [ToDo("For switch, create method for each case")]
+
+    public static bool TryAffect(this Character from, Character to, IAbility effect, bool isCast)
+    {
+        if (isCast)
+        {
+            
+        }
+    }
     public static bool ApplyEffect(this Character from, Character to, IAbility effect, BattleEnvironment current)
     {
         switch (effect)
         {
             /// Complex Effect
             case CastAreaDurationAimedMotivatedStatusAbility castAreaDurationAimedMotivatedStatusAbility:
+                
                 bool hasTimePassed = castAreaDurationAimedMotivatedStatusAbility.HasThresholdPassed(current.threshold);
                 if (!hasTimePassed) return false;
                 
@@ -96,6 +99,7 @@ public static class BattleLogicUtil
                     ref current.effectTargets);
 
                 if (detectedObjectsCount == 0) return false;
+                
                 
                 break;
             case CastAreaDurationAimedStatusAbility castAreaDurationAimedStatusAbility:

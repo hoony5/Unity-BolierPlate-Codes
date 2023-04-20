@@ -6,7 +6,9 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
+    [field:SerializeField] public int MaxStackCount { get; set; }
     [field:SerializeField] public float Range { get; set; }
+    [field:SerializeField] public string MotivationStat { get; set; }
     [field:SerializeField] public float Motivation { get; set; }
     [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public int ApplyTargetCount { get; set; }

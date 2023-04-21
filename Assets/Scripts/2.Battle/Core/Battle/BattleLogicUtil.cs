@@ -60,7 +60,8 @@ public static class BattleLogicUtil
 
     /// Battle Hierarchy
     /// Effect
-    /// 1. wait until Threshold passed
+    /// 1. wait until Threshold passed - external
+    /// 1.1 is Hit? 
     /// 2. Detect Area
     /// 3. apply duration
     /// 4.Search Tag on the colliders
@@ -76,20 +77,15 @@ public static class BattleLogicUtil
     /// Passive
     /// 1. Check Only Battle or Global
     /// 2. Apply it content type by content type
-
-    public static bool TryAffect(this Character from, Character to, IAbility effect, bool isCast)
-    {
-        if (isCast)
-        {
-            
-        }
-    }
     public static bool ApplyEffect(this Character from, Character to, IAbility effect, BattleEnvironment current)
     {
         switch (effect)
         {
             /// Complex Effect
             case CastAreaDurationAimedMotivatedStatusAbility castAreaDurationAimedMotivatedStatusAbility:
+
+                bool isHit = castAreaDurationAimedMotivatedStatusAbility.HitTheChance(current.hitRate);
+                if(!isHit) return false;
                 
                 bool hasTimePassed = castAreaDurationAimedMotivatedStatusAbility.HasThresholdPassed(current.threshold);
                 if (!hasTimePassed) return false;
@@ -99,8 +95,16 @@ public static class BattleLogicUtil
                     ref current.effectTargets);
 
                 if (detectedObjectsCount == 0) return false;
+
+                Timer timer = Clock.Instance.GetFreeTimer();
+                timer.SetDuration(castAreaDurationAimedMotivatedStatusAbility.Duration);
+                timer.SetMaxTime(castAreaDurationAimedMotivatedStatusAbility.Duration);
+                timer.SetOwner(from);
                 
                 
+                // Start Effect
+                timer.Start();
+
                 break;
             case CastAreaDurationAimedStatusAbility castAreaDurationAimedStatusAbility:
                 break;

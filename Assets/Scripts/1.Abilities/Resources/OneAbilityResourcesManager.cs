@@ -132,12 +132,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 StackCount = 1,
                 MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
                 EffectAbilities = ability.abilityInfos,
-                Motivation = float.TryParse(rowDatas[3], out float motivation) ? motivation : -1,
-                MotivationStat = rowDatas[4],
-                Chance = float.TryParse(rowDatas[5], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[6], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[7], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[8],
+                MotivationInfo = new MotivationInfo(),
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (motivationAbilities.Contains(effect)) continue;
             motivationAbilities.Add(effect);

@@ -41,8 +41,8 @@ public class EffectSearchStatInfoManager : MonoBehaviour
                 Max = int.TryParse(rowDatas[5], out int max) ? max : 0,
                 Index = int.TryParse(rowDatas[7], out int index) ? index : 0
             };
-            bool exist = Enum.TryParse(rowDatas[6], out DataUnit unitType);
-            SearchStatusItem searchStatusItem = new SearchStatusItem(statusItem,unitType);
+            bool exist = Enum.TryParse(rowDatas[6], out DataUnitType unitType);
+            SearchStatusItem searchStatusItem = new SearchStatusItem(statusItem,exist ? DataUnitType.None : unitType);
             if (statusItemInfos.Contains(searchStatusItem)) continue;
             statusItemInfos.Add(searchStatusItem);
             

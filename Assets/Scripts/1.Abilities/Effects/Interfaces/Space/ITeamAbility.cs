@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-/// <summary>
+﻿/// <summary>
 /// if the Team within a count people, the effect will be applied.
 /// </summary>
 public interface ITeamAbility : IAbility

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-/// <summary>
+﻿/// <summary>
 /// effect will be applied when the character's threshold is reached.
 /// </summary>
 public interface IThresholdAbility : IAbility

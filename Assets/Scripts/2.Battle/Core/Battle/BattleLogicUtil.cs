@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+
 public static class BattleLogicUtil
 {
     #region Basic Calculation
@@ -77,7 +79,7 @@ public static class BattleLogicUtil
     /// Passive
     /// 1. Check Only Battle or Global
     /// 2. Apply it content type by content type
-    public static bool ApplyEffect(this Character from, Character to, IAbility effect, BattleEnvironment current)
+    public static bool ApplyEffect(this Character from, Character other, IAbility effect, BattleEnvironment current)
     {
         switch (effect)
         {
@@ -87,24 +89,46 @@ public static class BattleLogicUtil
                 bool isHit = castAreaDurationAimedMotivatedStatusAbility.HitTheChance(current.hitRate);
                 if(!isHit) return false;
                 
+                // Check Time Passed
                 bool hasTimePassed = castAreaDurationAimedMotivatedStatusAbility.HasThresholdPassed(current.threshold);
                 if (!hasTimePassed) return false;
                 
-                int detectedObjectsCount = castAreaDurationAimedMotivatedStatusAbility.DetectObjectOnValidateArea(to,
-                    current.areaMask,
-                    ref current.effectTargets);
+                string effectName = castAreaDurationAimedMotivatedStatusAbility._effectName;
+                
+                // Find Target Condition
+                bool isFound = castAreaDurationAimedMotivatedStatusAbility.FindTag(other);
+                bool isStateFound = castAreaDurationAimedMotivatedStatusAbility.FindCharacterState(other, effectName);
+                bool isStatusesFound = castAreaDurationAimedMotivatedStatusAbility.FindCharacterStatus(other);
+                bool isTarget = isFound && isStateFound && isStatusesFound;
 
-                if (detectedObjectsCount == 0) return false;
+                // Check Motivation
+                if (!isTarget) return false;
+                Character target = castAreaDurationAimedMotivatedStatusAbility.ApplyTargetType is ApplyTargetType.Enemy ? other : from;
+                bool isMotivated = false;
+                switch (castAreaDurationAimedMotivatedStatusAbility.MotivationComparerType)
+                {
+                    default:
+                   case ComparerType.None :
+                       break;
+                   case ComparerType.Equal :
+                       isMotivated = castAreaDurationAimedMotivatedStatusAbility.IsMotivatedWhenApproximately(target);
+                       break;
+                   case ComparerType.LessOrEqual :
+                       isMotivated = castAreaDurationAimedMotivatedStatusAbility.IsMotivatedWhenLess(target);
+                       break;
+                   case ComparerType.GreaterOrEqual:
+                       isMotivated = castAreaDurationAimedMotivatedStatusAbility.IsMotivatedWhenGreater(target);
+                       break;
+                }
 
+                
+                
                 Timer timer = Clock.Instance.GetFreeTimer();
                 timer.SetDuration(castAreaDurationAimedMotivatedStatusAbility.Duration);
                 timer.SetMaxTime(castAreaDurationAimedMotivatedStatusAbility.Duration);
                 timer.SetOwner(from);
-                
-                
-                // Start Effect
                 timer.Start();
-
+                current.SetEffectTimer(effectName, timer);
                 break;
             case CastAreaDurationAimedStatusAbility castAreaDurationAimedStatusAbility:
                 break;

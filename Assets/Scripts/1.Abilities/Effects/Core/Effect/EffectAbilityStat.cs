@@ -1,42 +1,39 @@
 ﻿using System;
+using UnityEngine;
 
 [System.Serializable]
 public class EffectAbilityStat
 {
-    [UnityEngine.SerializeField] private StatusItemInfo _statusItemInfo;
-    [UnityEngine.SerializeField] private ApplyTargetType applyTargetType;
-    [UnityEngine.SerializeField] private CalculationType calculationType;
-    
-    public string StatRawName => _statusItemInfo.RawName; 
-    public float Value => _statusItemInfo.Value;
-    public float Min => _statusItemInfo.Min;
-    public float Max => _statusItemInfo.Max;
-    public CalculationType CalculationType => calculationType;
-    public ApplyTargetType ApplyTargetType => applyTargetType;
+    [field: SerializeField] public string RawName { get; set; }
+    [field: SerializeField] public string DisplayName { get; set; }
+    [field: SerializeField] public float Value { get; set; }
+    [field: SerializeField] public float AppliedValue { get; set; }
+    [field: SerializeField] public int Min { get; set; }
+    [field: SerializeField] public int Max { get; set; }
+    [field: SerializeField] public int Index { get; set; }
+    [field: SerializeField] private ApplyTargetType ApplyTargetType {get; set;}
+    [field: SerializeField] private CalculationType CalculationType {get; set;}
     
     public EffectAbilityStat(string statRawName, float value, int min, int max, string calculationType, string applyTargetType)
     {
-        _statusItemInfo = new StatusItemInfo
-        {
-            RawName = statRawName,
-            Value = value,
-            Min = min,
-            Max = max
-        };
+        RawName = statRawName;
+        Value = value;
+        Min = min;
+        Max = max;
         
-        this.calculationType = Enum.TryParse(calculationType, out CalculationType result) ? result : CalculationType.None;
-        this.applyTargetType = Enum.TryParse(applyTargetType, out ApplyTargetType result2) ? result2 : ApplyTargetType.None;
-    }
+        CalculationType = Enum.TryParse(calculationType, out CalculationType result) ? result : CalculationType.None;
+        ApplyTargetType = Enum.TryParse(applyTargetType, out ApplyTargetType result2) ? result2 : ApplyTargetType.None;
+    }   
     
     public void AddValue(float value)
     {
-        _statusItemInfo.Value += value;
-        if (_statusItemInfo.Value > Max) _statusItemInfo.Value = Max;
-        if (_statusItemInfo.Value < Min) _statusItemInfo.Value = Min;
+        Value += value;
+        if (Value > Max) Value = Max;
+        if (Value < Min) Value = Min;
     }
     public void InitValue()
     {
-        _statusItemInfo.Value = 0;
+        Value = 0;
     }
     
 }

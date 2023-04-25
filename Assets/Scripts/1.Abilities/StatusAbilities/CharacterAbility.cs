@@ -9,6 +9,7 @@ public class CharacterAbility : MonoBehaviour
     [SerializeField] private EquipmentStatusComponent equipmentStat;
     [SerializeField] private PetStatusComponent petStat;
     [SerializeField] private SkillStatusComponent skillStatus;
+    [SerializeField] private MotivationStatusComponent motivationStatus;
     
     public AllStatusInfos AllStatusInfos => allStatusInfos;
     public BuffStatusComponent BuffStat => buffStat;
@@ -17,4 +18,5 @@ public class CharacterAbility : MonoBehaviour
     public EquipmentStatusComponent EquipmentStat => equipmentStat;
     public PetStatusComponent PetStat => petStat;
     public SkillStatusComponent SkillStatus => skillStatus;
+    public MotivationStatusComponent MotivationStatus => motivationStatus;
 }

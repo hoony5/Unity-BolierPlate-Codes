@@ -59,32 +59,76 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
 
     public void ApplyMotivationStatus(Character character, Character enemy, MotivationStatusInfo motivationStatusInfo)
     {
-        float status = 0;
-        status = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.GetStatusValue(motivationStatusInfo.CurrentStatName) : 
-            enemy.StatusAbility.GetStatusValue(motivationStatusInfo.CurrentStatName);
+        string statusName = motivationStatusInfo.HasReflectMaxStatus ?
+            motivationStatusInfo.MaxStatName :
+            motivationStatusInfo.CurrentStatName;
+        int index = motivationStatusInfo.HasReflectMyStatus ? 
+            character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(statusName) :
+            enemy.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(statusName);
         
-        motivationStatusInfo.ApplyTargetType switch
+        
+        float status = motivationStatusInfo.HasReflectMyStatus ? 
+            character.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value :
+            enemy.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value;
+
+        float motivatedValue = motivationStatusInfo.CalculationType switch
         {
-            ApplyTargetType.Player => ,
-            ApplyTargetType.Enemy => ,
-            _ => throw new ArgumentOutOfRangeException()
+            CalculationType.None => 0,
+            CalculationType.Equalize => motivationStatusInfo.MotivatedValue,
+            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
+                status + motivationStatusInfo.MotivatedValue,
+            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Percentage =>
+                status + status * (1 + 0.01f * motivationStatusInfo.MotivatedValue),
+            CalculationType.Multiply when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
+                status * motivationStatusInfo.MotivatedValue,
+            _ => throw new ArgumentOutOfRangeException(
+                $"{motivationStatusInfo.CalculationType} | {motivationStatusInfo.MotivatedValueUnitType} not implement yet.")
         };
+        
+        switch (motivationStatusInfo.ApplyTargetType)
+        {
+            case ApplyTargetType.Player:
+                character.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, motivatedValue);
+                break;
+            case ApplyTargetType.Enemy:
+                enemy.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, motivatedValue);
+                break;
+        }
     }
 
     public void ApplyMotivationStatus(Character[] ourTeam, Character[] enemies, MotivationStatusInfo motivationStatusInfo)
     {
-        float status = 0;
-        status = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.GetStatusValue(motivationStatusInfo.CurrentStatName) : 
-            enemy.StatusAbility.GetStatusValue(motivationStatusInfo.CurrentStatName);
+        int index = motivationStatusInfo.HasReflectMyStatus ? 
+            character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(motivationStatusInfo.CurrentStatName) :
+            enemy.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(motivationStatusInfo.CurrentStatName);
         
-        motivationStatusInfo.ApplyTargetType switch
+        float status = motivationStatusInfo.HasReflectMyStatus ? 
+            character.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value :
+            enemy.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value;
+
+        float motivatedValue = motivationStatusInfo.CalculationType switch
         {
-            ApplyTargetType.Player => ,
-            ApplyTargetType.Enemy => ,
-            _ => throw new ArgumentOutOfRangeException()
+            CalculationType.None => 0,
+            CalculationType.Equalize => motivationStatusInfo.MotivatedValue,
+            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric => 
+                status + motivationStatusInfo.MotivatedValue,
+            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Percentage =>
+                status + status * (1 + 0.01f * motivationStatusInfo.MotivatedValue),
+            CalculationType.Multiply when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
+                status * motivationStatusInfo.MotivatedValue,
+            _ => throw new ArgumentOutOfRangeException(
+                $"{motivationStatusInfo.CalculationType} | {motivationStatusInfo.MotivatedValueUnitType} not implement yet.")
         };
+        
+        if (motivationStatusInfo.ApplyTargetType is ApplyTargetType.Player)
+        {
+            character.StatusAbility.Ability.MotivationStatus.SetBaseValue(motivationStatusInfo.CurrentStatName, motivatedValue);
+        }
+        
+        if (motivationStatusInfo.ApplyTargetType is ApplyTargetType.Enemy)
+        {
+            enemy.StatusAbility.Ability.MotivationStatus.SetBaseValue(motivationStatusInfo.CurrentStatName, motivatedValue);
+        }
     }
 
     public bool IsMotivatedWhenGreater(Character character, Character orOther)

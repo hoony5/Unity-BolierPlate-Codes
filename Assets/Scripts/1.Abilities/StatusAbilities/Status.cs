@@ -44,10 +44,11 @@ public class Status : MonoBehaviour
                                       + Ability.OriginalStat.GetStatuses()[index].Value
                                       + Ability.PetStat.GetStatuses()[index].Value
                                       + Ability.EquipmentStat.GetStatuses()[index].Value
-                                      + Ability.SkillStatus.GetStatuses()[index].Value;
+                                      + Ability.SkillStatus.GetStatuses()[index].Value
+                                      + Ability.MotivationStatus.GetStatuses()[index].Value;
     }
 
-    public void SetTotalBaseValue(string statusName, float value)
+    public void SetTotalValue(string statusName, float value)
     {
         foreach (StatusItemInfo stat in _totalStatuses)
         {
@@ -57,7 +58,7 @@ public class Status : MonoBehaviour
             }
         }
     }
-    public void AddTotalBaseValue(string statusName, float value)
+    public void AddTotalValue(string statusName, float value)
     {
         foreach (StatusItemInfo stat in _totalStatuses)
         {
@@ -67,43 +68,10 @@ public class Status : MonoBehaviour
             }
         }
     }
-    public void MultiplyTotalBaseValue(string statusName, float value)
+    public void MultiplyTotalValue(string statusName, float value)
     {
         foreach (StatusItemInfo stat in _totalStatuses)
         {
-            if (stat.RawName.Equals(statusName))
-            {
-                stat.Value *= value;
-            }
-        }
-    }
-    public void SetBaseValue(List<StatusItemInfo> stats, string statusName, float value)
-    {
-        for (var index = 0; index < stats.Count; index++)
-        {
-            var stat = stats[index];
-            if (stat.RawName.Equals(statusName))
-            {
-                stat.Value = value;
-            }
-        }
-    }
-    public void AddBaseValue(List<StatusItemInfo> stats, string statusName, float value)
-    {
-        for (var index = 0; index < stats.Count; index++)
-        {
-            var stat = stats[index];
-            if (stat.RawName.Equals(statusName))
-            {
-                stat.Value += value;
-            }
-        }
-    }
-    public void MultiplyBaseValue(List<StatusItemInfo> stats, string statusName, float value)
-    {
-        for (var index = 0; index < stats.Count; index++)
-        {
-            var stat = stats[index];
             if (stat.RawName.Equals(statusName))
             {
                 stat.Value *= value;

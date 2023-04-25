@@ -23,13 +23,13 @@ public static class BattleLogicUtil
     // Heal or Damage 
     public static float GetRawDamage(float chance, float inputDamage, float criticalRate, float criticalPercentage)
     {
-        return chance <= criticalRate ? inputDamage * criticalPercentage : inputDamage;
+        return chance <= criticalRate ? inputDamage * 0.01f * criticalPercentage : inputDamage;
     }
     
     // Resist heal or damage
     public static float IgnoreRawDamage(float chance, float inputDamage, float resistanceRate, float resistancePercentage)
     {
-        return chance <= resistanceRate ? inputDamage * resistancePercentage : inputDamage;
+        return chance <= resistanceRate ? inputDamage * 0.01f * resistancePercentage : inputDamage;
     }
     
     // Penetration attack or defense raw Value

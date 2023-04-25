@@ -3,10 +3,11 @@
 [System.Serializable]
 public class MotivationStatusInfo
 {
-    // is reflected by the status of the character my or his/her
-    [field:SerializeField] public bool HasReflectMyStatus { get; set; }
     // active or not
     [field:SerializeField] public bool MotivationActive { get; set; }
+    // is reflected by the status of the character my or his/her
+    [field:SerializeField] public bool HasReflectMyStatus { get; set; }
+    [field:SerializeField] public bool HasReflectMaxStatus { get; set; }
     // what kind of current StatName (ex. currentHp)
     [field:SerializeField] public string CurrentStatName { get; set; }
     // what kind of max StatName (ex. maxHp)
@@ -23,4 +24,5 @@ public class MotivationStatusInfo
     // Calculation Value Type
     [field:SerializeField] public CalculationType CalculationType { get; set; }
     [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
+    [field:SerializeField] public float AppliedValue { get; set; }
 }

@@ -40,7 +40,7 @@ public class EffectMotivationStatInfoManager : MonoBehaviour
                 CurrentStatName = rowDatas[2],
                 MaxStatName = rowDatas[3],
                 ReflectValue = float.TryParse(rowDatas[4], out float value) ? value : 0,
-                ValueUnitType = Enum.TryParse(rowDatas[5], out DataUnitType unitType) ? unitType : DataUnitType.None,
+                ReflectValueUnitType = Enum.TryParse(rowDatas[5], out DataUnitType unitType) ? unitType : DataUnitType.None,
                 MotivationComparerType = Enum.TryParse(rowDatas[6], out ComparerType comparerType) ? comparerType : ComparerType.None,
             };
             

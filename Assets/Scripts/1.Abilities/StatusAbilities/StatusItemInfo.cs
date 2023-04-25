@@ -12,7 +12,7 @@ public class StatusItemInfo
     [field: SerializeField] public int Min { get; set; }
     [field: SerializeField] public int Max { get; set; }
     [field: SerializeField] public int Index { get; set; }
-    
+
     public static readonly StatusItemInfo Empty = new StatusItemInfo {
         RawName = "Empty",
         DisplayName = "Empty",

@@ -23,7 +23,7 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
         Vector3 detectorSize = new Vector3(Range, position.y * 0.5f, Range);
         return Physics.OverlapBoxNonAlloc(position,  detectorSize, result, Quaternion.identity, areaMask);
     }
-
+    
     public void SetMotivationActive(Character character, Character orOther)
     {
         if(orOther is null) return;
@@ -49,24 +49,20 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
             if (!motivationData.MotivationActive) continue;
             
             // Apply motivation Value to character Data
-            float status = 0;
-            status = motivationData.HasReflectMyStatus ? 
-                character.StatusAbility.GetStatusValue(motivationData.CurrentStatName) : 
-                orOther.StatusAbility.GetStatusValue(motivationData.CurrentStatName);
-            
+            ApplyMotivationStatus(character,orOther,motivationData);
         }
     }
-
     public void ApplyMotivationStatus(Character character, Character enemy, MotivationStatusInfo motivationStatusInfo)
     {
+        //Calculate 
         string statusName = motivationStatusInfo.HasReflectMaxStatus ?
             motivationStatusInfo.MaxStatName :
             motivationStatusInfo.CurrentStatName;
+        
         int index = motivationStatusInfo.HasReflectMyStatus ? 
             character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(statusName) :
             enemy.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(statusName);
-        
-        
+
         float status = motivationStatusInfo.HasReflectMyStatus ? 
             character.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value :
             enemy.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value;
@@ -81,53 +77,55 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
                 status + status * (1 + 0.01f * motivationStatusInfo.MotivatedValue),
             CalculationType.Multiply when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
                 status * motivationStatusInfo.MotivatedValue,
-            _ => throw new ArgumentOutOfRangeException(
-                $"{motivationStatusInfo.CalculationType} | {motivationStatusInfo.MotivatedValueUnitType} not implement yet.")
-        };
+            _ => throw new ArgumentOutOfRangeException(@$"
+{motivationStatusInfo.CalculationType} |
+{motivationStatusInfo.MotivatedValueUnitType} not implement yet.")
+        } 
+        // if stackable, multiply stackCount
+        * (IsStackable ? StackCount : 1); 
+
+        // if previousValue is not 0, reset currentValue
+        if (Mathf.Abs(motivationStatusInfo.PreviousValue) > 0.001f)
+        {
+            switch (motivationStatusInfo.ApplyTargetType)
+            {
+                case ApplyTargetType.Player:
+                case ApplyTargetType.PlayerTeam:
+                case ApplyTargetType.RandomPlayerTeam:
+                    character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                    break;
+                case ApplyTargetType.Enemy:
+                case ApplyTargetType.EnemyTeam:
+                case ApplyTargetType.RandomEnemyTeam:
+                    enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                    break;
+                case ApplyTargetType.RandomAll:
+                case ApplyTargetType.All:
+                    character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                    enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                    break;
+            }
+        }
+        //override previousValue to new value
+        motivationStatusInfo.PreviousValue = motivatedValue;
         
         switch (motivationStatusInfo.ApplyTargetType)
         {
             case ApplyTargetType.Player:
-                character.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, motivatedValue);
+            case ApplyTargetType.PlayerTeam:
+            case ApplyTargetType.RandomPlayerTeam:
+                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
                 break;
             case ApplyTargetType.Enemy:
-                enemy.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, motivatedValue);
+            case ApplyTargetType.EnemyTeam:
+            case ApplyTargetType.RandomEnemyTeam:
+                enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
                 break;
-        }
-    }
-
-    public void ApplyMotivationStatus(Character[] ourTeam, Character[] enemies, MotivationStatusInfo motivationStatusInfo)
-    {
-        int index = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(motivationStatusInfo.CurrentStatName) :
-            enemy.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(motivationStatusInfo.CurrentStatName);
-        
-        float status = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value :
-            enemy.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value;
-
-        float motivatedValue = motivationStatusInfo.CalculationType switch
-        {
-            CalculationType.None => 0,
-            CalculationType.Equalize => motivationStatusInfo.MotivatedValue,
-            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric => 
-                status + motivationStatusInfo.MotivatedValue,
-            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Percentage =>
-                status + status * (1 + 0.01f * motivationStatusInfo.MotivatedValue),
-            CalculationType.Multiply when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
-                status * motivationStatusInfo.MotivatedValue,
-            _ => throw new ArgumentOutOfRangeException(
-                $"{motivationStatusInfo.CalculationType} | {motivationStatusInfo.MotivatedValueUnitType} not implement yet.")
-        };
-        
-        if (motivationStatusInfo.ApplyTargetType is ApplyTargetType.Player)
-        {
-            character.StatusAbility.Ability.MotivationStatus.SetBaseValue(motivationStatusInfo.CurrentStatName, motivatedValue);
-        }
-        
-        if (motivationStatusInfo.ApplyTargetType is ApplyTargetType.Enemy)
-        {
-            enemy.StatusAbility.Ability.MotivationStatus.SetBaseValue(motivationStatusInfo.CurrentStatName, motivatedValue);
+            case ApplyTargetType.RandomAll:
+            case ApplyTargetType.All:
+                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
+                enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
+                break;
         }
     }
 

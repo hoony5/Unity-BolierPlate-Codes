@@ -27,29 +27,45 @@ public class AreaTeamAbility : Effect, IAreaTeamAbility
 
     public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
-        List<StatusItemInfo> stats = BuffOrDebuff ? 
-            character.StatusAbility.Ability.BuffStat.GetStatuses() : 
-            character.StatusAbility.Ability.DebuffStat.GetStatuses();
+        float appliedValue = stat.Value * (IsStackable ? StackCount : 1);
+        int index = character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(stat.RawName);
+        
+        stat.PreviousValue = BuffOrDebuff ? 
+            character.StatusAbility.Ability.BuffStat.GetStatuses()[index].Value : 
+            character.StatusAbility.Ability.DebuffStat.GetStatuses()[index].Value;
         
         switch (stat.CalculationType)
         {
             case CalculationType.None:
                 break;
             case CalculationType.Equalize:
-                character.StatusAbility.SetBaseValue(stats, stat.StatRawName, stat.Value);
+                if(BuffOrDebuff)
+                    character.StatusAbility.Ability.BuffStat.SetBaseValue(stat.RawName, appliedValue);
+                else
+                    character.StatusAbility.Ability.DebuffStat.SetBaseValue(stat.RawName, appliedValue);
                 break;
             case CalculationType.Add:
-                character.StatusAbility.AddBaseValue(stats, stat.StatRawName, stat.Value);
+                if(BuffOrDebuff)
+                    character.StatusAbility.Ability.BuffStat.AddBaseValue(stat.RawName, appliedValue);
+                else
+                    character.StatusAbility.Ability.DebuffStat.AddBaseValue(stat.RawName, appliedValue);
                 break;
             /// ex. stat.Value is 1.2
             case CalculationType.Multiply:
-                character.StatusAbility.MultiplyBaseValue(stats, stat.StatRawName, stat.Value);
+                if(BuffOrDebuff)
+                    character.StatusAbility.Ability.BuffStat.MultiplyBaseValue(stat.RawName, appliedValue);
+                else
+                    character.StatusAbility.Ability.DebuffStat.MultiplyBaseValue(stat.RawName, appliedValue);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(stat.CalculationType), stat.CalculationType, null);
         }
     }
 
+    public void ResetStatus(Character character, EffectAbilityStat stat)
+    {
+        character.StatusAbility.Ability.BuffStat.SetBaseValue(stat.RawName, stat.PreviousValue);
+    }
     public void UpdateForTeam(Character[] team, EffectAbilityStat stat , ApplyTargetType targetType)
     {
         if(team is null || team.Length == 0) return;

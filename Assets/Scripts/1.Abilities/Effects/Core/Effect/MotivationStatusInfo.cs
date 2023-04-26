@@ -24,5 +24,5 @@ public class MotivationStatusInfo
     // Calculation Value Type
     [field:SerializeField] public CalculationType CalculationType { get; set; }
     [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
-    [field:SerializeField] public float AppliedValue { get; set; }
+    [field:SerializeField] public float PreviousValue { get; set; }
 }

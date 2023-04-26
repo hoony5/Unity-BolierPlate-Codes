@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PassiveAbility : Effect, ITeamAbility
+public class PassiveAbility : Effect, IPassiveAbility
 {
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public int MaxStackCount { get; set; }
-    [field:SerializeField] public bool BuffOrDebuff { get; set; }
     [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public int ApplyTargetCount { get; set; }
     [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
@@ -17,27 +16,32 @@ public class PassiveAbility : Effect, ITeamAbility
     
     public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
-        List<StatusItemInfo> stats = BuffOrDebuff ? 
-            character.StatusAbility.Ability.BuffStat.GetStatuses() : 
-            character.StatusAbility.Ability.DebuffStat.GetStatuses();
+        float appliedValue = stat.Value * (IsStackable ? StackCount : 1);
+        int index = character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(stat.RawName);
+        stat.PreviousValue = character.StatusAbility.Ability.SkillStatus.GetStatuses()[index].Value;
         
         switch (stat.CalculationType)
         {
             case CalculationType.None:
                 break;
             case CalculationType.Equalize:
-                character.StatusAbility.SetBaseValue(stats, stat.StatRawName, stat.Value);
+                character.StatusAbility.Ability.SkillStatus.SetBaseValue(stat.RawName, appliedValue);
                 break;
             case CalculationType.Add:
-                character.StatusAbility.AddBaseValue(stats, stat.StatRawName, stat.Value);
+                character.StatusAbility.Ability.SkillStatus.AddBaseValue(stat.RawName, appliedValue);
                 break;
             /// ex. stat.Value is 1.2
             case CalculationType.Multiply:
-                character.StatusAbility.MultiplyBaseValue(stats, stat.StatRawName, stat.Value);
+                character.StatusAbility.Ability.SkillStatus.MultiplyBaseValue(stat.RawName, appliedValue);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(stat.CalculationType), stat.CalculationType, null);
         }
+    }
+
+    public void ResetStatus(Character character, EffectAbilityStat stat)
+    {
+        character.StatusAbility.Ability.SkillStatus.SetBaseValue(stat.RawName, stat.PreviousValue);
     }
 
    public void UpdateForTeam(Character[] team, EffectAbilityStat stat , ApplyTargetType targetType)

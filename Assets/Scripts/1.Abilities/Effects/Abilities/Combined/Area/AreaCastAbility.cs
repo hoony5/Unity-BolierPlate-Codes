@@ -22,10 +22,9 @@ public class AreaCastAbility : Effect, IAreaCastAbility
         Vector3 detectorSize = new Vector3(Range, position.y * 0.5f, Range);
         return Physics.OverlapBoxNonAlloc(position,  detectorSize, result, Quaternion.identity, areaMask);
     }
-
-    public bool HasThresholdPassed(float threshold)
+    public bool HasThresholdPassed(float threshold, bool isHit)
     {
-        return  threshold >= Threshold;
+        return  threshold >= Threshold && !isHit;
     }
     public bool HitTheChance(float tryChance)
     {

@@ -156,12 +156,11 @@ public class OneAbilityResourcesManager : MonoBehaviour
                 IsStackable = bool.TryParse(rowDatas[1], out bool isStackable) && isStackable,
                 StackCount = 1,
                 MaxStackCount = int.TryParse(rowDatas[2], out int maxStackCount) ? maxStackCount : 0,
-                BuffOrDebuff = bool.TryParse(rowDatas[3], out bool buffOrDebuff) && buffOrDebuff,
                 EffectAbilities = ability.abilityInfos,
-                Chance = float.TryParse(rowDatas[4], out float chance) ? chance : 1,
-                ApplyTargetCount = int.TryParse(rowDatas[5], out int applyTargetCount) ? applyTargetCount : 1,
-                ApplyTargetType = Enum.TryParse(rowDatas[6], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
-                Description = rowDatas[7],
+                Chance = float.TryParse(rowDatas[3], out float chance) ? chance : 1,
+                ApplyTargetCount = int.TryParse(rowDatas[4], out int applyTargetCount) ? applyTargetCount : 1,
+                ApplyTargetType = Enum.TryParse(rowDatas[5], out ApplyTargetType  applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                Description = rowDatas[6],
             };
             if (passiveAbilities.Contains(effect)) continue;
             passiveAbilities.Add(effect);

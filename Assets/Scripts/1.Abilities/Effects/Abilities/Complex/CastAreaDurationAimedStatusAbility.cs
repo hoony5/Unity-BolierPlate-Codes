@@ -58,9 +58,9 @@ public class CastAreaDurationAimedStatusAbility : Effect, ICastAreaDurationAimed
     {
         return currentDuration >= Duration;
     }
-    public bool HasThresholdPassed(float threshold)
+    public bool HasThresholdPassed(float threshold, bool isHit)
     {
-        return  threshold >= Threshold;
+        return  threshold >= Threshold && !isHit;
     }
     public bool HitTheChance(float tryChance)
     {

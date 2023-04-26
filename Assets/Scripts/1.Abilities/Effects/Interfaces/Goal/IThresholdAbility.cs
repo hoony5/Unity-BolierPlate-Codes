@@ -4,5 +4,5 @@
 public interface IThresholdAbility : IAbility
 {
     float Threshold { get; set; }
-    bool HasThresholdPassed(float threshold);
+    bool HasThresholdPassed(float threshold, bool isHit);
 }

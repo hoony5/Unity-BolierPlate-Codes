@@ -7,12 +7,12 @@ public class EffectAbilityStat
     [field: SerializeField] public string RawName { get; set; }
     [field: SerializeField] public string DisplayName { get; set; }
     [field: SerializeField] public float Value { get; set; }
-    [field: SerializeField] public float AppliedValue { get; set; }
+    [field: SerializeField] public float PreviousValue { get; set; }
     [field: SerializeField] public int Min { get; set; }
     [field: SerializeField] public int Max { get; set; }
     [field: SerializeField] public int Index { get; set; }
-    [field: SerializeField] private ApplyTargetType ApplyTargetType {get; set;}
-    [field: SerializeField] private CalculationType CalculationType {get; set;}
+    [field: SerializeField] public ApplyTargetType ApplyTargetType {get; set;}
+    [field: SerializeField] public CalculationType CalculationType {get; set;}
     
     public EffectAbilityStat(string statRawName, float value, int min, int max, string calculationType, string applyTargetType)
     {

@@ -37,11 +37,16 @@ public class EffectMotivationStatInfoManager : MonoBehaviour
             MotivationStatusInfo statusItem = new MotivationStatusInfo()
             {
                 HasReflectMyStatus = bool.TryParse(rowDatas[1], out bool isMyStatus) && isMyStatus,
-                CurrentStatName = rowDatas[2],
-                MaxStatName = rowDatas[3],
-                ReflectValue = float.TryParse(rowDatas[4], out float value) ? value : 0,
-                ReflectValueUnitType = Enum.TryParse(rowDatas[5], out DataUnitType unitType) ? unitType : DataUnitType.None,
-                MotivationComparerType = Enum.TryParse(rowDatas[6], out ComparerType comparerType) ? comparerType : ComparerType.None,
+                HasReflectMaxStatus = bool.TryParse(rowDatas[2], out bool usingMaxStatus) && usingMaxStatus,
+                CurrentStatName = rowDatas[3],
+                MaxStatName = rowDatas[4],
+                ReflectValue = float.TryParse(rowDatas[5], out float reflectValue) ? reflectValue : 0,
+                ReflectValueUnitType = Enum.TryParse(rowDatas[6], out DataUnitType reflectValueUnitType) ? reflectValueUnitType : DataUnitType.None,
+                MotivationComparerType = Enum.TryParse(rowDatas[7], out ComparerType comparerType) ? comparerType : ComparerType.None,
+                ApplyTargetType = Enum.TryParse(rowDatas[8], out ApplyTargetType applyTargetType) ? applyTargetType : ApplyTargetType.None,
+                MotivatedValue = float.TryParse(rowDatas[9], out float motivatedValue) ? motivatedValue : 0,
+                MotivatedValueUnitType = Enum.TryParse(rowDatas[10], out DataUnitType motivatedValueUnitType) ? motivatedValueUnitType : DataUnitType.None,
+                MotivatedStatName = rowDatas[11], 
             };
             
             if (statusInfos.Contains(statusItem)) continue;

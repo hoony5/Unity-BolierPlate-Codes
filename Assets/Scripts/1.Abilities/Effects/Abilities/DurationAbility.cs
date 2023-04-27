@@ -21,4 +21,23 @@ public class DurationAbility : Effect, IDurationAbility
     {
         return  tryChance <= Chance;
     }
+    public void AddStackCount()
+    {
+        if (!IsStackable) return;
+        StackCount++;
+        if(StackCount > MaxStackCount) StackCount = MaxStackCount;
+    }
+
+    public void SubtractStackCount()
+    {
+        if (!IsStackable) return;
+        StackCount--;
+        if (StackCount <= 0) StackCount = 1;
+    }
+
+    public void ResetStackCount()
+    {
+        if (!IsStackable) return;
+        StackCount = 1;
+    }
 }

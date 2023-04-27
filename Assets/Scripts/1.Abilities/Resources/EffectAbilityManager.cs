@@ -48,9 +48,10 @@ public class EffectAbilityManager : MonoBehaviour
                 statRawName: rowDatas[2],
                 applyTargetType: rowDatas[3],
                 calculationType: rowDatas[4],
-                value: float.TryParse(rowDatas[5], out float Value) ? Value : 0,
-                min: int.TryParse(rowDatas[6], out int Min) ? Min : 0,
-                max: int.TryParse(rowDatas[7], out int Max) ? Max : 0
+                dataUnitType: rowDatas[5],
+                value: float.TryParse(rowDatas[6], out float Value) ? Value : 0,
+                min: int.TryParse(rowDatas[7], out int Min) ? Min : 0,
+                max: int.TryParse(rowDatas[8], out int Max) ? Max : 0
             );
             
             effectAbilityStats?.Add(effectAbilityStat);

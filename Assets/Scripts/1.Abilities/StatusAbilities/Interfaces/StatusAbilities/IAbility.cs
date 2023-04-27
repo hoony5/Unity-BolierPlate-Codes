@@ -11,4 +11,7 @@ public interface IAbility
     float Chance { get; set;}
     string Description { get; set;}
     List<EffectAbilityInfo> EffectAbilities { get; set; }
+    void AddStackCount();
+    void SubtractStackCount();
+    void ResetStackCount();
 }

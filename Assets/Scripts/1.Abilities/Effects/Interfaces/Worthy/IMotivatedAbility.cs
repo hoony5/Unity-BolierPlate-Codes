@@ -5,6 +5,7 @@ public interface IMotivatedAbility : IAbility
 {
     MotivationInfo MotivationInfo { get; set; }
     void SetMotivationActive(Character character, Character orOther);
+    void ResetStatus(Character character, MotivationStatusInfo motivationStatusInfo);
     void ApplyMotivationStatus(Character character, Character orOther, MotivationStatusInfo motivationStatusInfo);
     bool IsMotivatedWhenGreater(Character character, Character orOther);
     bool IsMotivatedWhenLess(Character character, Character orOther);

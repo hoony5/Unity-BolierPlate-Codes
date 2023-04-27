@@ -52,6 +52,45 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
             ApplyMotivationStatus(character,orOther,motivationData);
         }
     }
+
+    private void AddMotivationStatus(Character character, MotivationStatusInfo motivationStatusInfo,
+        string statusName, float value)
+    {
+        switch (motivationStatusInfo.CalculationType)
+        {
+            case CalculationType.None:
+            case CalculationType.Equalize:
+                character.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, value);
+                break;
+            case CalculationType.Add:
+            case CalculationType.Multiply:
+                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, value);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+    private void RemoveMotivationStatus(Character character, MotivationStatusInfo motivationStatusInfo, string statusName)
+    {
+        switch (motivationStatusInfo.CalculationType)
+        {
+            case CalculationType.None:
+            case CalculationType.Equalize:
+                character.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                motivationStatusInfo.PreviousValue = 0;
+                break;
+            case CalculationType.Add:
+                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.AddedValue);
+                motivationStatusInfo.AddedValue = 0;
+                break;
+            case CalculationType.Multiply:
+                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.MultipliedValue);
+                motivationStatusInfo.MultipliedValue = 0;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
     public void ApplyMotivationStatus(Character character, Character enemy, MotivationStatusInfo motivationStatusInfo)
     {
         //Calculate 
@@ -70,65 +109,87 @@ public class AreaMotivatedAbility : Effect, IAreaMotivatedAbility
         float motivatedValue = motivationStatusInfo.CalculationType switch
         {
             CalculationType.None => 0,
-            CalculationType.Equalize => motivationStatusInfo.MotivatedValue,
-            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
-                status + motivationStatusInfo.MotivatedValue,
-            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Percentage =>
-                status + status * (1 + 0.01f * motivationStatusInfo.MotivatedValue),
-            CalculationType.Multiply when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric =>
-                status * motivationStatusInfo.MotivatedValue,
+            CalculationType.Equalize when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric 
+                => motivationStatusInfo.MotivatedValue,
+            CalculationType.Equalize when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Percentage 
+                => status * 0.01f * motivationStatusInfo.MotivatedValue,
+            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric 
+                => status + motivationStatusInfo.MotivatedValue,
+            CalculationType.Add when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Percentage 
+                => status * 0.01f * motivationStatusInfo.MotivatedValue,
+            CalculationType.Multiply when motivationStatusInfo.MotivatedValueUnitType is DataUnitType.Numeric 
+                => status * motivationStatusInfo.MotivatedValue,
             _ => throw new ArgumentOutOfRangeException(@$"
 {motivationStatusInfo.CalculationType} |
 {motivationStatusInfo.MotivatedValueUnitType} not implement yet.")
         } 
         // if stackable, multiply stackCount
         * (IsStackable ? StackCount : 1); 
-
-        // if previousValue is not 0, reset currentValue
-        if (Mathf.Abs(motivationStatusInfo.PreviousValue) > 0.001f)
-        {
-            switch (motivationStatusInfo.ApplyTargetType)
-            {
-                case ApplyTargetType.Player:
-                case ApplyTargetType.PlayerTeam:
-                case ApplyTargetType.RandomPlayerTeam:
-                    character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
-                    break;
-                case ApplyTargetType.Enemy:
-                case ApplyTargetType.EnemyTeam:
-                case ApplyTargetType.RandomEnemyTeam:
-                    enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
-                    break;
-                case ApplyTargetType.RandomAll:
-                case ApplyTargetType.All:
-                    character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
-                    enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.PreviousValue);
-                    break;
-            }
-        }
         //override previousValue to new value
-        motivationStatusInfo.PreviousValue = motivatedValue;
+        switch (motivationStatusInfo.CalculationType)
+        {
+            case CalculationType.None:
+                break;
+            case CalculationType.Equalize:
+                motivationStatusInfo.PreviousValue = motivatedValue;
+                break;
+            case CalculationType.Add:
+                motivationStatusInfo.AddedValue = motivatedValue;
+                break;
+            case CalculationType.Multiply:
+                motivationStatusInfo.MultipliedValue = motivatedValue;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         
         switch (motivationStatusInfo.ApplyTargetType)
         {
             case ApplyTargetType.Player:
             case ApplyTargetType.PlayerTeam:
             case ApplyTargetType.RandomPlayerTeam:
-                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
+                AddMotivationStatus(character, motivationStatusInfo, statusName, motivatedValue);
                 break;
             case ApplyTargetType.Enemy:
             case ApplyTargetType.EnemyTeam:
             case ApplyTargetType.RandomEnemyTeam:
-                enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
+                AddMotivationStatus(enemy, motivationStatusInfo, statusName, motivatedValue);
                 break;
             case ApplyTargetType.RandomAll:
             case ApplyTargetType.All:
-                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
-                enemy.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, motivatedValue);
+                AddMotivationStatus(character, motivationStatusInfo, statusName, motivatedValue);
+                AddMotivationStatus(enemy, motivationStatusInfo, statusName, motivatedValue);
                 break;
         }
     }
 
+    public void ResetStatus(Character character, MotivationStatusInfo motivationStatusInfo)
+    {
+        RemoveMotivationStatus(character, motivationStatusInfo,
+            string.IsNullOrEmpty(motivationStatusInfo.MaxStatName)
+                ? motivationStatusInfo.CurrentStatName
+                : motivationStatusInfo.MaxStatName);
+    }
+
+    public void AddStackCount()
+    {
+        if (!IsStackable) return;
+        StackCount++;
+        if(StackCount > MaxStackCount) StackCount = MaxStackCount;
+    }
+
+    public void SubtractStackCount()
+    {
+        if (!IsStackable) return;
+        StackCount--;
+        if (StackCount <= 0) StackCount = 1;
+    }
+
+    public void ResetStackCount()
+    {
+        if (!IsStackable) return;
+        StackCount = 1;
+    }
     public bool IsMotivatedWhenGreater(Character character, Character orOther)
     {
         if (MotivationInfo.MotivationStatusInfos is null) return false;

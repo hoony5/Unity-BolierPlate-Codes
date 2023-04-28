@@ -17,7 +17,6 @@ public class AreaAbility : Effect, IAreaAbility
     {
         return  tryChance <= Chance;
     }
-    
     public int DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result)
     {
         Transform transform = character.transform;
@@ -31,14 +30,12 @@ public class AreaAbility : Effect, IAreaAbility
         StackCount++;
         if(StackCount > MaxStackCount) StackCount = MaxStackCount;
     }
-
     public void SubtractStackCount()
     {
         if (!IsStackable) return;
         StackCount--;
         if (StackCount <= 0) StackCount = 1;
     }
-
     public void ResetStackCount()
     {
         if (!IsStackable) return;

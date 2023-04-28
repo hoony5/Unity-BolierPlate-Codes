@@ -13,9 +13,9 @@ public class CastAbility : Effect, IThresholdAbility
     [field:SerializeField] public ApplyTargetType ApplyTargetType { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
-    public bool HasThresholdPassed(float threshold, bool isHit)
+    public bool HasThresholdPassed(float threshold)
     {
-        return  threshold >= Threshold && !isHit;
+        return  threshold >= Threshold;
     }
     public bool HitTheChance(float tryChance)
     {

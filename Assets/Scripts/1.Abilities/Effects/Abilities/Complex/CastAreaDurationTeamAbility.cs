@@ -25,9 +25,9 @@ public class CastAreaDurationTeamAbility : Effect, ICastAreaDurationTeamAbility
         Vector3 detectorSize = new Vector3(Range, position.y * 0.5f, Range);
         return Physics.OverlapBoxNonAlloc(position,  detectorSize, result, Quaternion.identity, areaMask);
     }
-    public bool HasThresholdPassed(float threshold, bool isHit)
+    public bool HasThresholdPassed(float threshold)
     {
-        return  threshold >= Threshold && !isHit;
+        return  threshold >= Threshold;
     }
     public bool HasTimePassed(float currentDuration)
     {

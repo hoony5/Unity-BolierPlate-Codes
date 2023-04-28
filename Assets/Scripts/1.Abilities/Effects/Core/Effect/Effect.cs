@@ -6,9 +6,9 @@ public class Effect
     public string _effectName;
     [SerializeField] protected AllStatusInfos _allStatusInfos;
     [SerializeField] protected AllEffectInfos _allEffectInfos;
+    [SerializeField] protected ExpenseAbilityInfo _expenseAbilityInfo;
     [SerializeField] protected EffectReferenceInfo _referenceInfo;
     [SerializeField] protected EffectValueInfo _valueInfo;
-    
     public void SetAllEffectInfo(string path)
     {
         _allEffectInfos = (AllEffectInfos)Resources.Load(path);

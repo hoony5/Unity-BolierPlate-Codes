@@ -7,23 +7,23 @@ public class EffectValueInfo
     [SerializeField] private string effectName;
     [SerializeField] private int level;
     [SerializeField] private int maxLevel;
-    [SerializeField] private float[] baseValues;
-    [SerializeField] private float[] coolTimes;
-    [SerializeField] private float[] costs;
+    [SerializeField] private float baseValue;
+    [SerializeField] private float coolTime;
+    [SerializeField] private float cost;
 
     public string EffectName => effectName;
     public int Level => level;
     public int MaxLevel => maxLevel;
     
-    public float GetValue => baseValues[level];
-    public float GetCoolTime => coolTimes[level];
-    public float GetCost => costs[level];
+    public float GetValue => baseValue;
+    public float GetCoolTime => coolTime;
+    public float GetCost => cost;
 
     public void ClearValues()
     {
-        Array.Clear(baseValues, 0, baseValues.Length);
-        Array.Clear(coolTimes, 0, coolTimes.Length);
-        Array.Clear(costs, 0, costs.Length);
+        baseValue = 0;
+        coolTime = 0;
+        cost = 0;
     }
     public void ResetLevel()
     {
@@ -35,13 +35,13 @@ public class EffectValueInfo
         if (level > maxLevel) level = maxLevel;
         if (level < 0) level = 0;
     }
-    public EffectValueInfo(string effectName, int maxLevel, float[] baseValues, float[] coolTimes, float[] costs)
+    public EffectValueInfo(string effectName, int maxLevel, float baseValue, float coolTime, float cost)
     {
         this.effectName = effectName;
         this.maxLevel = maxLevel;
-        this.baseValues = baseValues;
-        this.coolTimes = coolTimes;
-        this.costs = costs;
+        this.baseValue = baseValue;
+        this.coolTime = coolTime;
+        this.cost = cost;
     }
 
 }

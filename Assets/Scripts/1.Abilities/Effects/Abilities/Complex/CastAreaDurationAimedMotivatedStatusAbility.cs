@@ -60,9 +60,9 @@ public class CastAreaDurationAimedMotivatedStatusAbility : Effect, ICastAreaDura
     {
         return currentDuration >= Duration;
     }
-    public bool HasThresholdPassed(float threshold, bool isHit)
+    public bool HasThresholdPassed(float threshold)
     {
-        return  threshold >= Threshold && !isHit;
+        return  threshold >= Threshold;
     }
  
     public void SetMotivationActive(Character character, Character orOther)

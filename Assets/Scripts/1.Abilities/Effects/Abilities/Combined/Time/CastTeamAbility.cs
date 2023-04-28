@@ -199,9 +199,9 @@ public class CastTeamAbility : Effect, ICastTeamAbility
             }
         }
     }
-    public bool HasThresholdPassed(float threshold, bool isHit)
+    public bool HasThresholdPassed(float threshold)
     {
-        return  threshold >= Threshold && !isHit;
+        return  threshold >= Threshold;
     }
     public bool HitTheChance(float tryChance)
     {

@@ -16,10 +16,10 @@ public class CombinedAbilityResourcesManager : MonoBehaviour
         List<Effect> result = new List<Effect>(128);
         foreach (AbilityResourceInfo info in abilityResourceInfos)
         {
-            switch (info.typeName)
+            switch (info.sheetName)
             {
                 default:
-                    Debug.Log($"{info.typeName} is not supported on the this script");
+                    Debug.Log($"{info.sheetName} is not supported on the this script");
                     break;
                 case "AreaAimedAbility":
                     result.AddRange(LoadAreaAimedAbility(info.GetAbilityDatas()));

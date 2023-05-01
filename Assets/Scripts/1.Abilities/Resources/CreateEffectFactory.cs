@@ -8,6 +8,8 @@ public class CreateEffectFactory : MonoBehaviour
     public CombinedAbilityResourcesManager combinedAbilityResourcesManager;
     public ComplexAbilityResourcesManager complexAbilityResourcesManager;
     
+    [Header("Effect Value Info")]
+    public EffectValueInfo  effectValueManager;
     [Header("Effect Ability Info")]
     public EffectAbilityManager  effectAbilityManager;
     [Header("Effect Search Status Info")]

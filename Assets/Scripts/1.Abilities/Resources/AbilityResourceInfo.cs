@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 [System.Serializable]
 public class AbilityResourceInfo
 {
-    public string typeName;
+    public string sheetName;
     public string path;
     // Row Data - adapted from RowData.cs
-    [FormerlySerializedAs("baseInfos")] public List<AbilityDataInfo> infos = new List<AbilityDataInfo>(32);
+    public List<AbilityDataInfo> infos = new List<AbilityDataInfo>(32);
 
     public void SetAbilityDataInfo(string firstColumnValue , string[] columnHeaders, string[] columnValues)
     {

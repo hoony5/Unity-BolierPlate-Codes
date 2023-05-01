@@ -1,23 +1,24 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class Effect
 {
     public string _effectName;
-    [SerializeField] protected AllStatusInfos _allStatusInfos;
-    [SerializeField] protected AllEffectInfos _allEffectInfos;
-    [SerializeField] protected ExpenseAbilityInfo _expenseAbilityInfo;
-    [SerializeField] protected EffectReferenceInfo _referenceInfo;
-    [SerializeField] protected EffectValueInfo _valueInfo;
+    [field: SerializeField] public AllStatusInfos AllStatusInfos { get; set; }
+    [field:SerializeField] public AllEffectInfos AllEffectInfos{get;set;}
+    [field:SerializeField] public ExpenseAbilityInfo ExpenseAbilityInfo{get;set;}
+    [field:SerializeField] public EffectReferenceInfo ReferenceInfo{get;set;}
+    [field:SerializeField] public EffectValueInfo ValueInfo{get;set;}
     public void SetAllEffectInfo(string path)
     {
-        _allEffectInfos = (AllEffectInfos)Resources.Load(path);
+        AllEffectInfos = (AllEffectInfos)Resources.Load(path);
     }
     public void LoadEffectData(string effectName)
     {
-        if (!_allEffectInfos) return;
+        if (!AllEffectInfos) return;
         
         _effectName = effectName;
-        (_referenceInfo, _valueInfo) = _allEffectInfos.GetEffectDataInformation(effectName);
+        (ReferenceInfo, ValueInfo) = AllEffectInfos.GetEffectDataInformation(effectName);
     }
 }

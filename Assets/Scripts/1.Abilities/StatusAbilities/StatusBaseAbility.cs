@@ -9,7 +9,7 @@ public class StatusBaseAbility : MonoBehaviour
     {
         for (var index = 0; index < statusItems.Count; index++)
         {
-            statusItems[index].Value = 0;
+            statusItems[index].SetValue(0);
         }
     }
 
@@ -25,7 +25,7 @@ public class StatusBaseAbility : MonoBehaviour
             StatusItemInfo stat = statusItems[index];
             if (stat.RawName.Equals(statusName))
             {
-                stat.Value = value;
+                stat.SetValue(value);
             }
         }
     }
@@ -36,7 +36,7 @@ public class StatusBaseAbility : MonoBehaviour
             StatusItemInfo stat = statusItems[index];
             if (stat.RawName.Equals(statusName))
             {
-                stat.Value += value;
+                stat.AddValue(value);
             }
         }
     }
@@ -47,7 +47,7 @@ public class StatusBaseAbility : MonoBehaviour
             StatusItemInfo stat = statusItems[index];
             if (stat.RawName.Equals(statusName))
             {
-                stat.Value *= value;
+                stat.MultiplyValue(value);
             }
         }
     }

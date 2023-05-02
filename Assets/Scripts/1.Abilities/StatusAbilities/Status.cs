@@ -39,13 +39,14 @@ public class Status : MonoBehaviour
     public void UpdateStatusValue(string statusName)
     {
         int index = Ability.AllStatusInfos.GetStatusIndex(statusName);
-        _totalStatuses[index].Value = Ability.BuffStat.GetStatuses()[index].Value
-                                      + Ability.DebuffStat.GetStatuses()[index].Value
-                                      + Ability.OriginalStat.GetStatuses()[index].Value
-                                      + Ability.PetStat.GetStatuses()[index].Value
-                                      + Ability.EquipmentStat.GetStatuses()[index].Value
-                                      + Ability.SkillStatus.GetStatuses()[index].Value
-                                      + Ability.MotivationStatus.GetStatuses()[index].Value;
+        float totalValue = Ability.BuffStat.GetStatuses()[index].Value
+                           + Ability.DebuffStat.GetStatuses()[index].Value
+                           + Ability.OriginalStat.GetStatuses()[index].Value
+                           + Ability.PetStat.GetStatuses()[index].Value
+                           + Ability.EquipmentStat.GetStatuses()[index].Value
+                           + Ability.SkillStatus.GetStatuses()[index].Value
+                           + Ability.MotivationStatus.GetStatuses()[index].Value;
+        _totalStatuses[index].SetValue(totalValue);
     }
 
     public void SetTotalValue(string statusName, float value)
@@ -54,7 +55,7 @@ public class Status : MonoBehaviour
         {
             if (stat.RawName.Equals(statusName))
             {
-                stat.Value = value;
+                stat.SetValue(value);
             }
         }
     }
@@ -64,7 +65,7 @@ public class Status : MonoBehaviour
         {
             if (stat.RawName.Equals(statusName))
             {
-                stat.Value += value;
+                stat.AddValue(value);
             }
         }
     }
@@ -74,7 +75,7 @@ public class Status : MonoBehaviour
         {
             if (stat.RawName.Equals(statusName))
             {
-                stat.Value *= value;
+                stat.MultiplyValue(value);
             }
         }
     }

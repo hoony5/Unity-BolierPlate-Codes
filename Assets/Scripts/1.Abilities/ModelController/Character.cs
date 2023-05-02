@@ -12,7 +12,7 @@ public class Character : ModuleController, ICharacter
         throw new System.NotImplementedException();
     }
 
-    public float GetLifeValue(LifeValueType lifeValueType)
+    public float GetLifeValue(ChangedValueStatusType changedValueStatusType)
     {
         throw new System.NotImplementedException();
     }

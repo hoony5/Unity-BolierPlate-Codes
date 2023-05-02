@@ -2,6 +2,6 @@
 {
     // Battle
     float GetDamage(AbilityType abilityType);
-    float GetLifeValue(LifeValueType lifeValueType);
+    float GetLifeValue(ChangedValueStatusType changedValueStatusType);
     float GetArmor(AbilityType abilityType);
 }

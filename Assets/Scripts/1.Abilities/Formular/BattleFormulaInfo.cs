@@ -1,159 +1,38 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Formula Info", menuName = "ScriptableObject/Calculate/BattleFormulaInfo")]
-public class BattleFormulaInfo : ScriptableObject
+[System.Serializable]
+public class BattleFormulaInfo
 {
-    [SerializeField] private string statusName;
-    [SerializeField] private StatusReferenceTarget statusReferenceTarget;
-    [SerializeField] private CalculationTargetType calculationTargetType;
-    [SerializeField] private BattleFormulaInfo modifyBattleFormulaInfo;
-    [SerializeField] private FormulaCalculationType formulaCalculationType;
-    [SerializeField] private float modifyValue;
-    [SerializeField] private string description;
-    [SerializeField] private bool useInputMode;
-    [SerializeField] private bool useClamp;
-    [SerializeField] private Vector2 minMaxRange;
-    [NonSerialized] public float baseValue; // baseValue is determined by statusName
-    [NonSerialized] public float calculatedValue; // Pre-calculated value for performance optimization
-
-    public FormulaCalculationType FormulaCalculationType
+    [field: SerializeField] public string Name { get; private set; }
+    [field: SerializeField] public bool UseClampValue { get; private set; }
+    [field: SerializeField] public List<FormulaStat> FormulaStats { get; private set; }
+    [field: SerializeField] public int Min { get; private set; }
+    [field: SerializeField] public int Max { get; private set; }
+    [field: SerializeField] public string Description { get; private set; }
+    
+    public BattleFormulaInfo(string name, bool useClampValue, int min, int max, string description)
     {
-        get => formulaCalculationType;
-        set => formulaCalculationType = value;
+        Name = name;
+        UseClampValue = useClampValue;
+        FormulaStats = new List<FormulaStat>(6);
+        Min = min;
+        Max = max;
+        Description = description;
     }
-
-    public CalculationTargetType CalculationTargetType
+    public float GetCalculatedValue()
     {
-        get => calculationTargetType;
-        set => calculationTargetType = value;
-    }
-
-    public BattleFormulaInfo ModifyBattleFormulaInfo
-    {
-        get => modifyBattleFormulaInfo;
-        set => modifyBattleFormulaInfo = value;
-    }
-
-    public string StatusName
-    {
-        get => statusName;
-        set => statusName = value;
-    }
-
-    public float ModifyValue
-    {
-        get => modifyValue;
-        set => modifyValue = value;
-    }
-
-    public void CalculatePreCalculatedValue(Character me, Character other)
-    {
-        baseValue = statusReferenceTarget switch
+        float result = 0;
+        foreach (FormulaStat stat in FormulaStats)
         {
-             StatusReferenceTarget.Me => me.StatusAbility.GetStatusValue(statusName),
-             StatusReferenceTarget.Other => other.StatusAbility.GetStatusValue(statusName)
-        };
-        calculatedValue = formulaCalculationType switch
-        {
-            FormulaCalculationType.None => 0f,
-            FormulaCalculationType.Additive => baseValue + GetResult(),
-            FormulaCalculationType.Multiply => baseValue * GetResult(),
-            FormulaCalculationType.Logarithmic => Mathf.Log(baseValue, GetResult()),
-            _ => 0
-        };
-        calculatedValue = useClamp ? Mathf.Clamp(calculatedValue, minMaxRange.x, minMaxRange.y) : calculatedValue;
-    }
-#if UNITY_EDITOR
-    public float GetEditorCalculatedValue()
-    {
-        float result = formulaCalculationType switch
-        {
-            FormulaCalculationType.None => 0f,
-            FormulaCalculationType.Additive => baseValue + GetResult(),
-            FormulaCalculationType.Multiply => baseValue * GetResult(),
-            FormulaCalculationType.Logarithmic => Mathf.Log(baseValue, GetResult()),
-            _ => 0
-        };
-        return useClamp ? Mathf.Clamp(result, minMaxRange.x, minMaxRange.y) : result;
-    }
-#endif
-    private float GetResult()
-    {
-        switch (calculationTargetType)
-        {
-            case CalculationTargetType.UseModifyValue:
-                return modifyValue;
-            case CalculationTargetType.UseFormulaInfoValue when modifyBattleFormulaInfo is not null:
-                float result = 0;
-#if UNITY_EDITOR
-                result = modifyBattleFormulaInfo.GetEditorCalculatedValue();
-#else
-                result = modifyBattleFormulaInfo.GetPreCalculatedValue();
-#endif
-                return result;
-            case CalculationTargetType.UseFormulaInfoValue:
-                Debug.LogWarning("Missing formula reference");
-                return 0;
-            case CalculationTargetType.UseSelfValue:
-                return baseValue;
-            default:
-                return 0f;
-        }
-    }
-
-    public float GetPreCalculatedValue()
-    {
-        return calculatedValue;
-    }
-
-    public void Reset()
-    {
-        calculationTargetType = CalculationTargetType.UseModifyValue;
-        modifyBattleFormulaInfo = null;
-        FormulaCalculationType = FormulaCalculationType.None;
-    }
-
-    public string ToFormulaString()
-    {
-#if UNITY_EDITOR
-        string modifier = calculationTargetType switch
-        {
-            CalculationTargetType.UseModifyValue => modifyValue.ToString(),
-            CalculationTargetType.UseSelfValue => baseValue.ToString(),
-            CalculationTargetType.UseFormulaInfoValue => modifyBattleFormulaInfo is null
-                ? "Please, assign BattleFormulaInfo"    
-                : modifyBattleFormulaInfo.GetEditorCalculatedValue().ToString(),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        string @operator = formulaCalculationType switch
-        {
-            FormulaCalculationType.None => " None ",
-            FormulaCalculationType.Additive => " + ",
-            FormulaCalculationType.Multiply => " x ",
-            FormulaCalculationType.Logarithmic => "Log ",
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        string clampedValue = "";
-        if (useClamp)
-        {
-            if (GetEditorCalculatedValue() <= minMaxRange.x)
-                clampedValue = $"Clamped Min(<color=yellow>{minMaxRange.x}</color>)";
-            else if (GetEditorCalculatedValue() >= minMaxRange.y)
-                clampedValue = $"Clamped Max(<color=yellow>{minMaxRange.y}</color>)";
+            result += stat.CalculatedValue;
         }
 
-        string resultValue = "";
-        if (formulaCalculationType is FormulaCalculationType.Logarithmic)
+        if (UseClampValue)
         {
-            resultValue = $"Log({baseValue}) {modifier})";
-            return $"{(useClamp ? $"{clampedValue} : {resultValue}" : $"{clampedValue}")}";
+            result = Mathf.Clamp(result, Min, Max);
         }
 
-        resultValue = $"{baseValue} {@operator} {modifier}";
-        return $"{(useClamp ? $"{clampedValue} : {resultValue}" : $"{clampedValue}")}";
-#else
-        return string.Empty;
-#endif
+        return result;
     }
 }

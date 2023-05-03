@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class AbilityExpenseManager : MonoBehaviour
 { 
-    public AbilityResourceInfo[] abilityResourceInfos;
+    [field:SerializeField] public AbilityResourceInfo[] AbilityResourceInfos { get; private set; }
     [SerializeField] private List<ExpenseAbilityInfo> costs;
     private Dictionary<string, ExpenseAbilityInfo> _costIndexMap;
     
@@ -19,7 +19,7 @@ public class AbilityExpenseManager : MonoBehaviour
     public void SetExpenseInfos(ref List<BattleBehaviour> battleBehaviours)
     {
         costs.Clear();
-        foreach (AbilityResourceInfo info in abilityResourceInfos)
+        foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
             AllLoadExpenseInfo(info.GetAbilityDatas());
         }
@@ -44,7 +44,7 @@ public class AbilityExpenseManager : MonoBehaviour
 
         for (var index = 0; index < values.Count; index++)
         {
-            currentEffectName = values[index][0];
+            currentEffectName = string.IsNullOrEmpty(values[index][0]) ? currentEffectName : values[index][0];
             nextEffectName = index < values.Count - 1 ? values[index + 1][0] : currentEffectName;
 
             if (!string.IsNullOrEmpty(nextEffectName))

@@ -20,17 +20,11 @@ public class EffectSearchStatInfoManager : MonoBehaviour
         SearchStatusItemsMap = SearchStatuses.ToDictionary(key => key.effectName, value => value);
     }
 
-    public void SetEffectInfomations(SearchStatusInfo[] searchStatuses)
-    {
-        SearchStatuses.AddRange(searchStatuses);
-    }
-
     public void LoadAllSearchStatusItemInfo()
     {
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            SearchStatusInfo[] loadedData = LoadSearchStatusItemInfo(info.GetAbilityDatas()).ToArray();
-            SetEffectInfomations(loadedData);
+            SearchStatuses.AddRange(LoadSearchStatusItemInfo(info.GetAbilityDatas()).ToArray());
         }
     }
     private List<SearchStatusInfo> LoadSearchStatusItemInfo(List<string[]> values)
@@ -43,10 +37,7 @@ public class EffectSearchStatInfoManager : MonoBehaviour
         {
             string[] rowDatas = values[i];
             
-            if(i == 0)
-            {
-                currentEffectName = rowDatas[0];
-            }
+            currentEffectName = string.IsNullOrEmpty(rowDatas[0]) ? currentEffectName : rowDatas[0];
 
             nextEffectName = i <= values.Count - 1 ? values[i + 1][0] : currentEffectName;
             

@@ -37,12 +37,15 @@ public class BehaviourInfoManager : MonoBehaviour
         List<BehaviourValueInfo> valueInfos = new List<BehaviourValueInfo>(values.Count);
         List<float> baseValues = new List<float>();
         List<float> coolTimes = new List<float>();
+        string currentBehaviour = string.Empty;
+        string nextBehaviour = string.Empty;
+        
         for (var index = 0; index < values.Count; index++)
         {
             string[] rowDatas = values[index];
 
-            string currentBehaviour = rowDatas[0];
-            string nextBehaviour = index < values.Count - 1 ? values[index + 1][0] : currentBehaviour;
+            currentBehaviour = string.IsNullOrEmpty(rowDatas[0]) ? currentBehaviour : rowDatas[0];
+            nextBehaviour = index < values.Count - 1 ? values[index + 1][0] : currentBehaviour;
 
             if (!string.IsNullOrEmpty(nextBehaviour))
             {
@@ -57,6 +60,7 @@ public class BehaviourInfoManager : MonoBehaviour
                     CoolTimes = coolTimes.ToArray(),
                 };
                 valueInfos.Add(valueInfo);
+                currentBehaviour = nextBehaviour;
             }
             else
             {

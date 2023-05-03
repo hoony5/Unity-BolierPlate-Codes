@@ -9,7 +9,15 @@ public class AbilityResourceInfo
     // Row Data - adapted from RowData.cs
     [SerializeField] private List<AbilityDataInfo> infos = new List<AbilityDataInfo>(32);
 
-    public void SetAbilityDataInfo(string firstColumnValue , string[] columnHeaders, string[] columnValues)
+    public void LoadExcelDocument(ExcelCsvReader reader)
+    {
+        reader.LoadDocument(path, sheetName);
+        foreach (RowData rowData in reader.RowDataDictValues)
+        {
+            SetAbilityDataInfo(rowData.FirstColumnValue, rowData.columnHeaders.ToArray(), rowData.columnValues.ToArray());
+        }
+    }
+    private void SetAbilityDataInfo(string firstColumnValue , string[] columnHeaders, string[] columnValues)
     {
         if (infos.Exists(i => i.firstColumnValue == firstColumnValue)) return;
         

@@ -3,6 +3,4 @@
     None,
     Me,
     Other,
-    Our,
-    Them,
 }

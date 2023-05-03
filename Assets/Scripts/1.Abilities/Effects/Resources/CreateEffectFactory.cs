@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CreateEffectFactory : MonoBehaviour
 {
+    [field:SerializeField] public ExcelCsvReader CsvReader { get; private set; }
+    
     private Dictionary<string, Effect> allOneAbilities = new Dictionary<string, Effect>();
     [field:SerializeField] public OneAbilityResourcesManager OneAbilityResourcesManager {get; private set;}
     [field:SerializeField] public EffectAbilityManager  EffectAbilityManager {get; private set;}
@@ -12,6 +14,11 @@ public class CreateEffectFactory : MonoBehaviour
 
     public void CreateEffectList()
     {
+        LoadDocuments(OneAbilityResourcesManager.AbilityResourceInfos);
+        LoadDocuments(EffectAbilityManager.AbilityResourceInfos);
+        LoadDocuments(EffectSearchSatInfoManager.AbilityResourceInfos);
+        LoadDocuments(EffectMotivationManager.AbilityResourceInfos);
+        
         allOneAbilities = OneAbilityResourcesManager.LoadAllOneAbilities().ToDictionary(key => key.EffectName, value => value);
         // first
         EffectAbilityManager.LoadAllAbilityInfos();
@@ -19,8 +26,16 @@ public class CreateEffectFactory : MonoBehaviour
         EffectMotivationManager.LoadAllMotivationStatusInfoDatas();
     }
     
-    public bool TryGetValue(string key, out Effect value)
+    public bool TryGetValue(string keyWhichIsEffectName, out Effect value)
     {
-        return allOneAbilities.TryGetValue(key, out value);
+        return allOneAbilities.TryGetValue(keyWhichIsEffectName, out value);
+    }
+
+    private void LoadDocuments(AbilityResourceInfo[] abilityResourceInfos)
+    {
+        foreach (AbilityResourceInfo info in abilityResourceInfos)
+        {
+            info.LoadExcelDocument(CsvReader);
+        }    
     }
 }

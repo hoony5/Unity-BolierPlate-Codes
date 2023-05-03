@@ -21,17 +21,12 @@ public class EffectMotivationStatInfoManager : MonoBehaviour
         _motivationInfosMap = MotivationInfos.ToDictionary(key => key.EffectName, value => value);
     }
 
-    public void SetEffectInfomations(MotivationInfo[] searchStatuses)
-    {
-        MotivationInfos.AddRange(searchStatuses);
-    }
-
     public void LoadAllMotivationStatusInfoDatas()
     {
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
             MotivationInfo[] loadedData = LoadMotivationStatusInfoData(info.GetAbilityDatas()).ToArray();
-            SetEffectInfomations(loadedData);
+            MotivationInfos.AddRange(loadedData);
         }
     }
     private List<MotivationInfo> LoadMotivationStatusInfoData(List<string[]> values)
@@ -45,10 +40,7 @@ public class EffectMotivationStatInfoManager : MonoBehaviour
         {
             string[] rowDatas = values[i];
             
-            if(i == 0)
-            {
-                currentEffectName = rowDatas[0];
-            }
+            currentEffectName = string.IsNullOrEmpty(rowDatas[0]) ? currentEffectName : rowDatas[0];
 
             nextEffectName = i <= values.Count - 1 ? values[i + 1][0] : currentEffectName;
             

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class BattleFormulaInfoManager
 {
-    [field:SerializeField] private AbilityResourceInfo[] AbilityResourceInfos { get; set; }
-    [field:SerializeField] private List<BattleFormulaInfo> AllBattleFormulas {get; set;}
+    [field:SerializeField] public AbilityResourceInfo[] AbilityResourceInfos { get; private set; }
+    [field:SerializeField] public List<BattleFormulaInfo> AllBattleFormulas {get; private set;}
 
     public void LoadBattleFormulas()
     {

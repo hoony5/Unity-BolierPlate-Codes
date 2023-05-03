@@ -20,12 +20,12 @@ public class BattleFormulaInfo
         Max = max;
         Description = description;
     }
-    public float GetCalculatedValue()
+    public float GetCalculatedValue(Character character, Character other)
     {
         float result = 0;
         foreach (FormulaStat stat in FormulaStats)
         {
-            result += stat.CalculatedValue;
+            result += stat.GetCalculatedValue(character, other);
         }
 
         if (UseClampValue)

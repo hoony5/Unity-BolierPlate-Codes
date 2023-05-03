@@ -9,11 +9,11 @@ public class ExcelCsvReader : MonoBehaviour
 {
     private const int FixedCapcity = 32;
     private const string KorEnCoding = "ks_c_5601-1987";
-    public List<string> columnDataDictKeys = new List<string>(FixedCapcity);
-    public List<ColumnData> columnDataDictValues = new List<ColumnData>(FixedCapcity);
+    [field:SerializeField] public List<string> ColumnDataDictKeys {get; private set;} = new List<string>(FixedCapcity);
+    [field:SerializeField] public List<ColumnData> ColumnDataDictValues {get; private set;} = new List<ColumnData>(FixedCapcity);
     
-    public List<string> rowDataDictKeys = new List<string>(FixedCapcity);
-    public List<RowData> rowDataDictValues = new List<RowData>(FixedCapcity);
+    [field:SerializeField] public List<string> RowDataDictKeys {get; private set;} = new List<string>(FixedCapcity);
+    [field:SerializeField] public List<RowData> RowDataDictValues {get; private set;} = new List<RowData>(FixedCapcity);
 
     public Object excelFile;
     public string path;
@@ -98,21 +98,21 @@ public class ExcelCsvReader : MonoBehaviour
         }
 
         // Copy list and dictionary data to public variables
-        columnDataDictKeys.Clear();
-        columnDataDictValues.Clear();
-        rowDataDictKeys.Clear();
-        rowDataDictValues.Clear();
+        ColumnDataDictKeys.Clear();
+        ColumnDataDictValues.Clear();
+        RowDataDictKeys.Clear();
+        RowDataDictValues.Clear();
 
         foreach (ColumnData columnData in columnDataList)
         {
-            columnDataDictKeys.Add(columnData.Header);
-            columnDataDictValues.Add(columnData);
+            ColumnDataDictKeys.Add(columnData.Header);
+            ColumnDataDictValues.Add(columnData);
         }
 
         foreach (KeyValuePair<string, RowData> entry in rowDataDict)
         {
-            rowDataDictKeys.Add(entry.Key);
-            rowDataDictValues.Add(entry.Value);
+            RowDataDictKeys.Add(entry.Key);
+            RowDataDictValues.Add(entry.Value);
         }
     }
 }

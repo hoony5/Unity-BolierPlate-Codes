@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+[ToDo("After Adding Addressable Asset, Work on"), System.Serializable]
 public class BehaviourReferenceManager : MonoBehaviour
 {
     [field:SerializeField] public AbilityResourceInfo[] AbilityResourceInfos { get; private set; }

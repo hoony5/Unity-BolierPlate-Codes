@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EffectAbilityManager : MonoBehaviour
 {
-    public AbilityResourceInfo[] abilityResourceInfos;
+    [field:SerializeField] public AbilityResourceInfo[] AbilityResourceInfos { get;private set; }
  
     [field: Header("All EffectAbility Types")]
     [field:SerializeField] public List<EffectAbility> EffectAbilities { get; private set; }
@@ -18,11 +18,6 @@ public class EffectAbilityManager : MonoBehaviour
     private void OnEnable()
     {
         Reset();
-    }
-    public void SetEffectInfomations(EffectAbility[] effectAbilities, EffectAbilityInfo[] effectAbilityInfos)
-    {
-        EffectAbilities.AddRange(effectAbilities);
-        EffectAbilityInfos.AddRange(effectAbilityInfos);
     }
     public EffectAbilityInfo GetEffectAbilityInfo(string abilityName)
     {
@@ -53,11 +48,13 @@ public class EffectAbilityManager : MonoBehaviour
     // Load Start or Button Attributes
     public void LoadAllAbilityInfos()
     {
-        foreach (AbilityResourceInfo info in abilityResourceInfos)
+        foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
             List<string[]> infos = info.GetAbilityDatas();
             (List<EffectAbility> ability, List<EffectAbilityInfo> abilityInfo) loadedData = LoadEffectAbilityInfo(infos);
-            SetEffectInfomations(loadedData.ability.ToArray(),loadedData.abilityInfo.ToArray());
+
+            EffectAbilities.AddRange(loadedData.ability.ToArray());
+            EffectAbilityInfos.AddRange(loadedData.abilityInfo.ToArray());
         }
     }
     private (List<EffectAbility> ability, List<EffectAbilityInfo> abilityInfo) LoadEffectAbilityInfo(List<string[]> values)
@@ -77,12 +74,9 @@ public class EffectAbilityManager : MonoBehaviour
             string[] rowDatas = values[index];
 
             // Is First?
-            if (index == 0)
-            {
-                currentEffectName = rowDatas[0];
-                currentAbilityName = rowDatas[1];
-                effectAbilityStats = new List<EffectAbilityStat>(values.Count);
-            }
+            currentEffectName = string.IsNullOrEmpty(rowDatas[0]) ? currentEffectName : rowDatas[0];
+            currentAbilityName = string.IsNullOrEmpty(rowDatas[1]) ? currentAbilityName : rowDatas[1];
+            effectAbilityStats ??= new List<EffectAbilityStat>(values.Count);
             
             nextEffectName = index <= values.Count - 1 ? values[index + 1][0] : currentEffectName;
             nextAbilityName = index <= values.Count - 1 ? values[index + 1][1] : currentEffectName;

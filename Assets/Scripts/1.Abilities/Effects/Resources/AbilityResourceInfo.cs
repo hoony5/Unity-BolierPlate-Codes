@@ -31,7 +31,7 @@ public class AbilityResourceInfo
         infos.Add(newData);
     }
 
-    public List<string[]> GetAbilityDatas()
+    public List<string[]> GetDataList()
     {
         List<string[]> result = new List<string[]>(32);
         

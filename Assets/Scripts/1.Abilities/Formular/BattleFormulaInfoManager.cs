@@ -12,7 +12,7 @@ public class BattleFormulaInfoManager
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
             // add info sheet name
-            AllBattleFormulas.AddRange(LoadAllBattleFormulas(info.GetAbilityDatas()));
+            AllBattleFormulas.AddRange(LoadAllBattleFormulas(info.GetDataList()));
         }
     }
     private List<BattleFormulaInfo> LoadAllBattleFormulas(List<string[]> values)

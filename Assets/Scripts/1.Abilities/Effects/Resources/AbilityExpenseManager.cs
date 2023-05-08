@@ -21,7 +21,7 @@ public class AbilityExpenseManager : MonoBehaviour
         costs.Clear();
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            AllLoadExpenseInfo(info.GetAbilityDatas());
+            AllLoadExpenseInfo(info.GetDataList());
         }
 
         ConvertToDictionary();

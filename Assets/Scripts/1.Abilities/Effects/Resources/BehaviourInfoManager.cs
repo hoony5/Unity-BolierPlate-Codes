@@ -22,7 +22,7 @@ public class BehaviourInfoManager : MonoBehaviour
     {
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            List<string[]> data = info.GetAbilityDatas();
+            List<string[]> data = info.GetDataList();
             List<BehaviourValueInfo> valueInfos = GetEffectLevelInfo(data);
             foreach (BehaviourValueInfo valueInfo in valueInfos)
             {

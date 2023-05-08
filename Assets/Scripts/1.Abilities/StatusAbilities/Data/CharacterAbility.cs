@@ -1,22 +1,37 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class CharacterAbility : MonoBehaviour
+[System.Serializable]
+public class CharacterAbility
 {
-    [SerializeField] private AllStatusInfos allStatusInfos;
-    [SerializeField] private BuffStatusComponent buffStat ;
-    [SerializeField] private DebuffStatusComponent debuffStat;
-    [SerializeField] private OriginalStatusComponent originalStat;
-    [SerializeField] private EquipmentStatusComponent equipmentStat;
-    [SerializeField] private PetStatusComponent petStat;
-    [SerializeField] private SkillStatusComponent skillStatus;
-    [SerializeField] private MotivationStatusComponent motivationStatus;
-    
-    public AllStatusInfos AllStatusInfos => allStatusInfos;
-    public BuffStatusComponent BuffStat => buffStat;
-    public DebuffStatusComponent DebuffStat => debuffStat;
-    public OriginalStatusComponent OriginalStat => originalStat;
-    public EquipmentStatusComponent EquipmentStat => equipmentStat;
-    public PetStatusComponent PetStat => petStat;
-    public SkillStatusComponent SkillStatus => skillStatus;
-    public MotivationStatusComponent MotivationStatus => motivationStatus;
+    [field:SerializeField] public AllStatusInfos AllStatusInfos{get; private set;}
+    [field:SerializeField] public BuffStatusComponent BuffStat {get; private set;}
+    [field:SerializeField] public DebuffStatusComponent DebuffStat{get; private set;}
+    [field:SerializeField] public OriginalStatusComponent OriginalStat{get; private set;}
+    [field:SerializeField] public EquipmentStatusComponent EquipmentStat{get; private set;}
+    [field:SerializeField] public PetStatusComponent PetStat{get; private set;}
+    [field:SerializeField] public SkillStatusComponent SkillStatus{get; private set;}
+    [field:SerializeField] public MotivationStatusComponent MotivationStatus{get; private set;}
+
+    public CharacterAbility(List<StatusItemInfo> statusBaseInfo)
+    {
+        BuffStat = new BuffStatusComponent();
+        BuffStat.AddStatusesBaseInfo(statusBaseInfo);
+        DebuffStat = new DebuffStatusComponent();
+        DebuffStat.AddStatusesBaseInfo(statusBaseInfo);
+        OriginalStat = new OriginalStatusComponent();
+        OriginalStat.AddStatusesBaseInfo(statusBaseInfo);
+        EquipmentStat = new EquipmentStatusComponent();
+        EquipmentStat.AddStatusesBaseInfo(statusBaseInfo);
+        PetStat = new PetStatusComponent();
+        PetStat.AddStatusesBaseInfo(statusBaseInfo);
+        SkillStatus = new SkillStatusComponent();
+        SkillStatus.AddStatusesBaseInfo(statusBaseInfo);
+        MotivationStatus = new MotivationStatusComponent();
+        MotivationStatus.AddStatusesBaseInfo(statusBaseInfo);
+    }
+    public void SetOriginalStatusComponent(OriginalStatusComponent originalStatusComponent)
+    {
+        OriginalStat = originalStatusComponent;
+    }
 }

@@ -25,7 +25,7 @@ public class EffectMotivationStatInfoManager : MonoBehaviour
     {
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            MotivationInfo[] loadedData = LoadMotivationStatusInfoData(info.GetAbilityDatas()).ToArray();
+            MotivationInfo[] loadedData = LoadMotivationStatusInfoData(info.GetDataList()).ToArray();
             MotivationInfos.AddRange(loadedData);
         }
     }

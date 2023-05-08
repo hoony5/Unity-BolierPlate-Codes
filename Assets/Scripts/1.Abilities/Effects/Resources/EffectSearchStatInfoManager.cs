@@ -24,7 +24,7 @@ public class EffectSearchStatInfoManager : MonoBehaviour
     {
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            SearchStatuses.AddRange(LoadSearchStatusItemInfo(info.GetAbilityDatas()).ToArray());
+            SearchStatuses.AddRange(LoadSearchStatusItemInfo(info.GetDataList()).ToArray());
         }
     }
     private List<SearchStatusInfo> LoadSearchStatusItemInfo(List<string[]> values)
@@ -51,7 +51,6 @@ public class EffectSearchStatInfoManager : MonoBehaviour
             int Min = int.TryParse(rowDatas[4], out int min) ? min : 0;
             int Max = int.TryParse(rowDatas[5], out int max) ? max : 0;
             statusItem.SetValue(Value);
-            statusItem.SetRange(Min, Max);
             
             bool exist = Enum.TryParse(rowDatas[6], out DataUnitType unitType);
             SearchStatusItem searchStatusItem = new SearchStatusItem(statusItem,exist ? DataUnitType.None : unitType);

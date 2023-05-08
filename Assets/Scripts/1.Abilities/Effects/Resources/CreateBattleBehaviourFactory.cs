@@ -25,7 +25,7 @@ public class CreateBattleBehaviourFactory : MonoBehaviour
         
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            List<string[]> data = info.GetAbilityDatas();
+            List<string[]> data = info.GetDataList();
             // info SheetName ?
             
             allBattleBehaviours.AddRange(LoadBattleBehaviourInfos(data));

@@ -18,25 +18,25 @@ public class OneAbilityResourcesManager : MonoBehaviour
                     Debug.Log($"{info.sheetName} is not supported on the this script");
                     break;
                 case "AreaAbility":
-                     result.AddRange(LoadAreaAbility(info.GetAbilityDatas()));
+                     result.AddRange(LoadAreaAbility(info.GetDataList()));
                     break;
                 case "CastAbility":
-                     result.AddRange(LoadCastAbility(info.GetAbilityDatas()));
+                     result.AddRange(LoadCastAbility(info.GetDataList()));
                     break;
                 case "DurationAbility":
-                     result.AddRange(LoadDurationAbility(info.GetAbilityDatas()));
+                     result.AddRange(LoadDurationAbility(info.GetDataList()));
                     break;
                 case "MotivateAbility":
-                    result.AddRange(LoadMotivateAbility(info.GetAbilityDatas()));
+                    result.AddRange(LoadMotivateAbility(info.GetDataList()));
                     break;
                 case "PassiveAbility":
-                    result.AddRange(LoadPassiveAbility(info.GetAbilityDatas()));
+                    result.AddRange(LoadPassiveAbility(info.GetDataList()));
                     break;
                 case "TeamAbility":
-                    result.AddRange(LoadTeamAbility(info.GetAbilityDatas()));
+                    result.AddRange(LoadTeamAbility(info.GetDataList()));
                     break;
                 case "SearchAbility":
-                    result.AddRange(LoadSearchAbility(info.GetAbilityDatas()));
+                    result.AddRange(LoadSearchAbility(info.GetDataList()));
                     break;
             }
         }

@@ -19,7 +19,7 @@ public class BattleFormulaStatManager
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
             // add info sheet name
-            result.AddRange(LoadAllFormulaStats(info.GetAbilityDatas()));
+            result.AddRange(LoadAllFormulaStats(info.GetDataList()));
         }
 
         AllFormulaStats = result.ToDictionary(key => key.FormulaName, value => value);

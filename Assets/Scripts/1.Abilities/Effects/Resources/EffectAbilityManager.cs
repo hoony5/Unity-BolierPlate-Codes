@@ -50,7 +50,7 @@ public class EffectAbilityManager : MonoBehaviour
     {
         foreach (AbilityResourceInfo info in AbilityResourceInfos)
         {
-            List<string[]> infos = info.GetAbilityDatas();
+            List<string[]> infos = info.GetDataList();
             (List<EffectAbility> ability, List<EffectAbilityInfo> abilityInfo) loadedData = LoadEffectAbilityInfo(infos);
 
             EffectAbilities.AddRange(loadedData.ability.ToArray());

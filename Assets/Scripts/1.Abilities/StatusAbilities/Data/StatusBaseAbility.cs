@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class StatusBaseAbility : MonoBehaviour
+[System.Serializable]
+public class StatusBaseAbility
 {
     [field: SerializeField] protected List<StatusItemInfo> statusItems = new List<StatusItemInfo>(128);
 
-    public void ClearValues()
+    public void AddStatusesBaseInfo(List<StatusItemInfo> list)
+    {
+        statusItems = list;
+    }
+    
+    protected void ClearValues()
     {
         for (var index = 0; index < statusItems.Count; index++)
         {
@@ -17,12 +23,11 @@ public class StatusBaseAbility : MonoBehaviour
     {
         return statusItems;
     }
-    
+
     public void SetBaseValue(string statusName, float value)
     {
-        for (var index = 0; index < statusItems.Count; index++)
+        foreach (StatusItemInfo stat in statusItems)
         {
-            StatusItemInfo stat = statusItems[index];
             if (stat.RawName.Equals(statusName))
             {
                 stat.SetValue(value);
@@ -31,9 +36,8 @@ public class StatusBaseAbility : MonoBehaviour
     }
     public void AddBaseValue(string statusName, float value)
     {
-        for (var index = 0; index < statusItems.Count; index++)
+        foreach (StatusItemInfo stat in statusItems)
         {
-            StatusItemInfo stat = statusItems[index];
             if (stat.RawName.Equals(statusName))
             {
                 stat.AddValue(value);
@@ -42,9 +46,8 @@ public class StatusBaseAbility : MonoBehaviour
     }
     public void MultiplyBaseValue(string statusName, float value)
     {
-        for (var index = 0; index < statusItems.Count; index++)
+        foreach (StatusItemInfo stat in statusItems)
         {
-            StatusItemInfo stat = statusItems[index];
             if (stat.RawName.Equals(statusName))
             {
                 stat.MultiplyValue(value);

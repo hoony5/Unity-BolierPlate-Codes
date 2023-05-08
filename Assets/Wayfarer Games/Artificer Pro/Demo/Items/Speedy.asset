@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c33e9476251428b89f4137d4b5f88b6, type: 3}
+  m_Name: Speedy
+  m_EditorClassIdentifier: 
+  description: 'We''re going zoom
+
+    Permanently increase fire rate by 10%'
+  icon: {fileID: 21300000, guid: f23adebb454fc41078a418e2568d0473, type: 3}
+  maxStacks: 5
+  rarity: {fileID: 11400000, guid: 3ffa3b6de74d4403f8feb77ef6e81948, type: 2}
+  triggerOnEquip: 1
+  events: []
+  externalTrigger: 0
+  statsToChange:
+  - {fileID: 11400000, guid: 028433b25ccf142deb6d21dac614d95c, type: 2}
+  modifiers:
+  - Type: 0
+    MultiplyBy: 0.9
+    Add: 0
+  timeInSeconds: 0
+  maxTempStacks: 1

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e8ee8fdf104334b1da7152bc0b9248, type: 3}
+  m_Name: Boomstick
+  m_EditorClassIdentifier: 
+  description: 'They all said dynamite was dangerous, so I added it to your bullets
+
+    Bullets
+    explode on impact'
+  icon: {fileID: 21300000, guid: 5e0666cb23ba247da826733066b6c1ff, type: 3}
+  maxStacks: 1
+  rarity: {fileID: 11400000, guid: daa66e04e9d544339bb98fe3fa45dbf7, type: 2}
+  triggerOnEquip: 0
+  events:
+  - {fileID: 11400000, guid: e8895b88806a540a199d0976d06a621c, type: 2}
+  externalTrigger: 0
+  itemPrefab: {fileID: 3864698183824059162, guid: 6c6d251d232f64b1586b3e0005a11bf0, type: 3}
+  destroyObjectsOnUnequip: 1
+  maxPoolSize: 10
+  collectionChecks: 1

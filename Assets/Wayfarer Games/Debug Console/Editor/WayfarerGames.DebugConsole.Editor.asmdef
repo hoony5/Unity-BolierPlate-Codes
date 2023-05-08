@@ -1,0 +1,19 @@
+{
+    "name": "WayfarerGames.DebugConsole.Editor",
+    "rootNamespace": "DebugConsole",
+    "references": [
+        "GUID:5ec45c56730984e4793f2233dcd167b2",
+        "GUID:478a2357cc57436488a56e564b08d223"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

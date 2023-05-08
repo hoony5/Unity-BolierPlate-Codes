@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Wayfarer%20Games/Artificer%20Pro/Editor/Item/Item.uss?fileID=7433441132597879392&amp;guid=4dbe885bdfec849d19a46ebcdad932e0&amp;type=3#Item" />
+    <ui:VisualElement name="Container" style="flex-grow: 1; background-color: rgb(67, 67, 67); padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; min-height: auto;">
+        <ui:VisualElement name="BaseItem" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement name="Header" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-items: flex-end; justify-content: flex-start;">
+                <ui:Button display-tooltip-when-elided="true" name="Icon" class="icon" style="height: 75px; width: 75px; background-color: rgba(255, 255, 255, 0); -unity-text-outline-color: rgba(0, 0, 0, 0); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); justify-content: flex-end; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                    <uie:ObjectField name="IconPicker" type="UnityEngine.Sprite, UnityEngine.CoreModule" style="flex-grow: 1; align-self: auto; align-items: auto;" />
+                </ui:Button>
+                <ui:VisualElement class="asset" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Name" class="item-name" style="justify-content: flex-start; flex-direction: column; align-items: stretch; flex-grow: 1;" />
+                    <uie:PropertyField name="Script" />
+                    <ui:VisualElement name="Object" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: auto; flex-direction: row;">
+                        <uie:ObjectField label="Asset" name="Object" style="flex-grow: 1;" />
+                        <ui:Button text="Clone" display-tooltip-when-elided="true" name="Clone" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <uie:PropertyField name="Description" class="item-description" />
+            <ui:DropdownField label="Rarity" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="Rarity" />
+            <ui:VisualElement name="Toggles" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                <ui:Toggle label="Triggered on equip?" name="TriggerOnEquip" />
+                <ui:Toggle label="Triggered by external objects? " name="ExternalTrigger" />
+            </ui:VisualElement>
+            <uie:PropertyField name="Events" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ExtraFields" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+    </ui:VisualElement>
+</ui:UXML>

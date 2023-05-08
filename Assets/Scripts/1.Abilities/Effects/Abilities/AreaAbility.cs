@@ -19,7 +19,7 @@ public class AreaAbility : Effect, IAreaAbility
     }
     public int DetectObjectOnValidateArea(Character character, int areaMask, ref Collider[] result)
     {
-        Transform transform = character.transform;
+        Transform transform = character.Transform;
         Vector3 position = transform.position;
         Vector3 detectorSize = new Vector3(Range, position.y * 0.5f, Range);
         return Physics.OverlapBoxNonAlloc(position,  detectorSize, result, Quaternion.identity, areaMask);

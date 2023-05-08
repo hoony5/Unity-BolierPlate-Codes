@@ -10,18 +10,38 @@ public class CreateNpcTraits
 
     public void SetNpcAttributes(ref List<NPC> npcs)
     {
+        List<CharacterAttributes> attributesList = new List<CharacterAttributes>();
+        List<CharacterLootInfo> lootInfosList = new List<CharacterLootInfo>();
+        
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
             switch (info.sheetName)
             {
                 case "Attribute":
                     info.LoadExcelDocument(CsvReader);
+                    attributesList = LoadAttributes(info.GetDataList());
                     break;
                 case "Loot":
                     info.LoadExcelDocument(CsvReader);
+                    lootInfosList = LoadLootInfos(info.GetDataList());
                     break;
                 default:
                     continue;
+            }
+        }
+
+        for (int index = 0; index < npcs.Count; index++)
+        {
+            for(var i = 0 ; i < attributesList.Count; i++)
+            {
+                if(npcs[index].Name == attributesList[i].Name)
+                    npcs[index].SetAttributes(attributesList[i]);
+            }
+
+            for (var k = 0; k < lootInfosList.Count; k++)
+            {
+                if(npcs[index].Name == lootInfosList[k].Name)
+                    npcs[index].SetLootInfo(lootInfosList[k]);
             }
         }
     }

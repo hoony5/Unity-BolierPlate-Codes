@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class CharacterLootInfo
+public class NPCLootInfo
 {
     [field:SerializeField] public string Name { get; private set; }
     [field:SerializeField] public int LootExp { get; private set; }
@@ -19,7 +19,7 @@ public class CharacterLootInfo
     [field:SerializeField] public string[] LootMythItems { get; private set; }
     [field:SerializeField] public float LootMyth { get; private set; }
     
-    public CharacterLootInfo(string name, int lootExp, int lootMoney, string[] lootCommonItems, float lootCommon, string[] lootUncommonItems, float lootUncommon, string[] lootRareItems, float lootRare, string[] lootUniqueItems, float lootUnique, string[] lootLegendaryItems, float lootLegendary, string[] lootMythItems, float lootMyth)
+    public NPCLootInfo(string name, int lootExp, int lootMoney, string[] lootCommonItems, float lootCommon, string[] lootUncommonItems, float lootUncommon, string[] lootRareItems, float lootRare, string[] lootUniqueItems, float lootUnique, string[] lootLegendaryItems, float lootLegendary, string[] lootMythItems, float lootMyth)
     {
         Name = name;
         LootExp = lootExp;

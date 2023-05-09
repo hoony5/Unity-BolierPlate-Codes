@@ -10,8 +10,8 @@ public class CreateNpcTraits
 
     public void SetNpcAttributes(ref List<NPC> npcs)
     {
-        List<CharacterAttributes> attributesList = new List<CharacterAttributes>();
-        List<CharacterLootInfo> lootInfosList = new List<CharacterLootInfo>();
+        List<NPCAttributes> attributesList = new List<NPCAttributes>();
+        List<NPCLootInfo> lootInfosList = new List<NPCLootInfo>();
         
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
@@ -46,14 +46,14 @@ public class CreateNpcTraits
         }
     }
     
-    private List<CharacterAttributes> LoadAttributes(List<string[]> values)
+    private List<NPCAttributes> LoadAttributes(List<string[]> values)
     {
-        List<CharacterAttributes> result = new List<CharacterAttributes>(values.Count);
+        List<NPCAttributes> result = new List<NPCAttributes>(values.Count);
         
         for (var index = 0; index < values.Count; index++)
         {
             string[] rowData = values[index];
-            CharacterAttributes attributes = new CharacterAttributes
+            NPCAttributes attributes = new NPCAttributes
             (
                 name:rowData[0],
                 elementalType:Enum.TryParse(rowData[1], out ElementalType elementalType) ? elementalType : ElementalType.Normal,
@@ -65,8 +65,9 @@ public class CreateNpcTraits
                 defenseSkills:rowData[7].Split(','),
                 utilitySkills:rowData[8].Split(','),
                 passiveSkills:rowData[9].Split(','),
-                places:rowData[10].Split(','),
-                description:rowData[11]
+                motivationSkills:rowData[10].Split(','),
+                places:rowData[11].Split(','),
+                description:rowData[12]
             );
             if(!result.Exists(i => i.Name == attributes.Name))
                 result.Add(attributes);
@@ -74,14 +75,14 @@ public class CreateNpcTraits
 
         return result;
     }
-    private List<CharacterLootInfo> LoadLootInfos(List<string[]> values)
+    private List<NPCLootInfo> LoadLootInfos(List<string[]> values)
     {
-        List<CharacterLootInfo> result = new List<CharacterLootInfo>(values.Count);
+        List<NPCLootInfo> result = new List<NPCLootInfo>(values.Count);
         
         for (var index = 0; index < values.Count; index++)
         {
             string[] rowData = values[index];
-            CharacterLootInfo lootInfo = new CharacterLootInfo
+            NPCLootInfo lootInfo = new NPCLootInfo
             (
                 name:rowData[0],
                 lootExp:int.TryParse(rowData[1], out int lootExp) ? lootExp : 0,

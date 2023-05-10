@@ -28,7 +28,7 @@ public class AbilityExpenseManager : MonoBehaviour
 
         foreach (BattleBehaviour behaviour in battleBehaviours)
         {
-            if (!_costIndexMap.TryGetValue(behaviour.BehaviourName, out ExpenseAbilityInfo value)) continue;
+            if (!_costIndexMap.TryGetValue(behaviour.Name, out ExpenseAbilityInfo value)) continue;
             
             behaviour.ExpenseAbilityInfos  = value;
         }

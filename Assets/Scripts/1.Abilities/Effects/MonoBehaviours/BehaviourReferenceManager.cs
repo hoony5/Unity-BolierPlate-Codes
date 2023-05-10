@@ -14,8 +14,8 @@ public class BehaviourReferenceManager : MonoBehaviour
 
         foreach (BattleBehaviour data in input)
         {
-            if (!_effectReferenceInfosMap.ContainsKey(data.BehaviourName)) continue;
-            data.BehaviourReferenceInfo = _effectReferenceInfosMap[data.BehaviourName];
+            if (!_effectReferenceInfosMap.ContainsKey(data.Name)) continue;
+            data.BehaviourReferenceInfo = _effectReferenceInfosMap[data.Name];
         }
     }
     private void Init()

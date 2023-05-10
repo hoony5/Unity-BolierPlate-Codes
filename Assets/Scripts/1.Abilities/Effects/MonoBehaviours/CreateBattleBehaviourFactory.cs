@@ -39,11 +39,14 @@ public class CreateBattleBehaviourFactory : MonoBehaviour
         List<BattleBehaviour> result = new List<BattleBehaviour>(values.Count);
         foreach (string[] rowData in values)
         {
-            BattleBehaviour behaviour = new BattleBehaviour()
-            {
-                BehaviourName = rowData[0],
-                Effects = rowData[1].Split(',')
-            };
+            BattleBehaviour behaviour = new BattleBehaviour
+            (
+                name: rowData[0],
+                effects: rowData[1].Split(','),
+                grade:rowData[2],
+                rank:rowData[3],
+                maxRank:rowData[4]
+            );
             
             if(!result.Contains(behaviour)) 
                 result.Add(behaviour);
@@ -59,7 +62,7 @@ public class CreateBattleBehaviourFactory : MonoBehaviour
         {
             foreach (BattleBehaviour behaviour in inputBehaviours)
             {
-                if (behaviour.BehaviourName != info.Name) continue;
+                if (behaviour.Name != info.Name) continue;
                 behaviour.FormulaInfo = info;
             }
         }

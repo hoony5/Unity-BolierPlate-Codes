@@ -13,9 +13,9 @@ public class BehaviourInfoManager : MonoBehaviour
 
         foreach (BattleBehaviour data in input)
         {
-            if (!behaviourValueInfosMap.ContainsKey(data.BehaviourName)) continue;
+            if (!behaviourValueInfosMap.ContainsKey(data.Name)) continue;
             data.BehaviourValueInfo = new BehaviourValueInfo();
-            data.BehaviourValueInfo = behaviourValueInfosMap[data.BehaviourName];
+            data.BehaviourValueInfo = behaviourValueInfosMap[data.Name];
         }
     }
     private void Init()
@@ -37,6 +37,7 @@ public class BehaviourInfoManager : MonoBehaviour
         List<BehaviourValueInfo> valueInfos = new List<BehaviourValueInfo>(values.Count);
         List<float> baseValues = new List<float>();
         List<float> coolTimes = new List<float>();
+        List<int> maxExps = new List<int>();
         string currentBehaviour = string.Empty;
         string nextBehaviour = string.Empty;
         
@@ -58,6 +59,7 @@ public class BehaviourInfoManager : MonoBehaviour
                     BaseValues = baseValues.ToArray(),
                     ValuePerLevel = float.TryParse(rowDatas[4], out float valuePerLevel) ? valuePerLevel : 0,
                     CoolTimes = coolTimes.ToArray(),
+                    MaxExps = maxExps.ToArray()
                 };
                 valueInfos.Add(valueInfo);
                 currentBehaviour = nextBehaviour;
@@ -66,8 +68,10 @@ public class BehaviourInfoManager : MonoBehaviour
             {
                 float BaseValue = float.TryParse(rowDatas[3], out float baseValue) ? baseValue : 0;
                 float CoolTime = float.TryParse(rowDatas[5], out float coolTime) ? coolTime : 0;
+                int MaxExp = int.TryParse(rowDatas[6], out int maxExp) ? maxExp : 0;
                 baseValues.Add(BaseValue);
                 coolTimes.Add(CoolTime);
+                maxExps.Add(MaxExp);
             }
         }
 

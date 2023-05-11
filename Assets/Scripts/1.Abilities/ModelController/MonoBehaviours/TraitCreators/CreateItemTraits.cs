@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 [System.Serializable]
-public class CreateNpcTraits
+public class CreateItemTraits : TraitsCreator
 {
-    [field: SerializeField] public ExcelCsvReader CsvReader { get; private set; }
-    [field: SerializeField] public AbilityResourceInfo[] AllAbilityResourceInfos { get; private set; }
-
     public void SetNpcAttributes(ref List<NPC> npcs)
     {
         List<NPCAttributes> attributesList = new List<NPCAttributes>();
@@ -17,11 +13,11 @@ public class CreateNpcTraits
         {
             switch (info.sheetName)
             {
-                case "Attribute":
+                case "NpcAttributes":
                     info.LoadExcelDocument(CsvReader);
                     attributesList = LoadAttributes(info.GetDataList());
                     break;
-                case "Loot":
+                case "NpcLootChance":
                     info.LoadExcelDocument(CsvReader);
                     lootInfosList = LoadLootInfos(info.GetDataList());
                     break;

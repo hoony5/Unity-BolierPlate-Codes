@@ -4,5 +4,5 @@
 /// </summary>
 public interface IAbilityToPetAbility : IAbility
 {
-    void EffectToPetAbility(PetStatusComponent ability);
+    void EffectToPetAbility(StatusBaseAbility ability);
 }

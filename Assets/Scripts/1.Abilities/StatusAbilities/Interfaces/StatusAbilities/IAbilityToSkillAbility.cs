@@ -4,5 +4,5 @@
 /// </summary>
 public interface IAbilityToSkillAbility : IAbility
 {
-    void EffectToSkillAbility(SkillStatusComponent ability);
+    void EffectToSkillAbility(StatusBaseAbility ability);
 }

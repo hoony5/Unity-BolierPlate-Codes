@@ -4,24 +4,19 @@ using UnityEngine;
 
 [System.Serializable]
 [ToDo("이곳은 UI에서 보여지는 Effect 정보를 관리하는 공간 - 총 26개")]
-public class EffectDashBoard : MonoBehaviour
+public class EffectDashBoard
 {
     public List<string> PositiveBattleEffect {get; private set;}
     public List<string> NegativeBattleEffect {get; private set;}
     public List<string> PositiveGlobalEffect {get; private set;}
     public List<string> NegativeGlobalEffect {get;private set;}
     
-    private void Init(int capacity = 32)
+    public void Init(int capacity = 32)
     {
         PositiveBattleEffect = new List<string>(capacity);
         NegativeBattleEffect = new List<string>(capacity);
         PositiveGlobalEffect = new List<string>(capacity);
         NegativeGlobalEffect = new List<string>(capacity);
-    }
-
-    private void Start()
-    {
-        Init();
     }
 
     public bool ExistPositiveBattleEffect(string effectName)

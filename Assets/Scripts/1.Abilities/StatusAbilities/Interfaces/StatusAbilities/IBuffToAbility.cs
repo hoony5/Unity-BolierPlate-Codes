@@ -4,5 +4,5 @@
 /// </summary>
 public interface IBuffToAbility : IAbility
 {
-    void BuffToAbility(BuffStatusComponent ability);
+    void BuffToAbility(StatusBaseAbility ability);
 }

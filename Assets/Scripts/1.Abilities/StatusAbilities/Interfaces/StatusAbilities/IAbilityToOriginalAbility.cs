@@ -4,5 +4,5 @@
 /// </summary>
 public interface IAbilityToOriginalAbility : IAbility
 {
-    void EffectToOriginalAbility(OriginalStatusComponent ability);
+    void EffectToOriginalAbility(StatusBaseAbility ability);
 }

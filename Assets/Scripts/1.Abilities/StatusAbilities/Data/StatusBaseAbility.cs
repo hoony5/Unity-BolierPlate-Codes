@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class StatusBaseAbility
 {
+    [field:SerializeField]  public string Name { get; private set; }
     [field: SerializeField] protected List<StatusItemInfo> statusItems = new List<StatusItemInfo>(128);
-
-    public void AddStatusesBaseInfo(List<StatusItemInfo> list)
+    public StatusBaseAbility(){}
+    public StatusBaseAbility(string name) => Name = name;
+    public void SetStatusesBaseInfo(List<StatusItemInfo> list)
     {
         statusItems = list;
     }

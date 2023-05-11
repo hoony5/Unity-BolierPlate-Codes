@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Status : MonoBehaviour
+public class Status
 {
-    [field: SerializeField] public CharacterAbility Ability { get; set; }
+    [field: SerializeField] public AbilityInfo AbilityInfo { get; set; }
     [field: SerializeField] public EffectDashBoard EffectDashBoard { get; set; }
 
     [SerializeField] private List<StatusItemInfo> _totalStatuses = new List<StatusItemInfo>(128);
+
+    public Status()
+    {
+        AbilityInfo = new AbilityInfo();
+        EffectDashBoard = new EffectDashBoard();
+    }
+    public void SetAbility(AbilityInfo abilityInfo)
+    {
+        AbilityInfo = abilityInfo;
+    }
     
     public float GetStatusValue(string statusName)
     {
@@ -29,7 +39,7 @@ public class Status : MonoBehaviour
 
     public void UpdateTotalStatuses()
     {
-        string[] keys = Ability.AllStatusInfos.GetStatusIndexMapKeys;
+        string[] keys = AbilityInfo.AllStatusInfos.GetStatusIndexMapKeys;
         foreach (string statusName in keys)
         {
             UpdateStatusValue(statusName);
@@ -38,14 +48,12 @@ public class Status : MonoBehaviour
 
     public void UpdateStatusValue(string statusName)
     {
-        int index = Ability.AllStatusInfos.GetStatusIndex(statusName);
-        float totalValue = Ability.BuffStat.GetStatuses()[index].Value
-                           + Ability.DebuffStat.GetStatuses()[index].Value
-                           + Ability.OriginalStat.GetStatuses()[index].Value
-                           + Ability.PetStat.GetStatuses()[index].Value
-                           + Ability.EquipmentStat.GetStatuses()[index].Value
-                           + Ability.SkillStatus.GetStatuses()[index].Value
-                           + Ability.MotivationStatus.GetStatuses()[index].Value;
+        int index = AbilityInfo.AllStatusInfos.GetStatusIndex(statusName);
+        float totalValue = 0;
+        foreach (StatusBaseAbility statuse in AbilityInfo.Statuses)
+        {
+            totalValue += statuse.GetStatuses()[index].Value;
+        }
         _totalStatuses[index].SetValue(totalValue);
     }
 

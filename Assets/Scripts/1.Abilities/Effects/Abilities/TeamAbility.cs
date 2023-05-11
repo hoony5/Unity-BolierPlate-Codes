@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class TeamAbility : Effect, ITeamAbility
 {
+    private readonly string BuffStatusName = "BuffStatus";
+    private readonly string DebuffStatusName = "DebuffStatus";
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public int MaxStackCount { get; set; }
@@ -23,16 +25,16 @@ public class TeamAbility : Effect, ITeamAbility
             case CalculationType.None:
             case CalculationType.Equalize:
                 if(BuffOrDebuff)
-                    character.StatusAbility.Ability.BuffStat.SetBaseValue(statusName, value);
+                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].SetBaseValue(statusName, value);
                 else
-                    character.StatusAbility.Ability.DebuffStat.SetBaseValue(statusName, value);
+                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].SetBaseValue(statusName, value);
                 break;
             case CalculationType.Add:
             case CalculationType.Multiply:
                 if(BuffOrDebuff)
-                    character.StatusAbility.Ability.BuffStat.AddBaseValue(statusName, value);
+                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].AddBaseValue(statusName, value);
                 else
-                    character.StatusAbility.Ability.DebuffStat.AddBaseValue(statusName, value);
+                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].AddBaseValue(statusName, value);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -45,24 +47,24 @@ public class TeamAbility : Effect, ITeamAbility
             case CalculationType.None:
             case CalculationType.Equalize:
                 if(BuffOrDebuff)
-                    character.StatusAbility.Ability.BuffStat.SetBaseValue(statusName, stat.PreviousValue);
+                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].SetBaseValue(statusName, stat.PreviousValue);
                 else
-                    character.StatusAbility.Ability.DebuffStat.SetBaseValue(statusName, stat.PreviousValue);
+                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].SetBaseValue(statusName, stat.PreviousValue);
                 stat.PreviousValue = 0;
                 break;
             case CalculationType.Add:
                 if(BuffOrDebuff)
-                    character.StatusAbility.Ability.BuffStat.AddBaseValue(statusName, -stat.AddedValue);
+                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].AddBaseValue(statusName, -stat.AddedValue);
                 else
-                    character.StatusAbility.Ability.DebuffStat.AddBaseValue(statusName, -stat.AddedValue);
+                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].AddBaseValue(statusName, -stat.AddedValue);
 
                 stat.AddedValue = 0;
                 break;
             case CalculationType.Multiply:
                 if(BuffOrDebuff)
-                    character.StatusAbility.Ability.BuffStat.AddBaseValue(statusName, -stat.MultipliedValue);
+                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].AddBaseValue(statusName, -stat.MultipliedValue);
                 else
-                    character.StatusAbility.Ability.DebuffStat.AddBaseValue(statusName, -stat.MultipliedValue);
+                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].AddBaseValue(statusName, -stat.MultipliedValue);
                 
                 stat.MultipliedValue = 0;
                 break;
@@ -73,10 +75,10 @@ public class TeamAbility : Effect, ITeamAbility
      public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
         float appliedValue = stat.Value * (IsStackable ? StackCount : 1);
-        int index = character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(stat.RawName);
+        int index = character.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(stat.RawName);
         float status = BuffOrDebuff ? 
-            character.StatusAbility.Ability.BuffStat.GetStatuses()[index].Value :
-            character.StatusAbility.Ability.DebuffStat.GetStatuses()[index].Value;
+            character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].GetStatuses()[index].Value :
+            character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].GetStatuses()[index].Value;
         
         float modifierStatus = stat.CalculationType switch
         {

@@ -4,5 +4,5 @@
 /// </summary>
 public interface IAbilityToEquipmentAbility : IAbility
 {
-    void EffectToEquipmentAbility(EquipmentStatusComponent ability);
+    void EffectToEquipmentAbility(StatusBaseAbility ability);
 }

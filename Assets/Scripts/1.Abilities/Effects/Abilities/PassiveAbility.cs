@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PassiveAbility : Effect, IPassiveAbility
 {
+    private readonly string SkillStatusName = "SkillStatus";
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public int MaxStackCount { get; set; }
@@ -21,11 +22,11 @@ public class PassiveAbility : Effect, IPassiveAbility
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.Ability.SkillStatus.SetBaseValue(statusName, value);
+                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].SetBaseValue(statusName, value);
                 break;
             case CalculationType.Add:
             case CalculationType.Multiply:
-                character.StatusAbility.Ability.SkillStatus.AddBaseValue(statusName, value);
+                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].AddBaseValue(statusName, value);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -37,15 +38,15 @@ public class PassiveAbility : Effect, IPassiveAbility
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.Ability.SkillStatus.SetBaseValue(statusName, stat.PreviousValue);
+                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].SetBaseValue(statusName, stat.PreviousValue);
                 stat.PreviousValue = 0;
                 break;
             case CalculationType.Add:
-                character.StatusAbility.Ability.SkillStatus.AddBaseValue(statusName, -stat.AddedValue);
+                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].AddBaseValue(statusName, -stat.AddedValue);
                 stat.AddedValue = 0;
                 break;
             case CalculationType.Multiply:
-                character.StatusAbility.Ability.SkillStatus.AddBaseValue(statusName, -stat.MultipliedValue);
+                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].AddBaseValue(statusName, -stat.MultipliedValue);
                 stat.MultipliedValue = 0;
                 break;
             default:
@@ -55,8 +56,8 @@ public class PassiveAbility : Effect, IPassiveAbility
     public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
         float appliedValue = stat.Value * (IsStackable ? StackCount : 1);
-        int index = character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(stat.RawName);
-        float status = character.StatusAbility.Ability.SkillStatus.GetStatuses()[index].Value;
+        int index = character.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(stat.RawName);
+        float status = character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].GetStatuses()[index].Value;
         float modifierStatus = stat.CalculationType switch
         {
             CalculationType.None => 0,

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class CharacterBehaviour : MonoBehaviour
+[System.Serializable]
+public class CharacterBehaviour
 {
     [SerializeField] private BattleBehaviour battleBehaviour;
     [SerializeField] private InteractionBehaviourComponent interactionBehaviour;

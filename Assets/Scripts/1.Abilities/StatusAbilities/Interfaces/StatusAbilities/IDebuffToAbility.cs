@@ -4,5 +4,5 @@
 /// </summary>
 public interface IDebuffToAbility : IAbility
 {
-    void DebuffToAbility(DebuffStatusComponent ability);
+    void DebuffToAbility(StatusBaseAbility ability);
 }

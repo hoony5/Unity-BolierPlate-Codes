@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class MotivateAbility : Effect, IMotivatedAbility
 {
+    private readonly string MotivationStatusName = "MotivationStatus";
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public int MaxStackCount { get; set; }
@@ -51,11 +52,11 @@ public class MotivateAbility : Effect, IMotivatedAbility
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, value);
+                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].SetBaseValue(statusName, value);
                 break;
             case CalculationType.Add:
             case CalculationType.Multiply:
-                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, value);
+                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].AddBaseValue(statusName, value);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -67,15 +68,15 @@ public class MotivateAbility : Effect, IMotivatedAbility
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.Ability.MotivationStatus.SetBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].SetBaseValue(statusName, -motivationStatusInfo.PreviousValue);
                 motivationStatusInfo.PreviousValue = 0;
                 break;
             case CalculationType.Add:
-                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.AddedValue);
+                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].AddBaseValue(statusName, -motivationStatusInfo.AddedValue);
                 motivationStatusInfo.AddedValue = 0;
                 break;
             case CalculationType.Multiply:
-                character.StatusAbility.Ability.MotivationStatus.AddBaseValue(statusName, -motivationStatusInfo.MultipliedValue);
+                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].AddBaseValue(statusName, -motivationStatusInfo.MultipliedValue);
                 motivationStatusInfo.MultipliedValue = 0;
                 break;
             default:
@@ -90,12 +91,12 @@ public class MotivateAbility : Effect, IMotivatedAbility
             motivationStatusInfo.CurrentStatName;
         
         int index = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(statusName) :
-            enemy.StatusAbility.Ability.AllStatusInfos.GetStatusIndex(statusName);
+            character.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(statusName) :
+            enemy.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(statusName);
 
         float status = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value :
-            enemy.StatusAbility.Ability.MotivationStatus.GetStatuses()[index].Value;
+            character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].GetStatuses()[index].Value :
+            enemy.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].GetStatuses()[index].Value;
 
         float motivatedValue = motivationStatusInfo.CalculationType switch
         {

@@ -4,66 +4,75 @@ using System.Collections.Generic;
 [System.Serializable]
 public class CreateItemTraits : TraitsCreator
 {
-    public void SetNpcAttributes(ref List<NPC> npcs)
+    public void SetItemAttributes(ref List<Item> item)
     {
-        List<NPCAttributes> attributesList = new List<NPCAttributes>();
-        List<NPCLootInfo> lootInfosList = new List<NPCLootInfo>();
+        List<ItemAttributes> attributesList = new List<ItemAttributes>();
         
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
             switch (info.sheetName)
             {
-                case "NpcAttributes":
+                case "ItemAttributes":
                     info.LoadExcelDocument(CsvReader);
-                    attributesList = LoadAttributes(info.GetDataList());
-                    break;
-                case "NpcLootChance":
-                    info.LoadExcelDocument(CsvReader);
-                    lootInfosList = LoadLootInfos(info.GetDataList());
+                    attributesList = LoadItemAttributes(info.GetDataList());
                     break;
                 default:
                     continue;
             }
         }
 
-        for (int index = 0; index < npcs.Count; index++)
+        for (int index = 0; index < item.Count; index++)
         {
             for(var i = 0 ; i < attributesList.Count; i++)
             {
-                if(npcs[index].Name == attributesList[i].Name)
-                    npcs[index].SetAttributes(attributesList[i]);
+                if(item[index].Name == attributesList[i].Name)
+                    item[index].SetAttributes(attributesList[i]);
             }
-
-            for (var k = 0; k < lootInfosList.Count; k++)
+        }
+    }
+    public void SetEquipmentAttributes(ref List<Equipment> equipments)
+    {
+        List<EquipmentAttributes> attributesList = new List<EquipmentAttributes>();
+        
+        foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
+        {
+            switch (info.sheetName)
             {
-                if(npcs[index].Name == lootInfosList[k].Name)
-                    npcs[index].SetLootInfo(lootInfosList[k]);
+                case "EquipmentAttributes":
+                    info.LoadExcelDocument(CsvReader);
+                    attributesList = LoadEquipmentAttributes(info.GetDataList());
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+        for (int index = 0; index < equipments.Count; index++)
+        {
+            for(var i = 0 ; i < attributesList.Count; i++)
+            {
+                if(equipments[index].Name == attributesList[i].Name)
+                    equipments[index].SetAttributes(attributesList[i]);
             }
         }
     }
     
-    private List<NPCAttributes> LoadAttributes(List<string[]> values)
+    private List<ItemAttributes> LoadItemAttributes(List<string[]> values)
     {
-        List<NPCAttributes> result = new List<NPCAttributes>(values.Count);
+        List<ItemAttributes> result = new List<ItemAttributes>(values.Count);
         
         for (var index = 0; index < values.Count; index++)
         {
             string[] rowData = values[index];
-            NPCAttributes attributes = new NPCAttributes
+            ItemAttributes attributes = new ItemAttributes
             (
                 name:rowData[0],
                 elementalType:Enum.TryParse(rowData[1], out ElementalType elementalType) ? elementalType : ElementalType.Normal,
-                race: rowData[2],
+                category: rowData[2],
                 grade:Enum.TryParse(rowData[3], out Grade grade) ? grade : Grade.Common,
-                isBoss:bool.TryParse(rowData[4], out bool isBoss) && isBoss,
-                isElite:bool.TryParse(rowData[5], out bool isElite) && isElite,
-                attackSkills:rowData[6].Split(','),
-                defenseSkills:rowData[7].Split(','),
-                utilitySkills:rowData[8].Split(','),
-                passiveSkills:rowData[9].Split(','),
-                motivationSkills:rowData[10].Split(','),
-                places:rowData[11].Split(','),
-                description:rowData[12]
+                passiveSkills:rowData[4].Split(','),
+                places:rowData[5].Split(','),
+                description:rowData[6]
             );
             if(!result.Exists(i => i.Name == attributes.Name))
                 result.Add(attributes);
@@ -71,33 +80,29 @@ public class CreateItemTraits : TraitsCreator
 
         return result;
     }
-    private List<NPCLootInfo> LoadLootInfos(List<string[]> values)
+    
+    private List<EquipmentAttributes> LoadEquipmentAttributes(List<string[]> values)
     {
-        List<NPCLootInfo> result = new List<NPCLootInfo>(values.Count);
+        List<EquipmentAttributes> result = new List<EquipmentAttributes>(values.Count);
         
         for (var index = 0; index < values.Count; index++)
         {
             string[] rowData = values[index];
-            NPCLootInfo lootInfo = new NPCLootInfo
+            EquipmentAttributes attributes = new EquipmentAttributes
             (
                 name:rowData[0],
-                lootExp:int.TryParse(rowData[1], out int lootExp) ? lootExp : 0,
-                lootMoney:int.TryParse(rowData[2], out int lootMoney) ? lootMoney : 0,
-                lootCommonItems:rowData[3].Split(','),
-                lootCommon:float.TryParse(rowData[4], out float lootCommon) ? lootCommon : 0,
-                lootUncommonItems:rowData[5].Split(','),
-                lootUncommon: float.TryParse(rowData[6], out float lootUncommon) ? lootUncommon : 0,
-                lootRareItems:rowData[7].Split(','),
-                lootRare:float.TryParse(rowData[8], out float lootRare) ? lootRare : 0,
-                lootUniqueItems:rowData[9].Split(','),
-                lootUnique:float.TryParse(rowData[10], out float lootUnique) ? lootUnique : 0,
-                lootLegendaryItems:rowData[11].Split(','),
-                lootLegendary:float.TryParse(rowData[12], out float lootLegendary) ? lootLegendary : 0,
-                lootMythItems:rowData[13].Split(','),
-                lootMyth:float.TryParse(rowData[14], out float lootMyth) ? lootMyth : 0
+                elementalType:Enum.TryParse(rowData[1], out ElementalType elementalType) ? elementalType : ElementalType.Normal,
+                category: rowData[2],
+                grade:Enum.TryParse(rowData[3], out Grade grade) ? grade : Grade.Common,
+                attackSkills:rowData[4].Split(','),
+                defenseSkills:rowData[5].Split(','),
+                utilitySkills:rowData[6].Split(','),
+                passiveSkills:rowData[7].Split(','),
+                places:rowData[8].Split(','),
+                description:rowData[9]
             );
-            if(!result.Exists(i => i.Name == lootInfo.Name))
-                result.Add(lootInfo);
+            if(!result.Exists(i => i.Name == attributes.Name))
+                result.Add(attributes);
         }
 
         return result;

@@ -4,7 +4,7 @@
 public class Equipment : Item, IEquipable, IEnhancable, IDissolvable
 {
     [field: SerializeField] public int Level { get; private set; }
-    [field: SerializeField] public Status StatusAbility { get; private set; }
+    [field: SerializeField] public EquipmentAttributes EquipmentAttributes { get; private set; }
     public bool Equip(bool isValidate)
     {
         throw new System.NotImplementedException();

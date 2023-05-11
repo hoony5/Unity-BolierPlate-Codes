@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class CreateCharacterAbility : AbilityModelCreator
 {
-    [field: SerializeField] public ExcelCsvReader CsvReader { get; private set; }
-    [field:SerializeField] public AbilityResourceInfo[] AllAbilityResourceInfos { get; private set; }
-
     public Character SetCharacter()
     {
         Character character = new Character();
@@ -21,7 +18,6 @@ public class CreateCharacterAbility : AbilityModelCreator
                     break;
                 case "StatusesBase":
                     info.LoadExcelDocument(CsvReader);
-                    character = new NPC();
                     character.StatusAbility.SetAbility(abilityInfo);
                     character.StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
                     break;
@@ -67,7 +63,7 @@ public class CreateCharacterAbility : AbilityModelCreator
         {
             switch (info.sheetName)
             {
-                case "BattleStatuses":
+                case "NpcStatuses":
                     info.LoadExcelDocument(CsvReader);
                     LoadAllUnitsOriginalStatuses(ref npcs, info.sheetName, info.GetDataList());
                     break;

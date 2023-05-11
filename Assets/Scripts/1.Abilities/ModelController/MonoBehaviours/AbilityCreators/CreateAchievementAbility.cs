@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using UnityEngine;
 
-public class CreateEquipmentAbility : AbilityModelCreator
+public class CreateAchievementAbility : AbilityModelCreator
 {
-    public List<Equipment> SetEquipments()
+    public List<Achievement> SetAchievements()
     {
-        List<Equipment> equipments = new List<Equipment>();
+        List<Achievement> achievements = new List<Achievement>();
         AbilityInfo abilityInfo = null;
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
@@ -12,15 +14,15 @@ public class CreateEquipmentAbility : AbilityModelCreator
             {
                 case "StatusTypes":
                     info.LoadExcelDocument(CsvReader);
-                    abilityInfo = new AbilityInfo(LoadStatusTypesByModels("Equipment", info.GetDataList()));
+                    abilityInfo = new AbilityInfo(LoadStatusTypesByModels("Achievement", info.GetDataList()));
                     break;
                 case "StatusesBase":
                     info.LoadExcelDocument(CsvReader);
-                    for (var index = 0; index < equipments.Count; index++)
+                    for (var index = 0; index < achievements.Count; index++)
                     {
-                        equipments[index] = new Equipment();
-                        equipments[index].StatusAbility.SetAbility(abilityInfo);
-                        equipments[index].StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
+                        achievements[index] = new Achievement();
+                        achievements[index].StatusAbility.SetAbility(abilityInfo);
+                        achievements[index].StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
                     }
                     break;
                 default:
@@ -28,18 +30,18 @@ public class CreateEquipmentAbility : AbilityModelCreator
             }
         }
 
-        SetAbilitiesValues(ref equipments);
-        return equipments;
+        SetAbilitiesValues(ref achievements);
+        return achievements;
     }
-    private void SetAbilitiesValues(ref List<Equipment> equipments)
+    private void SetAbilitiesValues(ref List<Achievement> achievements)
     {
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
             switch (info.sheetName)
             {
-                case "EquipmentStatuses":
+                case "AchievementStatuses":
                     info.LoadExcelDocument(CsvReader);
-                    LoadAllOriginalStatuses(ref equipments, info.sheetName, info.GetDataList());
+                    LoadAllOriginalStatuses(ref achievements, info.sheetName, info.GetDataList());
                     break;
                 default:
                     continue;
@@ -48,11 +50,11 @@ public class CreateEquipmentAbility : AbilityModelCreator
     }
 
     [ToDo("Divide Datas each levels or contents")]
-    private void LoadAllOriginalStatuses(ref List<Equipment> equipments , string originalStatusType ,List<string[]> values)
+    private void LoadAllOriginalStatuses(ref List<Achievement> achievements , string originalStatusType ,List<string[]> values)
     {
-        foreach (Equipment equipment in equipments)
+        foreach (Achievement achievement in achievements)
         {
-            StatusBaseAbility status = equipment.StatusAbility.AbilityInfo.StatusesMap[originalStatusType];
+            StatusBaseAbility status = achievement.StatusAbility.AbilityInfo.StatusesMap[originalStatusType];
             for (var index = 3; index < values.Count; index++)
             {
                 string[] rowData = values[index];
@@ -63,5 +65,4 @@ public class CreateEquipmentAbility : AbilityModelCreator
             }
         }
     }
-    
 }

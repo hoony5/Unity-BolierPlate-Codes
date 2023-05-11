@@ -37,9 +37,9 @@ public class CreatePetAbility : AbilityModelCreator
         {
             switch (info.sheetName)
             {
-                case "BattleStatuses":
+                case "PetStatuses":
                     info.LoadExcelDocument(CsvReader);
-                    LoadAllUnitsOriginalStatuses(ref pets, info.sheetName, info.GetDataList());
+                    LoadAllOriginalStatuses(ref pets, info.sheetName, info.GetDataList());
                     break;
                 default:
                     continue;
@@ -47,7 +47,7 @@ public class CreatePetAbility : AbilityModelCreator
         }
     }
 
-    private void LoadAllUnitsOriginalStatuses(ref List<Pet> pets , string originalStatusType ,List<string[]> values)
+    private void LoadAllOriginalStatuses(ref List<Pet> pets , string originalStatusType ,List<string[]> values)
     {
         foreach (Pet pet in pets)
         {

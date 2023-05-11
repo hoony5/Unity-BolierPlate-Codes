@@ -8,6 +8,7 @@ public class GrowEquipment : Item, IEquipable
     [field: SerializeField] public int CurrentExp { get; private set; }
     [field: SerializeField] public int MaxExp { get; private set; }
     [field: SerializeField] public Status StatusAbility { get; private set; }
+    [field: SerializeField] public EquipmentAttributes EquipmentAttributes { get; private set; }
     
     public bool Equip(bool isValidate)
     {
@@ -44,5 +45,10 @@ public class GrowEquipment : Item, IEquipable
     {
         AddLevel(1);
         ResetExp();
+    }
+
+    public void SetAttribute(EquipmentAttributes attribute)
+    {
+        EquipmentAttributes = attribute;
     }
 }

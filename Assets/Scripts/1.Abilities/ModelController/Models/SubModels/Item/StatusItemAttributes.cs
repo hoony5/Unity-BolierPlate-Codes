@@ -1,25 +1,31 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[Serializable]
-public class ItemAttributes
+[System.Serializable]
+public class StatusItemAttributes
 {
     [field:SerializeField] public string Name { get; private set; }
     [field:SerializeField] public ElementalType ElementalType { get; private set; }
     [field:SerializeField] public string Category { get; private set; }
     [field:SerializeField] public Grade Grade { get; private set; }
-    [field: SerializeField] public bool IsQuestItem { get; private set; }
+    [field:SerializeField] public bool IsQuestItem{ get; private set; }
     [field: SerializeField] public int MaxCount { get; private set; }
+    [field:SerializeField] public string[] PassiveSkills { get; private set; }
+    [field:SerializeField] public string[] Places { get; private set; }
     [field:SerializeField] public string Description { get; private set; }
-    
-    public ItemAttributes(string name, ElementalType elementalType, string category, Grade grade, int maxCount,bool isQuestItem, string description)
+
+    public StatusItemAttributes(string name, ElementalType elementalType, string category, Grade grade,
+        int maxCount, bool isQuestItem,
+        string[] passiveSkills, string[] places,
+        string description)
     {
         Name = name;
         ElementalType = elementalType;
         Category = category;
         Grade = grade;
-        IsQuestItem = isQuestItem;
         MaxCount = maxCount;
+        IsQuestItem = isQuestItem;
+        PassiveSkills = passiveSkills;
+        Places = places;
         Description = description;
     }
 }

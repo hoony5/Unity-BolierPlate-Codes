@@ -4,6 +4,7 @@
 public class PetAttributes
 {
     [field:SerializeField] public string Name { get; private set; }
+    [field:SerializeField] public string Type { get; private set; }
     [field:SerializeField] public ElementalType ElementalType { get; private set; }
     [field:SerializeField] public string Race { get; private set; }
     [field:SerializeField] public Grade Grade { get; private set; }
@@ -14,11 +15,12 @@ public class PetAttributes
     [field:SerializeField] public string[] MotivationSkills { get; private set; }
     [field:SerializeField] public string Description { get; private set; }
 
-    public PetAttributes(string name, ElementalType elementalType, string race,Grade grade, string[] attackSkills,
+    public PetAttributes(string name,string type, ElementalType elementalType, string race,Grade grade, string[] attackSkills,
         string[] defenseSkills, string[] utilitySkills, string[] passiveSkills, string[] motivationSkills,
         string description)
     {
         Name = name;
+        Type = type;
         ElementalType = elementalType;
         Race = race;
         Grade = grade;

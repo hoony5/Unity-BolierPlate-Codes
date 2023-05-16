@@ -1,18 +1,11 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class Achievement : ModuleController, IStatus
+public class Achievement : ModuleController
 {
-    [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public int Level { get; private set; }
-    [field: SerializeField] public string Tag { get; private set; }
-    [field: SerializeField] public Status StatusAbility { get; private set; }
-    [field: SerializeField] public AchievementAttributes Attributes { get; private set; }
-
-    public bool CompareTag(string tag)
-    {
-        return !string.IsNullOrEmpty(tag) && !string.IsNullOrEmpty(Tag) && Tag == tag;
-    }
+    [field: SerializeField] public string Name { get; protected set; }
+    [field: SerializeField] public Status StatusAbility { get; protected set; }
+    [field: SerializeField] public AchievementAttributes Attributes { get; protected set; }
     public void SetName(string name)
     {
         Name = name;

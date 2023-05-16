@@ -1,6 +1,4 @@
-﻿using System;
-
-public enum Rank
+﻿public enum Rank
 {
     None,
     Nine,

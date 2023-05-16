@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 [System.Serializable]
 public class CreateNpcTraits : TraitsCreator
 {
+    private List<NPCAttributes> attributesList = new List<NPCAttributes>();
+    private List<NPCLootInfo> lootInfosList = new List<NPCLootInfo>();
+    private string NpcAttributesSheetName => "NpcAttributes";
+    private string NpcLootChanceSheetName => "NpcLootChance";
     public void SetNpcAttributes(ref List<NPC> npcs)
     {
-        List<NPCAttributes> attributesList = new List<NPCAttributes>();
-        List<NPCLootInfo> lootInfosList = new List<NPCLootInfo>();
+        attributesList.Clear();
+        lootInfosList.Clear();
         
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
-            switch (info.sheetName)
+            if (info.sheetName == NpcAttributesSheetName)
             {
-                case "NpcAttributes":
-                    info.LoadExcelDocument(CsvReader);
-                    attributesList = LoadAttributes(info.GetDataList());
-                    break;
-                case "NpcLootChance":
-                    info.LoadExcelDocument(CsvReader);
-                    lootInfosList = LoadLootInfos(info.GetDataList());
-                    break;
-                default:
-                    continue;
+                info.LoadExcelDocument(CsvReader);
+                attributesList = LoadAttributes(info.GetDataList());
+            }
+            else if (info.sheetName == NpcLootChanceSheetName)
+            {
+                info.LoadExcelDocument(CsvReader);
+                lootInfosList = LoadLootInfos(info.GetDataList());
             }
         }
 
@@ -45,8 +45,7 @@ public class CreateNpcTraits : TraitsCreator
     
     private List<NPCAttributes> LoadAttributes(List<string[]> values)
     {
-        List<NPCAttributes> result = new List<NPCAttributes>(values.Count);
-        
+        attributesList.Clear();
         for (var index = 0; index < values.Count; index++)
         {
             string[] rowData = values[index];
@@ -66,15 +65,15 @@ public class CreateNpcTraits : TraitsCreator
                 places:rowData[11].Split(','),
                 description:rowData[12]
             );
-            if(!result.Exists(i => i.Name == attributes.Name))
-                result.Add(attributes);
+            if(!attributesList.Exists(i => i.Name == attributes.Name))
+                attributesList.Add(attributes);
         }
 
-        return result;
+        return attributesList;
     }
     private List<NPCLootInfo> LoadLootInfos(List<string[]> values)
     {
-        List<NPCLootInfo> result = new List<NPCLootInfo>(values.Count);
+        lootInfosList.Clear();
         
         for (var index = 0; index < values.Count; index++)
         {
@@ -97,10 +96,10 @@ public class CreateNpcTraits : TraitsCreator
                 lootMythItems:rowData[13].Split(','),
                 lootMyth:float.TryParse(rowData[14], out float lootMyth) ? lootMyth : 0
             );
-            if(!result.Exists(i => i.Name == lootInfo.Name))
-                result.Add(lootInfo);
+            if(!lootInfosList.Exists(i => i.Name == lootInfo.Name))
+                lootInfosList.Add(lootInfo);
         }
 
-        return result;
+        return lootInfosList;
     }
 }

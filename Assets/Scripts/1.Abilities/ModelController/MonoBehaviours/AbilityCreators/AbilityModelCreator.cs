@@ -7,6 +7,11 @@ public class AbilityModelCreator : MonoBehaviour
 {
     [field: SerializeField] public ExcelCsvReader CsvReader { get; private set; }
     [field:SerializeField] public AbilityResourceInfo[] AllAbilityResourceInfos { get; private set; }
+    protected string GrowableSheetName => "Growable";
+    protected string EnhancableSheetName => "Enhancable";
+    protected string CombinableSheetName => "Combinable";
+    protected string StatusTypesSheetName => "StatusTypes";
+    protected string StatusesBaseSheetName => "StatusesBase";
     
     protected List<StatusBaseAbility> LoadStatusTypesByModels(string model, List<string[]> values)
     {

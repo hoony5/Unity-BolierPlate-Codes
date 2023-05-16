@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public class CreateCharacterAbility : AbilityModelCreator
 {
+    private string CharacterItemName => "Character";
+    private string NpcStatusesSheetName => "NpcStatuses";
     public Character SetCharacter()
     {
         Character character = new Character();
@@ -10,19 +11,16 @@ public class CreateCharacterAbility : AbilityModelCreator
         
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
-            switch (info.sheetName)
+            if (info.sheetName == StatusTypesSheetName)
             {
-                case "StatusTypes":
-                    info.LoadExcelDocument(CsvReader);
-                    abilityInfo = new AbilityInfo(LoadStatusTypesByModels("Character", info.GetDataList()));
-                    break;
-                case "StatusesBase":
-                    info.LoadExcelDocument(CsvReader);
-                    character.StatusAbility.SetAbility(abilityInfo);
-                    character.StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
-                    break;
-                default:
-                    continue;
+                info.LoadExcelDocument(CsvReader);
+                abilityInfo = new AbilityInfo(LoadStatusTypesByModels(CharacterItemName, info.GetDataList()));
+            }
+            else if (info.sheetName == StatusesBaseSheetName)
+            {
+                info.LoadExcelDocument(CsvReader);
+                character.StatusAbility.SetAbility(abilityInfo);
+                character.StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
             }
         }
 
@@ -34,23 +32,20 @@ public class CreateCharacterAbility : AbilityModelCreator
         AbilityInfo abilityInfo = null;
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
-            switch (info.sheetName)
+            if (info.sheetName == StatusTypesSheetName)
             {
-                case "StatusTypes":
-                    info.LoadExcelDocument(CsvReader);
-                    abilityInfo = new AbilityInfo(LoadStatusTypesByModels("Character", info.GetDataList()));
-                    break;
-                case "StatusesBase":
-                    info.LoadExcelDocument(CsvReader);
-                    for (var index = 0; index < npcs.Count; index++)
-                    {
-                        npcs[index] = new NPC();
-                        npcs[index].StatusAbility.SetAbility(abilityInfo);
-                        npcs[index].StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
-                    }
-                    break;
-                default:
-                    continue;
+                info.LoadExcelDocument(CsvReader);
+                abilityInfo = new AbilityInfo(LoadStatusTypesByModels(CharacterItemName, info.GetDataList()));
+            }
+            else if (info.sheetName == StatusesBaseSheetName)
+            {
+                info.LoadExcelDocument(CsvReader);
+                for (var index = 0; index < npcs.Count; index++)
+                {
+                    npcs[index] = new NPC();
+                    npcs[index].StatusAbility.SetAbility(abilityInfo);
+                    npcs[index].StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
+                }
             }
         }
 
@@ -61,19 +56,12 @@ public class CreateCharacterAbility : AbilityModelCreator
     {
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
-            switch (info.sheetName)
-            {
-                case "NpcStatuses":
-                    info.LoadExcelDocument(CsvReader);
-                    LoadAllUnitsOriginalStatuses(ref npcs, info.sheetName, info.GetDataList());
-                    break;
-                default:
-                    continue;
-            }
+            if (info.sheetName != NpcStatusesSheetName) continue;
+            info.LoadExcelDocument(CsvReader);
+            LoadAllUnitsOriginalStatuses(ref npcs, info.sheetName, info.GetDataList());
         }
     }
 
-    [ToDo("Divide Datas each levels or contents")]
     private void LoadAllUnitsOriginalStatuses(ref List<NPC> npcs , string originalStatusType ,List<string[]> values)
     {
         foreach (NPC npc in npcs)

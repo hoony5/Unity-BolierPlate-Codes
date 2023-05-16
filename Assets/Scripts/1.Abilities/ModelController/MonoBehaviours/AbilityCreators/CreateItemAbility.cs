@@ -2,55 +2,51 @@
 
 public class CreateItemAbility : AbilityModelCreator
 {
-    public List<Item> SetItems()
+    private string StatusItemName => "StatusItem";
+    private string StatusItemStatusSheetName => "StatusItemStatuses";
+    
+    public List<StatusItem> SetStatusItems()
     {
-        List<Item> items = new List<Item>();
+        List<StatusItem> items = new List<StatusItem>();
         AbilityInfo abilityInfo = null;
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
-            switch (info.sheetName)
+            if (info.sheetName == StatusTypesSheetName)
             {
-                case "StatusTypes":
-                    info.LoadExcelDocument(CsvReader);
-                    abilityInfo = new AbilityInfo(LoadStatusTypesByModels("Item", info.GetDataList()));
-                    break;
-                case "StatusesBase":
-                    info.LoadExcelDocument(CsvReader);
-                    for (var index = 0; index < items.Count; index++)
-                    {
-                        items[index] = new Item();
-                        items[index].StatusAbility.SetAbility(abilityInfo);
-                        items[index].StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
-                    }
-                    break;
-                default:
-                    continue;
+                info.LoadExcelDocument(CsvReader);
+                abilityInfo = new AbilityInfo(LoadStatusTypesByModels(StatusItemName, info.GetDataList()));
+            }
+            else if (info.sheetName == StatusesBaseSheetName)
+            {
+                info.LoadExcelDocument(CsvReader);
+                for (var index = 0; index < items.Count; index++)
+                {
+                    items[index] = new StatusItem();
+                    items[index].StatusAbility.SetAbility(abilityInfo);
+                    items[index].StatusAbility.AbilityInfo.SetStatusBaseInfo(LoadStatusBasicNames(info.GetDataList()));
+                }
+            }
+            else
+            {
+                continue;
             }
         }
 
         SetAbilitiesValues(ref items);
         return items;
     }
-    private void SetAbilitiesValues(ref List<Item> items)
+    private void SetAbilitiesValues(ref List<StatusItem> items)
     {
         foreach (AbilityResourceInfo info in AllAbilityResourceInfos)
         {
-            switch (info.sheetName)
-            {
-                case "ItemStatuses":
-                    info.LoadExcelDocument(CsvReader);
-                    LoadAllOriginalStatuses(ref items, info.sheetName, info.GetDataList());
-                    break;
-                default:
-                    continue;
-            }
+            if (info.sheetName != StatusItemStatusSheetName ) continue;
+            info.LoadExcelDocument(CsvReader);
+            LoadAllOriginalStatuses(ref items, info.sheetName, info.GetDataList());
         }
     }
-
-    [ToDo("Divide Datas each levels or contents")]
-    private void LoadAllOriginalStatuses(ref List<Item> items , string originalStatusType ,List<string[]> values)
+    private void LoadAllOriginalStatuses(ref List<StatusItem> items , string originalStatusType ,List<string[]> values)
     {
-        foreach (Item item in items)
+        foreach (StatusItem item in items)
         {
             StatusBaseAbility status = item.StatusAbility.AbilityInfo.StatusesMap[originalStatusType];
             for (var index = 3; index < values.Count; index++)
@@ -63,5 +59,4 @@ public class CreateItemAbility : AbilityModelCreator
             }
         }
     }
-    
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -14,6 +13,10 @@ public class StatusBaseAbility
         statusItems = list;
     }
     
+    public void Clear()
+    {
+        statusItems.Clear();
+    }
     protected void ClearValues()
     {
         for (var index = 0; index < statusItems.Count; index++)

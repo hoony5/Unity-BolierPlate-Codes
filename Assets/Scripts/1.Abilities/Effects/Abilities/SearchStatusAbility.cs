@@ -42,7 +42,7 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
 
     public bool FindTag(Character other)
     {
-        return other.CompareTag(SearchTag);
+        return other.Transform is not null && other.Transform.CompareTag(SearchTag);
     }
     public bool HitTheChance(float tryChance)
     {

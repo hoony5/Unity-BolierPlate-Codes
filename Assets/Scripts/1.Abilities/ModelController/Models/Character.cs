@@ -7,7 +7,7 @@ public class Character : ModuleController, IGrowable
     [field: SerializeField] public int MaxLevel { get; private set; }
     [field: SerializeField] public int CurrentExp { get; private set; }
     [field: SerializeField] public int MaxExp { get; private set; }
-    [field: SerializeField] public string Tag { get; private set; }
+    [field:SerializeField] public int CurrentEnergy { get; private set; }
     [field: SerializeField] public Transform Transform { get; private set; }
     [field: SerializeField] public CharacterType CharacterType { get; private set; }
     [field: SerializeField] public Status StatusAbility { get; private set; }
@@ -54,12 +54,6 @@ public class Character : ModuleController, IGrowable
         MaxLevel = maxLevel;
         MaxExp = maxExp;
     }
-
-    public bool CompareTag(string tag)
-    {
-        return !string.IsNullOrEmpty(tag) && !string.IsNullOrEmpty(Tag) && Tag == tag;
-    }
-    
     public void SetAttributes(PlayerAttributes attributes)
     {
         Attributes = attributes;

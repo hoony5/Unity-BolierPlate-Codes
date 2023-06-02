@@ -2,6 +2,17 @@
 Not using ECS, but Basic Unity System's BoilerPlate Codes . For Study
 
 ---
+
+### soon - 2023-06-06
+1. Combine UGS , using C# module and custom data model for module and cloud code.
+
+2. Take a part Client Game Logic to Server.
+
+3.  Process with encrypt by AES ,RSA, HMAC which Main Messages .
+
+4. Complete designing Game Data Model of Abilities.
+
+
 ### 2023-03-20
 1. Effect Interfaaces
    - for Creating Skill, Item, Attack Effect.

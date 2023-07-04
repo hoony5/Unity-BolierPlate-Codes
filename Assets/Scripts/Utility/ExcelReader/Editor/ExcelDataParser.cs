@@ -62,6 +62,23 @@ namespace Utility.ExcelReader.Editor
                 field.SetValue(instance, rowData.ColumnValues[columnAttribute.Index]);
             }
         }
-    
+        public static void JoinFields<T>(this T instance, string category, string key, FieldInfo[] fields)
+        {
+            bool isSuccess = DataManager.Instance.DataSo.TryGetValue(category, out ExcelSheetInfo excelData);
+            if (!isSuccess)
+            {
+                Debug.LogError($"Category : {category} | Loaded Data is null ? {excelData is null}");
+                return;
+            }
+
+            bool isSuccess2 = excelData.RowDataDict.TryGetValue(key, out RowData rowData);
+            if (!isSuccess2)
+            {
+                Debug.LogError($"Key : {key} | RowData Data is null ? {rowData is null}");
+                return;
+            }
+
+            instance.SetFields(fields, rowData);
+        }
     }
 }

@@ -1,25 +1,27 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ExcelCsvReader))]
-public class ExcelCsvReaderEditor : Editor
+namespace Utility.ExcelReader.Editor
 {
-    private ExcelCsvReader _reader;
-    private void OnEnable()
+    [CustomEditor(typeof(ExcelCsvReader))]
+    public class ExcelCsvReaderEditor : UnityEditor.Editor
     {
-        _reader = (ExcelCsvReader)target;
-    }
-
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        
-        _reader.path = _reader.excelFile is not null ? AssetDatabase.GetAssetPath(_reader.excelFile) : string.Empty;
-        EditorGUILayout.Space(10);
-        if (GUILayout.Button("Load"))
+        private ExcelCsvReader _reader;
+        private void OnEnable()
         {
-            _reader.LoadDocument(_reader.path, _reader.sheetName);
+            _reader = (ExcelCsvReader)target;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+        
+            _reader.path = _reader.excelFile is not null ? AssetDatabase.GetAssetPath(_reader.excelFile) : string.Empty;
+            EditorGUILayout.Space(10);
+            if (GUILayout.Button("Load"))
+            {
+                _reader.LoadDocument(_reader.path, _reader.sheetName);
+            }
         }
     }
 }

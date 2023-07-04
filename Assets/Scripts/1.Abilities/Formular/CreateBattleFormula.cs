@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Utility.ExcelReader;
 
 [System.Serializable]
 public class CreateBattleFormula

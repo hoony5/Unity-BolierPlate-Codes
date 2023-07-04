@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 
-[System.Serializable]
-public class RowData
+namespace Utility.ExcelReader
 {
-    public string FirstColumnValue; // key
-    public List<string> columnHeaders;
-    public List<string> columnValues;
+    [System.Serializable]
+    public class RowData
+    {
+        public string FirstColumnValue {get; set;} 
+        public List<string> ColumnHeaders {get; set;}
+        public List<string> ColumnValues {get; set;}
+    }
 }

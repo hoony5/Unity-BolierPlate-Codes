@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Utility.ExcelReader;
 
 public class CreateBattleBehaviourFactory : MonoBehaviour
 {

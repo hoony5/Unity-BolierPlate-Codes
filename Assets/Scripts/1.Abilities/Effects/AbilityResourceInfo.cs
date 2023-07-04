@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Utility.ExcelReader;
 
 [System.Serializable]
 public class AbilityResourceInfo
@@ -14,7 +15,7 @@ public class AbilityResourceInfo
         reader.LoadDocument(path, sheetName);
         foreach (RowData rowData in reader.RowDataDictValues)
         {
-            SetAbilityDataInfo(rowData.FirstColumnValue, rowData.columnHeaders.ToArray(), rowData.columnValues.ToArray());
+            SetAbilityDataInfo(rowData.FirstColumnValue, rowData.ColumnHeaders.ToArray(), rowData.ColumnValues.ToArray());
         }
     }
     private void SetAbilityDataInfo(string firstColumnValue , string[] columnHeaders, string[] columnValues)

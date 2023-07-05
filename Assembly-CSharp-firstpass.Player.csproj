@@ -41,6 +41,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll" />
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -250,13 +252,13 @@
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.XRModule.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\AOT\Newtonsoft.Json.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader.DataSet">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
      </Reference>
      <Reference Include="netstandard">
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
@@ -634,10 +636,6 @@
       <Project>{35e2ebf2-eb42-4a4f-fe98-89ed72f1b596}</Project>
       <Name>Unity.AI.Navigation.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="CustomEnum.Player.csproj">
-      <Project>{a58bd3f9-f152-c15c-139c-25a6c54d8486}</Project>
-      <Name>CustomEnum.Player</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Analytics.DataPrivacy.Player.csproj">
       <Project>{ae239efe-2ce4-36de-e347-196f495e2d24}</Project>
       <Name>Unity.Analytics.DataPrivacy.Player</Name>
@@ -645,10 +643,6 @@
     <ProjectReference Include="Unity.Services.Core.Player.csproj">
       <Project>{9368dd50-4e62-4743-4812-7bb6ea220fcb}</Project>
       <Name>Unity.Services.Core.Player</Name>
-    </ProjectReference>
-    <ProjectReference Include="AssetsImportProcessor.Player.csproj">
-      <Project>{b33b7cc5-ec99-e600-99c7-0b7494426d1e}</Project>
-      <Name>AssetsImportProcessor.Player</Name>
     </ProjectReference>
     <ProjectReference Include="NaughtyAttributes.Test.Player.csproj">
       <Project>{30ddf654-dc22-85e0-6874-c7a0d8ad1663}</Project>
@@ -662,13 +656,17 @@
       <Project>{d40190ad-21dd-deed-5b4b-0d70a55c8dba}</Project>
       <Name>UnityEngine.Purchasing.SecurityCore.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="CustomCoroutine.Player.csproj">
-      <Project>{63af0c11-598f-dfe0-29bf-e1b1ed59c1f9}</Project>
-      <Name>CustomCoroutine.Player</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.Purchasing.Codeless.Player.csproj">
       <Project>{f155d052-79f2-be8b-c27e-18c4fd8fdc05}</Project>
       <Name>UnityEngine.Purchasing.Codeless.Player</Name>
+    </ProjectReference>
+    <ProjectReference Include="ToDoListWindow.Player.csproj">
+      <Project>{c0d3edbf-c47f-4a5d-c4c3-71b002b1b26b}</Project>
+      <Name>ToDoListWindow.Player</Name>
+    </ProjectReference>
+    <ProjectReference Include="Patterns.Player.csproj">
+      <Project>{a51b486a-2e0b-8c16-f72b-be6cd1890950}</Project>
+      <Name>Patterns.Player</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Player.csproj">
       <Project>{8bea0816-886a-c440-9565-ade42d998c82}</Project>
@@ -678,10 +676,6 @@
       <Project>{26a039fd-1075-ed42-a92d-70380fdfc27d}</Project>
       <Name>Unity.Services.Core.Analytics.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="ToDoListWindow.Player.csproj">
-      <Project>{c0d3edbf-c47f-4a5d-c4c3-71b002b1b26b}</Project>
-      <Name>ToDoListWindow.Player</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.Purchasing.Player.csproj">
       <Project>{fe22e957-2d11-305e-9597-318f98834d9c}</Project>
       <Name>UnityEngine.Purchasing.Player</Name>
@@ -689,6 +683,10 @@
     <ProjectReference Include="NaughtyAttributes.Core.Player.csproj">
       <Project>{11aef8b4-f7b5-7552-c55d-b2e505096c23}</Project>
       <Name>NaughtyAttributes.Core.Player</Name>
+    </ProjectReference>
+    <ProjectReference Include="ToDoAttribute.Player.csproj">
+      <Project>{11c841bf-79eb-9dcd-7477-99ac48a21c6e}</Project>
+      <Name>ToDoAttribute.Player</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.Player.csproj">
       <Project>{604d7a12-dc9a-51f8-9446-54c6b99f35ab}</Project>
@@ -714,9 +712,9 @@
       <Project>{448d5c8e-6ed4-193d-0dd8-2687c1f1dc1a}</Project>
       <Name>UnityEngine.UI.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="Status.Player.csproj">
-      <Project>{6d51dda4-5240-a050-b72f-1e0b76257644}</Project>
-      <Name>Status.Player</Name>
+    <ProjectReference Include="AssetsImportProcessor.Player.csproj">
+      <Project>{b33b7cc5-ec99-e600-99c7-0b7494426d1e}</Project>
+      <Name>AssetsImportProcessor.Player</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Timeline.Player.csproj">
       <Project>{d8453049-a20d-3ac8-d925-de271db4e4d5}</Project>
@@ -726,17 +724,17 @@
       <Project>{33c65a95-fc26-f672-3c87-c3f885949256}</Project>
       <Name>AYellowpaper.SerializedCollections.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="Patterns.Player.csproj">
-      <Project>{a51b486a-2e0b-8c16-f72b-be6cd1890950}</Project>
-      <Name>Patterns.Player</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Services.Analytics.Player.csproj">
       <Project>{73b11e73-8bfb-e062-9641-37390a4fdec7}</Project>
       <Name>Unity.Services.Analytics.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="ToDoAttribute.Player.csproj">
-      <Project>{11c841bf-79eb-9dcd-7477-99ac48a21c6e}</Project>
-      <Name>ToDoAttribute.Player</Name>
+    <ProjectReference Include="CustomCoroutine.Player.csproj">
+      <Project>{63af0c11-598f-dfe0-29bf-e1b1ed59c1f9}</Project>
+      <Name>CustomCoroutine.Player</Name>
+    </ProjectReference>
+    <ProjectReference Include="CustomEnum.Player.csproj">
+      <Project>{a58bd3f9-f152-c15c-139c-25a6c54d8486}</Project>
+      <Name>CustomEnum.Player</Name>
     </ProjectReference>
     <ProjectReference Include="ExcelCsvReader1.Player.csproj">
       <Project>{405ed956-d056-2a7c-c02c-a8928dc7258a}</Project>

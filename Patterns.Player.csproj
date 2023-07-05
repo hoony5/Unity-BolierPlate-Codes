@@ -41,11 +41,16 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll" />
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Utility\Patterns\Sigleton\Singleton.cs" />
+     <Compile Include="Assets\Scripts\7.Utility\Patterns\Sigleton\Singleton.cs" />
+     <Compile Include="Assets\Scripts\7.Utility\Patterns\Commnad\ICommand.cs" />
+     <Compile Include="Assets\Scripts\7.Utility\Patterns\Commnad\Command.cs" />
+     <Compile Include="Assets\Scripts\7.Utility\Patterns\Commnad\CommandManagement.cs" />
      <Reference Include="UnityEngine">
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>
      </Reference>
@@ -248,13 +253,13 @@
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.XRModule.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\AOT\Newtonsoft.Json.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader.DataSet">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
      </Reference>
      <Reference Include="netstandard">
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>

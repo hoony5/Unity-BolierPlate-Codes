@@ -41,12 +41,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll" />
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Library\PackageCache\com.unity.purchasing@4.8.0\Runtime\AppleMacosStub\AssemblyInfo.cs" />
      <Compile Include="Library\PackageCache\com.unity.purchasing@4.8.0\Runtime\AppleMacosStub\OSXStoreBindings.cs" />
+     <Compile Include="Library\PackageCache\com.unity.purchasing@4.8.0\Runtime\AppleMacosStub\AssemblyInfo.cs" />
      <None Include="Library\PackageCache\com.unity.purchasing@4.8.0\Runtime\AppleMacosStub\UnityEngine.Purchasing.AppleMacosStub.asmdef" />
      <Folder Include="Library\PackageCache\com.unity.purchasing@4.8.0\Runtime\AppleMacosStub" />
      <Reference Include="UnityEngine">
@@ -320,7 +322,7 @@
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.collab-proxy@2.0.4\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
@@ -332,7 +334,7 @@
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.analytics@3.8.1\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader.DataSet">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
      </Reference>
      <Reference Include="netstandard">
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>

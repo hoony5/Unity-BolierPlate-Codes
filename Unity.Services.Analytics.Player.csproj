@@ -41,22 +41,19 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll" />
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\DiskCache.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AcquisitionSource\AnalyticsServiceInstance.AcquisitionSource.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\AnalyticsServiceInstance.Transaction.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\ObsoleteAPI\Events.CustomData.deprecated.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\Product.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\ObsoleteAPI\Events.Transaction.deprecated.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\AnalyticsContainer.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\WebRequestHelper.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\CoreStatsHelper.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\TransactionFailed\AnalyticsServiceInstance.TransactionFailed.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdProvider.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\ObsoleteAPI\Events.AdImpression.deprecated.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Platform\UserCountry.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Dispatcher.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\BufferX.cs" />
@@ -64,44 +61,49 @@
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\AnalyticsServiceInstance.Consent.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Platform\Locale.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Platform\DebugDevice.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionParameters.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\AnalyticsForgetter.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\AnalyticsService.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\SdkVersion.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\RealCurrency.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\NewPlayerHelper.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\AnalyticsServiceInstance.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdCompletionStatus.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Data\StdCommonParams.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Data\StdGenerator.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionServer.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionCurrencyConverter.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\AnalyticsLifetime.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\VirtualCurrencyType.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\Item.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\VirtualCurrency.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\GeoAPI.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\ConsentStatus.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdPlacementType.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdImpressionParameters.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\TransactionFailed\TransactionFailedParameters.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\AnalyticsServiceInstance.Transaction.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\ObsoleteAPI\Events.Transaction.deprecated.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\AnalyticsContainer.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdProvider.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\ObsoleteAPI\Events.AdImpression.deprecated.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionParameters.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\AnalyticsForgetter.cs" />
+     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\SdkVersion.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\ObsoleteAPI\Events.deprecated.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\IAnalyticsService.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AcquisitionSource\AcquisitionSourceParameters.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionType.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Platform\DeviceVolume.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\ConsentCheckException.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Data\StdCommonParams.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Ua2CoreInitializeCallback.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\StandardEventServiceComponent.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Data\StdGenerator.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\AssemblyInfo.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionServer.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\EventData.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Buffer.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\TransactionCurrencyConverter.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\AnalyticsLifetime.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AnalyticsServiceInstance.AdImpression.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\ConsentTracker.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AnalyticsServiceInstance.CustomData.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\VirtualCurrencyType.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\Item.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\Transaction\VirtualCurrency.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Event.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\GeoIPResponse.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\GeoAPI.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Runtime\Consent\ConsentStatus.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdPlacementType.cs" />
      <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Platform\Runtime.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\AdImpression\AdImpressionParameters.cs" />
-     <Compile Include="Library\PackageCache\com.unity.services.analytics@4.4.0\Runtime\Events\TransactionFailed\TransactionFailedParameters.cs" />
      <Reference Include="UnityEngine">
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>
      </Reference>

@@ -41,6 +41,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll" />
+    <Analyzer Include="F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="F:\UnityEditor\2022.3.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -307,7 +309,7 @@
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.analytics@3.8.1\Unity.Analytics.Editor.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.dll</HintPath>
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
@@ -316,7 +318,7 @@
      <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Library\PackageCache\com.unity.analytics@3.8.1\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
      </Reference>
      <Reference Include="ExcelDataReader.DataSet">
-     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
+     <HintPath>F:\BackUp 2023-0324\Unity Portfolios\BoilerPlate\BP\Assets\Scripts\7.Utility\ExcelReader\Plugins\ExcelDataReader.DataSet.dll</HintPath>
      </Reference>
      <Reference Include="netstandard">
      <HintPath>F:\UnityEditor\2022.3.0f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
@@ -698,10 +700,6 @@
       <Project>{11615e6b-3333-367e-3e90-d0802baf1763}</Project>
       <Name>Unity.AI.Navigation</Name>
     </ProjectReference>
-    <ProjectReference Include="CustomEnum.csproj">
-      <Project>{be39da6b-c224-5cad-5be0-1993edf577ec}</Project>
-      <Name>CustomEnum</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Analytics.DataPrivacy.csproj">
       <Project>{2e07ff84-0f06-f1da-fb5a-82e746caa76e}</Project>
       <Name>Unity.Analytics.DataPrivacy</Name>
@@ -709,10 +707,6 @@
     <ProjectReference Include="Unity.Services.Core.csproj">
       <Project>{398a0058-c3d0-1651-6806-8d4e829740c0}</Project>
       <Name>Unity.Services.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="AssetsImportProcessor.csproj">
-      <Project>{964ed4d3-d9ac-9f33-5ff5-2f5ead4362e8}</Project>
-      <Name>AssetsImportProcessor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Rider.Editor.csproj">
       <Project>{0c343f00-fcd2-6b25-ac09-b0ada8f7f2b0}</Project>
@@ -734,13 +728,17 @@
       <Project>{407ca772-006f-4ad9-c7a1-c982c0bdfb72}</Project>
       <Name>UnityEngine.Purchasing.SecurityCore</Name>
     </ProjectReference>
-    <ProjectReference Include="CustomCoroutine.csproj">
-      <Project>{fed9b6ff-d4ee-c9d4-ea7a-c33aa2cc7868}</Project>
-      <Name>CustomCoroutine</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.Purchasing.Codeless.csproj">
       <Project>{c0fb97b5-d66f-01a7-72e5-8f247a8ef834}</Project>
       <Name>UnityEngine.Purchasing.Codeless</Name>
+    </ProjectReference>
+    <ProjectReference Include="ToDoListWindow.csproj">
+      <Project>{4b5816ce-6186-2370-6097-11c6efc261f6}</Project>
+      <Name>ToDoListWindow</Name>
+    </ProjectReference>
+    <ProjectReference Include="Patterns.csproj">
+      <Project>{30153f01-8824-5fe8-c519-1ded56300992}</Project>
+      <Name>Patterns</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.csproj">
       <Project>{1e1105d1-6603-5e4c-3ea6-00c962ca2047}</Project>
@@ -753,10 +751,6 @@
     <ProjectReference Include="Unity.Services.Core.Analytics.csproj">
       <Project>{583e009f-dbfa-1bea-6b66-88f44f48bb09}</Project>
       <Name>Unity.Services.Core.Analytics</Name>
-    </ProjectReference>
-    <ProjectReference Include="ToDoListWindow.csproj">
-      <Project>{4b5816ce-6186-2370-6097-11c6efc261f6}</Project>
-      <Name>ToDoListWindow</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.AI.Navigation.Editor.ConversionSystem.csproj">
       <Project>{5ff90940-1849-6f8c-bd2f-a9ffe36bb22f}</Project>
@@ -773,6 +767,10 @@
     <ProjectReference Include="NaughtyAttributes.Core.csproj">
       <Project>{1ff0abf0-3a9d-b82c-00e2-5c885857bd26}</Project>
       <Name>NaughtyAttributes.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="ToDoAttribute.csproj">
+      <Project>{dd677052-2600-92fa-61c1-80fea6235cf7}</Project>
+      <Name>ToDoAttribute</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
       <Project>{79d1dad9-ccda-5a7c-08f2-0cf1cba373c3}</Project>
@@ -830,13 +828,13 @@
       <Project>{b2125397-adf8-4ef2-b631-995d28ef60ba}</Project>
       <Name>UnityEditor.XR.LegacyInputHelpers</Name>
     </ProjectReference>
-    <ProjectReference Include="Status.csproj">
-      <Project>{d26234f8-c1ee-925b-0b6f-af33fdac4fd1}</Project>
-      <Name>Status</Name>
-    </ProjectReference>
     <ProjectReference Include="NaughtyAttributes.Editor.csproj">
       <Project>{53d32acf-b831-b83f-6b28-6ca3488785ff}</Project>
       <Name>NaughtyAttributes.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="AssetsImportProcessor.csproj">
+      <Project>{964ed4d3-d9ac-9f33-5ff5-2f5ead4362e8}</Project>
+      <Name>AssetsImportProcessor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{74923239-a84c-7c3f-89b3-3820ca009da4}</Project>
@@ -846,10 +844,6 @@
       <Project>{936d5600-9526-8a87-cf18-347ddd1b3dc1}</Project>
       <Name>AYellowpaper.SerializedCollections</Name>
     </ProjectReference>
-    <ProjectReference Include="Patterns.csproj">
-      <Project>{30153f01-8824-5fe8-c519-1ded56300992}</Project>
-      <Name>Patterns</Name>
-    </ProjectReference>
     <ProjectReference Include="AYellowpaper.SerializedCollections.Editor.csproj">
       <Project>{45ef1749-03d3-64e9-72ca-d5135569a573}</Project>
       <Name>AYellowpaper.SerializedCollections.Editor</Name>
@@ -858,13 +852,13 @@
       <Project>{660526ab-3aa1-3daa-5100-748bec53e095}</Project>
       <Name>Unity.Services.Analytics</Name>
     </ProjectReference>
+    <ProjectReference Include="CustomCoroutine.csproj">
+      <Project>{fed9b6ff-d4ee-c9d4-ea7a-c33aa2cc7868}</Project>
+      <Name>CustomCoroutine</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.AI.Navigation.Updater.csproj">
       <Project>{9d20aaa0-02cc-3b6d-eb81-6a966d5bf3a5}</Project>
       <Name>Unity.AI.Navigation.Updater</Name>
-    </ProjectReference>
-    <ProjectReference Include="ToDoAttribute.csproj">
-      <Project>{dd677052-2600-92fa-61c1-80fea6235cf7}</Project>
-      <Name>ToDoAttribute</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
       <Project>{2b7c6345-d5f1-443f-badd-4bb8b8191c1d}</Project>
@@ -874,13 +868,17 @@
       <Project>{ecc2e7f5-27c0-3e8c-522a-f8b853a17366}</Project>
       <Name>Unity.AI.Navigation.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Tilemap.Editor.csproj">
-      <Project>{2f5d8487-d3f2-6765-e688-b6ce6589a551}</Project>
-      <Name>Unity.2D.Tilemap.Editor</Name>
+    <ProjectReference Include="CustomEnum.csproj">
+      <Project>{be39da6b-c224-5cad-5be0-1993edf577ec}</Project>
+      <Name>CustomEnum</Name>
     </ProjectReference>
     <ProjectReference Include="ExcelCsvReader1.csproj">
       <Project>{8afb6e19-a9ec-515d-fb1b-b1162f576436}</Project>
       <Name>ExcelCsvReader1</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Tilemap.Editor.csproj">
+      <Project>{2f5d8487-d3f2-6765-e688-b6ce6589a551}</Project>
+      <Name>Unity.2D.Tilemap.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

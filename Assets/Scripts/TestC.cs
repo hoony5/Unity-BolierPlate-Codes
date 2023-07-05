@@ -8,14 +8,17 @@ using Utility.ExcelReader.Editor;
 public class TestC : MonoBehaviour
 {
     public RowData rowData;
-    //public SerializeDictionary<string, string> test = new SerializeDictionary<string, string>();
+    public GameObject go;
     public ExpenseAbilityInfo expenseAbilityInfoData;
+    public string a1;
+    public string a2;
+    public string a3;
 
     [Button()]
     private void Parse()
     {
-        // expenseAbilityInfoData = ExcelDataParser.FromData<ExpenseAbilityInfo>(rowData);
-        _ = TestSingleton.Instance.name;
+        //expenseAbilityInfoData = ExcelDataParser.FromData<ExpenseAbilityInfo>(rowData);
+
+        Debug.Log(!go);
     }
 }
-

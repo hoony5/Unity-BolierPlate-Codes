@@ -2,72 +2,147 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
-[System.Serializable]
+[Serializable]
 public class CustomEnum<T>
 {
-    [SerializeField] private List<EnumItem<T>> _items = new List<EnumItem<T>>(32);
+    [field: SerializeField] private string PreviousKey {get; set;} 
+    [field: SerializeField] private string CurrentKey {get; set;}
+    [SerializeField] private EnumItem<T>[] _itemsBuffer;
+    private Dictionary<string, EnumItem<T>> _itemsDictionary;
+
+    public event UnityAction<EnumItem<T>> OnEnterValue;
+    public event UnityAction<EnumItem<T>> OnStayValue;
+    public event UnityAction<EnumItem<T>> OnExitValue;
+
+    private EnumItem<T> Empty;
+
+    public CustomEnum() { }
     
+    public void Init()
+    {
+        PreviousKey = string.Empty;
+        CurrentKey = string.Empty;
+
+        if (_itemsDictionary is null)
+            _itemsDictionary = new Dictionary<string, EnumItem<T>>();
+        else
+        {
+            _itemsDictionary.Clear();
+            _itemsBuffer = _itemsBuffer.OrderBy(item => item.Order).ToArray();
+        }
+
+        foreach (EnumItem<T> item in _itemsBuffer)
+        {
+            _itemsDictionary.TryAdd(item.Key, item);
+        }
+    }
+
     public void Clear()
     {
-        _items.Clear();
+        _itemsDictionary.Clear();
     }
 
-    public void Add(string key, T value, int order, bool hasFlag)
+    public void SetPrevious()
     {
-        _items.Add(new EnumItem<T>(key, value, order, hasFlag));
+        ChangeItem(PreviousKey);
     }
 
-    public void Add(EnumItem<T> item)
+    public void Set(string key)
     {
-        _items.Add(item);
+        if(!_itemsDictionary.ContainsKey(key))
+        {
+            Debug.LogWarning($"Key: {key} does not exist in the dictionary.");
+            return;
+        }
+
+        ChangeItem(key);
     }
 
-    public EnumItem<T> GetItemByKey(string key)
+    public void Set(T value)
     {
-        return _items.FirstOrDefault(item => item.Key == key);
+        string key = _itemsDictionary.FirstOrDefault(x => x.Value.Value.Equals(value)).Key;
+
+        if(string.IsNullOrEmpty(key))
+        {
+            Debug.LogWarning($"Value: {value} does not exist in the dictionary.");
+            return;
+        }
+
+        ChangeItem(key);
     }
 
-    public EnumItem<T> GetItemByValue(T value)
+    public void Set(int order) 
     {
-        return _items.FirstOrDefault(item => Equals(item.Value, value));
+        if (order >= _itemsBuffer.Length)
+        {
+            Debug.LogWarning("Order is out of range");
+            return;
+        }
+
+        string key = _itemsBuffer[order].Key;
+
+        ChangeItem(key);
     }
 
-    public EnumItem<T> GetItemByOrder(int order)
-    {
-        return _items.FirstOrDefault(item => item.Order == order);
-    }
     public void SetFlag(string key, bool setFlag)
     {
-        foreach (EnumItem<T> item in _items)
+        if(!_itemsDictionary.ContainsKey(key))
         {
-            if (item.Key.Equals(key, StringComparison.Ordinal))
-                item.HasFlag = setFlag;
+            Debug.LogWarning($"Key: {key} does not exist in the dictionary.");
+            return;
         }
+
+        _itemsDictionary[key].HasFlag = setFlag;
+
+        ChangeItem(key);
     }
 
     public void SetFlag(T value, bool setFlag)
     {
-        foreach (EnumItem<T> item in _items)
+        string key = _itemsDictionary.FirstOrDefault(x => x.Value.Value.Equals(value)).Key;
+
+        if(string.IsNullOrEmpty(key))
         {
-            if (Equals(item.Value,value))
-                item.HasFlag = setFlag;
+            Debug.LogWarning($"Value: {value} does not exist in the dictionary.");
+            return;
         }
+
+        _itemsDictionary[key].HasFlag = setFlag;
+
+        ChangeItem(key);
     }
 
     public void SetFlag(int order, bool setFlag)
     {
-        if (order >= _items.Count)
+        if (order >= _itemsBuffer.Length)
         {
-            Debug.Assert(order >= _items.Count, "order is out of range");
+            Debug.LogWarning("Order is out of range");
             return;
         }
 
-        _items[order].HasFlag = setFlag;
+        string key = _itemsBuffer[order].Key;
+
+        _itemsDictionary[key].HasFlag = setFlag;
+
+        ChangeItem(key);
     }
 
-    public IEnumerable<EnumItem<T>> GetItemsByOrder()
+    private void ChangeItem(string key)
     {
-        return _items.OrderBy(item => item.Order);
+        EnumItem<T> previousItem;
+
+        if (!string.IsNullOrEmpty(PreviousKey) && _itemsDictionary.TryGetValue(PreviousKey, out previousItem))
+        {
+            OnExitValue?.Invoke(previousItem);
+        }
+
+        (CurrentKey, PreviousKey) = (key, CurrentKey);
+
+        EnumItem<T> currentItem = _itemsDictionary[CurrentKey];
+
+        OnEnterValue?.Invoke(currentItem);
+        OnStayValue?.Invoke(currentItem);
     }
 }

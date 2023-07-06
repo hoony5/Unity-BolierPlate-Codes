@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using Utility.ExcelReader;
-using Utility.ExcelReader.Editor;
 
 public class TestC : MonoBehaviour
 {

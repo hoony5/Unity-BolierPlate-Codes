@@ -7,6 +7,7 @@ namespace Utility.ExcelReader
     public class ColumnData
     {
         [field:SerializeField] public string Header {get; set;}
+        [field:SerializeField] public string Type {get; set;}
         [field:SerializeField] public List<string> Values {get; set;}
     }
 }

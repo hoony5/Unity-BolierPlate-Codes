@@ -22,7 +22,7 @@ public static class RowDataToObject
         }
 
         Dictionary<string, T> result = new Dictionary<string, T>(sheetInfo.RowDataDict.Values.Count);
-        foreach (RowData rowData in sheetInfo.RowDataDict[sheetInfo.TypeName].Values)
+        foreach (RowData rowData in sheetInfo.RowDataDict.Values)
         {
             T instance = JsonConvert.DeserializeObject<T>(CreateJsonFormat_Internal(rowData, usingUnityJsonFormat));
             result.Add(rowData.FirstColumnValue, instance);
@@ -30,7 +30,7 @@ public static class RowDataToObject
 
         return result;
     }
-    public static T Convert<T>(this ExcelSheetInfo sheetInfo, string typeName, string index, bool usingUnityJsonFormat = false)
+    public static T Convert<T>(this ExcelSheetInfo sheetInfo, string index, bool usingUnityJsonFormat = false)
     {
         Type getType = Type.GetType(sheetInfo.TypeName);
         
@@ -44,7 +44,7 @@ public static class RowDataToObject
             Debug.LogError($"[{sheetInfo.TypeName}] is not equal with [T:{typeof(T)}].");
             return default;
         }
-        RowData rowData = sheetInfo.RowDataDict[typeName][index];
+        RowData rowData = sheetInfo.RowDataDict[index];
         T instance = JsonConvert.DeserializeObject<T>(CreateJsonFormat_Internal(rowData, usingUnityJsonFormat));
 
         return instance;
@@ -52,21 +52,26 @@ public static class RowDataToObject
 
     private static string CreateJsonFormat_Internal(RowData rowData, bool usingUnityJsonFormat = false)
     {
-        return new string($$"""{{{CreateJsonFormatContent_Internal(rowData, usingUnityJsonFormat)}}}""");
+        return new string($"{{{CreateJsonFormatContent_Internal(rowData, usingUnityJsonFormat)}}}");
     }
 
     private static string CreateJsonFormatContent_Internal(RowData rowData, bool usingUnityJsonFormat = false)
     {
-        if (rowData.ColumnValues.Count == 0) return string.Empty;
-        if (rowData.ColumnValues.Count != rowData.ColumnHeaders.Count) return string.Empty;
+        if (rowData.Values.Count == 0) return string.Empty;
+        if (rowData.Values.Count != rowData.Headers.Count) return string.Empty;
         string content = string.Empty;
-        for (int i = 0; i < rowData.ColumnHeaders.Count; i++)
+        for (int i = 0; i < rowData.Headers.Count; i++)
         {
             // $"<{memberName}>k__BackingField" : $"{memberName}"
-            string memberName = rowData.ColumnHeaders[i];
-            string memberValue = rowData.ColumnValues[i];
-            content += $$"""{{(usingUnityJsonFormat ? $"<{memberName}>k__BackingField" : $"{memberName}")}}":"{{memberValue}}""";
-            if (i != rowData.ColumnHeaders.Count - 1) content += ',';
+            string memberName = $"\"{rowData.Headers[i]}\"";
+            string memberType = rowData.Types[i];
+            string memberValue = memberType switch
+            {
+                "string" => $"\"{rowData.Values[i]}\"",
+                _ => rowData.Values[i]
+            };
+            content += $@"{(usingUnityJsonFormat ? $"<{memberName}>k__BackingField" : $"{memberName}")}:{memberValue}";
+            if (i != rowData.Headers.Count - 1) content += ',';
         }
 
         return content;
@@ -94,21 +99,22 @@ public static class RowDataToObject
         
         RowData rowData = new RowData()
         {
-            ColumnHeaders = new List<string>(),
-            ColumnValues = new List<string>(),
+            Headers = new List<string>(),
+            Values = new List<string>(),
             FirstColumnValue = string.Empty
         };
         for(int i = 0 ; i < rawValue.Length; i ++)
         {
             string[] pair = rawValue[i].Split(":",StringSplitOptions.RemoveEmptyEntries);
-            rowData.ColumnHeaders.Add(pair[0]);
-
-            rowData.ColumnValues.Add(pair[1].Contains('[') ? 
+            rowData.Headers.Add(pair[0]);
+        
+            rowData.Values.Add(pair[1].Contains('[') ? 
                     pair[1].Replace("[","").Replace("]","") :
                     pair[1]);
         }
 
         rowData.FirstColumnValue = rawValue[0].Split(":", StringSplitOptions.RemoveEmptyEntries)[0];
+        rowData.Types = result.RowDataDict[rowData.FirstColumnValue].Types;
 
         return rowData;
     }

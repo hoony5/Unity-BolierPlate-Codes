@@ -1,28 +1,19 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
-using AYellowpaper.SerializedCollections;
 using ExcelDataReader;
-using UnityEngine;
 
 namespace Utility.ExcelReader
 {
-    public class ExcelCsvReader : MonoBehaviour
+    public static class ExcelCsvReader
     {
+        // No ANSI
         private const string KorEnCoding = "ks_c_5601-1987";
-        // Test
-        public Object excelFile;
-        public string path;
-        public string sheetName;
-
-        public void SaveDatabase(string filePath, string sheetName)
+        
+        public static ExcelSheetInfo LoadDocument(string filePath, string sheetName)
         {
-            LoadDocument(filePath, sheetName);
-        }
-        public ExcelSheetInfo LoadDocument(string filePath, string sheetName)
-        {
+            int TypeIndex = 0;
             ExcelReaderConfiguration config = new ExcelReaderConfiguration();
             config.FallbackEncoding = Encoding.GetEncoding(KorEnCoding);
 
@@ -49,11 +40,12 @@ namespace Utility.ExcelReader
                         DataColumn column = table.Columns[index];
                         ColumnData columnData = new ColumnData();
                         columnData.Header = column.ColumnName;
+                        columnData.Type = table.Rows[TypeIndex].ItemArray[index].ToString();
 
                         if (column.ColumnName.Contains($"Column{index}")) continue;
 
                         columnData.Values = new List<string>();
-                        for (int i = 0; i < table.Rows.Count; i++)
+                        for (int i = TypeIndex + 1; i < table.Rows.Count; i++)
                         {
                             string value = table.Rows[i][column].ToString();
                             if (string.IsNullOrEmpty(value)) continue;
@@ -69,7 +61,7 @@ namespace Utility.ExcelReader
                         columnDataList.Add(columnData);
                     }
 
-                    // Load row data into dictionary
+                    // Load row data into dictionary, index 0 is not header
                     for (int index = 0; index < table.Rows.Count; index++)
                     {
                         object[] row = table.Rows[index].ItemArray;
@@ -78,14 +70,16 @@ namespace Utility.ExcelReader
 
                         if (string.IsNullOrEmpty(rowData.FirstColumnValue)) continue;
 
-                        rowData.ColumnHeaders = new List<string>();
-                        rowData.ColumnValues = new List<string>();
+                        rowData.Headers = new List<string>();
+                        rowData.Types = new List<string>();
+                        rowData.Values = new List<string>();
+                        
                         for (int i = 0; i < table.Columns.Count; i++)
                         {
                             string header = table.Columns[i].ColumnName;
                             if (header.Contains($"Column{i}")) continue;
 
-                            rowData.ColumnHeaders.Add(header);
+                            rowData.Headers.Add(header);
                             string value = row[i].ToString();
 
                             if (value == "True")
@@ -93,7 +87,8 @@ namespace Utility.ExcelReader
                             if (value == "False")
                                 value = "false";
 
-                            rowData.ColumnValues.Add(value);
+                            rowData.Values.Add(value);
+                            rowData.Types.Add(table.Rows[TypeIndex].ItemArray[i].ToString());
                         }
 
                         rowDataDict.Add(rowData.FirstColumnValue, rowData);
@@ -102,16 +97,18 @@ namespace Utility.ExcelReader
             }
 
             ExcelSheetInfo excelSheetInfo = new ExcelSheetInfo();
-            // Copy list and dictionary data to public variables
-            excelSheetInfo.ColumnDataDict.Clear();
-            excelSheetInfo.RowDataDict.Clear();
+            excelSheetInfo.TypeName = sheetName;
 
             foreach (ColumnData columnData in columnDataList)
             {
                 excelSheetInfo.ColumnDataDict.Add(columnData.Header, columnData);
             }
 
-            excelSheetInfo.RowDataDict.TryAdd(this.sheetName, new SerializedDictionary<string, RowData>(rowDataDict));
+            //excelSheetInfo.RowDataDict.TryAdd(this.sheetName, new SerializedDictionary<string, RowData>(rowDataDict));
+            foreach (RowData rowData in rowDataDict.Values)
+            {
+                _ = excelSheetInfo.RowDataDict.TryAdd(rowData.FirstColumnValue, rowData);    
+            }
 
             return excelSheetInfo;
         }

@@ -13,11 +13,11 @@ namespace Utility.ExcelReader
         
         [field:SerializeField] public string TypeName { get; set; }
         
-        [field: SerializeField, SerializedDictionary("TypeName", "Excel Column Data")]
+        [field: SerializeField, SerializedDictionary("Name", "Excel Column Data")]
         public SerializedDictionary<string, ColumnData> ColumnDataDict { get; private set; } = new SerializedDictionary<string, ColumnData>(FixedCapacity);
 
-        [field: SerializeField, SerializedDictionary("TypeName", "Excel Row Data")]
-        public SerializedDictionary<string, SerializedDictionary<string, RowData>> RowDataDict { get; private set; } = new SerializedDictionary<string, SerializedDictionary<string, RowData>>(FixedCapacity);
+        [field: SerializeField, SerializedDictionary("Name", "Excel Row Data")]
+        public SerializedDictionary<string, RowData> RowDataDict { get; private set; } = new SerializedDictionary<string, RowData>(FixedCapacity);
 
     }
 }

@@ -6,6 +6,6 @@ namespace Utility.ExcelReader
     [Serializable]
     public class DataManager : Singleton<DataManager>
     {
-        [field:SerializeField] public ExcelDataSO DataSo { get; set; }
+        // Add "ObjectDataSO<T>"s.
     }
 }

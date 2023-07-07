@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     [field:NonSerialized] private static T _Instance { get; set; }
+    [field: NonSerialized] private static object _LockObject { get; } = new object();
     [field: SerializeField] public bool IsAliveAfterUnloadScene { get; set; } = true;
     
     public event UnityAction<T> OnWakeup; 
@@ -17,11 +18,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (_Instance is not null) return _Instance;
 
-            GameObject go = new GameObject($"{typeof(T).Name} Singleton Instance");
-            _Instance = go.AddComponent<T>();
-            
-            if(go.GetComponent<Singleton<T>>().IsAliveAfterUnloadScene)
-                DontDestroyOnLoad(go);
+            lock(_LockObject)
+            {
+                GameObject go = new GameObject($"{typeof(T).Name} Singleton Instance");
+                _Instance = go.AddComponent<T>();
+
+                if (go.GetComponent<Singleton<T>>().IsAliveAfterUnloadScene)
+                    DontDestroyOnLoad(go);
+            }
             
             return _Instance;
         }

@@ -18,7 +18,7 @@ namespace Utility.ExcelReader
         [SerializeField]
         protected SerializedDictionary<string, ObjectDataSO<T>> referenceDictionary =
             new SerializedDictionary<string, ObjectDataSO<T>>();
-        public virtual void Init()
+        protected virtual void Init()
         {
             databaseAsync.Clear();
             foreach (KeyValuePair<string, SerializedDictionary<string,T>> item in database)

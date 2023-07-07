@@ -15,6 +15,22 @@ namespace Utility.ExcelReader
         private ConcurrentDictionary<string, ExcelSheetInfo> DatabaseAsync =
             new ConcurrentDictionary<string, ExcelSheetInfo>();
 
+#if UNITY_EDITOR
+        public void Set(IDictionary<string, ExcelSheetInfo> database)
+        {
+            foreach (KeyValuePair<string, ExcelSheetInfo> item in database)
+            {
+                Database[item.Key] = item.Value;
+            }
+        }
+        public void Set(IList<string> keys, IList<ExcelSheetInfo> values)
+        {
+            for (int i = 0; i < keys.Count; i++)
+            {
+                Database[keys[i]] = values[i];
+            }
+        }
+#endif
         public void Init()
         {
             DatabaseAsync.Clear();

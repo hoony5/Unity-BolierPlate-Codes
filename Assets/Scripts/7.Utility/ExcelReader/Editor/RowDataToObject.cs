@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEditor;
 using UnityEngine;
 using Utility.ExcelReader;
 
@@ -77,15 +78,22 @@ public static class RowDataToObject
         return content;
     }
 
-    private static RowData ToRowData<T>(this T instance, string typeName)
+    private static RowData ToRowData<T>(this T instance, string typeName, string path)
     {
-        if (!DataManager.Instance.DataSo.ContainsKey(typeName))
+        ExcelDataSO excelDataSo = AssetDatabase.LoadAssetAtPath<ExcelDataSO>(path);
+        
+        if(excelDataSo is null)
+        {
+            Debug.LogError($"There is no ExcelDataSO : {path}");
+            return null;
+        }
+        if (!excelDataSo.ContainsKey(typeName))
         {
             Debug.LogError($"There is no typeName : {typeName}");
             return null;
         }
 
-        if (!DataManager.Instance.DataSo.TryGetValue(typeName, out ExcelSheetInfo result))
+        if (!excelDataSo.TryGetValue(typeName, out ExcelSheetInfo result))
         {
             result = new ExcelSheetInfo();
         }

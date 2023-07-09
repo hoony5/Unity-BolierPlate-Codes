@@ -59,4 +59,17 @@ public class Character : ModuleController, IGrowable
         Attributes = attributes;
     }
 
+    public bool TryGetStatusAbility(string statusType, out StatusBaseAbility statusBaseAbility)
+    {
+        bool exist = StatusAbility
+            .AbilityInfo
+            .TryGetStatusAbility(statusType, out statusBaseAbility);
+        if (!exist)
+        {
+            Debug.LogError($"{statusType} is not in Status");
+            return false;
+        }
+
+        return true;
+    }
 }

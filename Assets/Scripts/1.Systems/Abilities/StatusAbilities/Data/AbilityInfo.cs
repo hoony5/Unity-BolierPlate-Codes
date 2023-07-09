@@ -1,25 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [System.Serializable]
 public class AbilityInfo
 {
-    [field:SerializeField] public AllStatusInfos AllStatusInfos{get; private set;}
-    [field:SerializeField] public List<StatusBaseAbility> Statuses {get; private set;}
-    [field:SerializeField] public Dictionary<string, StatusBaseAbility> StatusesMap {get; private set;}
-
-    public AbilityInfo(){ }
-    public AbilityInfo(List<StatusBaseAbility> statuses)
+    [field:SerializeField] private SerializedDictionary<string, StatusBaseAbility> StatusesMap {get; set;} 
+        = new SerializedDictionary<string, StatusBaseAbility>(128);
+    
+    public bool TryGetStatusAbility(string statType, out StatusBaseAbility statusBaseAbility)
     {
-        Statuses = statuses;
-        StatusesMap = statuses.ToDictionary(x => x.Name, x => x);
+        return StatusesMap.TryGetValue(statType, out statusBaseAbility);
     }
-    public void SetStatusBaseInfo(List<StatusItemInfo> statusBaseInfo)
+
+    public bool TryGetAllStatusBaseInfo(string statusName ,out float sum)
     {
-        foreach (StatusBaseAbility stat in Statuses)
+        sum = 0;
+        foreach (KeyValuePair<string, StatusBaseAbility> status in StatusesMap)
         {
-            stat.SetStatusesBaseInfo(statusBaseInfo);
+            sum += status.Value.GetBaseValue(statusName); 
         }
+        return true;
     }
 }

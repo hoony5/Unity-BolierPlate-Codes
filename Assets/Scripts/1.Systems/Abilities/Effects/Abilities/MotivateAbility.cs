@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -21,42 +22,50 @@ public class MotivateAbility : Effect, IMotivatedAbility
         if(orOther is null) return;
         if(MotivationInfo.MotivationStatusInfos is null) return;
         if(MotivationInfo.MotivationStatusInfos.Count == 0) return;
-        
-        for (var i = 0; i < MotivationInfo.MotivationStatusInfos.Count; i++)
+    
+        foreach (MotivationStatusInfo motivationData in MotivationInfo.MotivationStatusInfos.Where(IsValidMotivationData))
         {
-            MotivationStatusInfo motivationData = MotivationInfo.MotivationStatusInfos[i];
-
-            if (motivationData.MotivationComparerType is ComparerType.None) continue;
-            if (motivationData.ApplyTargetType is ApplyTargetType.None) continue;
-
-            // motivation Active
-            motivationData.MotivationActive = motivationData.MotivationComparerType switch
-            {
-                ComparerType.Equal => IsMotivatedWhenApproximately(character, orOther),
-                ComparerType.GreaterOrEqual => IsMotivatedWhenLess(character, orOther),
-                ComparerType.LessOrEqual => IsMotivatedWhenGreater(character, orOther),
-                _ => false
-            };
+            motivationData.MotivationActive = DetermineMotivationActive(character, orOther, motivationData);
 
             if (!motivationData.MotivationActive) continue;
-            
-            // Apply motivation Value to character Data
-            ApplyMotivationStatus(character,orOther,motivationData);
+        
+            ApplyMotivationStatus(character, orOther, motivationData);
         }
     }
+
+    private bool IsValidMotivationData(MotivationStatusInfo motivationData)
+    {
+        return motivationData.MotivationComparerType is not ComparerType.None 
+               && motivationData.ApplyTargetType is not ApplyTargetType.None;
+    }
+
+    private bool DetermineMotivationActive(Character character, Character orOther, MotivationStatusInfo motivationData)
+    {
+        return motivationData.MotivationComparerType switch
+        {
+            ComparerType.Equal => IsMotivatedWhenApproximately(character, orOther),
+            ComparerType.GreaterOrEqual => IsMotivatedWhenLess(character, orOther),
+            ComparerType.LessOrEqual => IsMotivatedWhenGreater(character, orOther),
+            _ => false
+        };
+    }
+
 
     private void AddMotivationStatus(Character character, MotivationStatusInfo motivationStatusInfo,
         string statusName, float value)
     {
+        if (!character.TryGetStatusAbility(MotivationStatusName, out StatusBaseAbility statusBaseAbility))
+            return;
+
         switch (motivationStatusInfo.CalculationType)
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].SetBaseValue(statusName, value);
+                statusBaseAbility.SetBaseValue(statusName, value);
                 break;
             case CalculationType.Add:
             case CalculationType.Multiply:
-                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].AddBaseValue(statusName, value);
+                statusBaseAbility.AddBaseValue(statusName, value);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -64,19 +73,22 @@ public class MotivateAbility : Effect, IMotivatedAbility
     }
     private void RemoveMotivationStatus(Character character, MotivationStatusInfo motivationStatusInfo, string statusName)
     {
+        if (!character.TryGetStatusAbility(MotivationStatusName, out StatusBaseAbility statusBaseAbility))
+            return;
+        
         switch (motivationStatusInfo.CalculationType)
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].SetBaseValue(statusName, -motivationStatusInfo.PreviousValue);
+                statusBaseAbility.SetBaseValue(statusName, -motivationStatusInfo.PreviousValue);
                 motivationStatusInfo.PreviousValue = 0;
                 break;
             case CalculationType.Add:
-                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].AddBaseValue(statusName, -motivationStatusInfo.AddedValue);
+                statusBaseAbility.AddBaseValue(statusName, -motivationStatusInfo.AddedValue);
                 motivationStatusInfo.AddedValue = 0;
                 break;
             case CalculationType.Multiply:
-                character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].AddBaseValue(statusName, -motivationStatusInfo.MultipliedValue);
+                statusBaseAbility.AddBaseValue(statusName, -motivationStatusInfo.MultipliedValue);
                 motivationStatusInfo.MultipliedValue = 0;
                 break;
             default:
@@ -90,13 +102,15 @@ public class MotivateAbility : Effect, IMotivatedAbility
             motivationStatusInfo.MaxStatName :
             motivationStatusInfo.CurrentStatName;
         
-        int index = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(statusName) :
-            enemy.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(statusName);
-
+        if (!character.TryGetStatusAbility(MotivationStatusName, out StatusBaseAbility playerAbility))
+            return;
+        
+        if (!enemy.TryGetStatusAbility(MotivationStatusName, out StatusBaseAbility enemyAbility))
+            return;
+        
         float status = motivationStatusInfo.HasReflectMyStatus ? 
-            character.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].GetStatuses()[index].Value :
-            enemy.StatusAbility.AbilityInfo.StatusesMap[MotivationStatusName].GetStatuses()[index].Value;
+            playerAbility.GetBaseValue(statusName) :
+            enemyAbility.GetBaseValue(statusName);
 
         float motivatedValue = motivationStatusInfo.CalculationType switch
         {

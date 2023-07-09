@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utility.ExcelReader;
+// ReSharper disable All
 
 [System.Serializable]
 public class AbilityResourceInfo
@@ -8,17 +10,17 @@ public class AbilityResourceInfo
     public string sheetName;
     public string path;
     // Row Data - adapted from RowData.cs
-    [SerializeField] private List<AbilityDataInfo> infos = new List<AbilityDataInfo>(32);
+    [SerializeField] private List<RowData> infos = new List<RowData>(32);
 
     private void SetAbilityDataInfo(string firstColumnValue , string[] columnHeaders, string[] columnValues)
     {
-        if (infos.Exists(i => i.firstColumnValue == firstColumnValue)) return;
+        if (infos.Exists(i => i.FirstColumnValue == firstColumnValue)) return;
         
-        AbilityDataInfo newData = new AbilityDataInfo()
+        RowData newData = new RowData()
         {
-            firstColumnValue = firstColumnValue,
-            columnHeaders = columnHeaders,
-            columnValues = columnValues
+            FirstColumnValue = firstColumnValue,
+            Headers = columnHeaders.ToList(),
+            Values = columnValues.ToList()
         };
         
         infos.Add(newData);
@@ -28,9 +30,9 @@ public class AbilityResourceInfo
     {
         List<string[]> result = new List<string[]>(32);
         
-        foreach (AbilityDataInfo info in infos)
+        foreach (RowData info in infos)
         {
-            result.Add(info.columnValues);
+            result.Add(info.Values.ToArray());
         }
 
         return result;

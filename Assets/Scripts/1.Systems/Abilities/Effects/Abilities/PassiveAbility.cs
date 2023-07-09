@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,49 +16,53 @@ public class PassiveAbility : Effect, IPassiveAbility
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
 
-    private void AddSkillStatus(Character character, EffectAbilityStat stat,
-        string statusName, float value)
+    private delegate void ModifyValue(StatusBaseAbility statusBaseAbility, string statusName, float value);
+
+    private Dictionary<CalculationType, ModifyValue> valueModifiers = new Dictionary<CalculationType, ModifyValue>
     {
-        switch (stat.CalculationType)
-        {
-            case CalculationType.None:
-            case CalculationType.Equalize:
-                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].SetBaseValue(statusName, value);
-                break;
-            case CalculationType.Add:
-            case CalculationType.Multiply:
-                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].AddBaseValue(statusName, value);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        { CalculationType.None, (statusBaseAbility, statusName, value) => {} },
+        { CalculationType.Equalize, (statusBaseAbility, statusName, value) => statusBaseAbility.SetBaseValue(statusName, value) },
+        { CalculationType.Add, (statusBaseAbility, statusName, value) => statusBaseAbility.AddBaseValue(statusName, value) },
+        { CalculationType.Multiply, (statusBaseAbility, statusName, value) => statusBaseAbility.AddBaseValue(statusName, value) },
+    };
+
+    private void ModifySkillStatus(Character character, EffectAbilityStat stat, string statusName, float value, bool isAdding)
+    {
+        if(!character.TryGetStatusAbility(SkillStatusName, out StatusBaseAbility statusBaseAbility)) 
+            return;
+    
+        if (!valueModifiers.ContainsKey(stat.CalculationType))
+            throw new ArgumentOutOfRangeException();
+
+        float adjustedValue = isAdding ? value : -value;
+        valueModifiers[stat.CalculationType].Invoke(statusBaseAbility, statusName, adjustedValue);
     }
-    private void RemoveSkillStatus(Character character, EffectAbilityStat stat, string statusName)
+
+    private void ResetAddedValue(EffectAbilityStat stat)
     {
         switch (stat.CalculationType)
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].SetBaseValue(statusName, stat.PreviousValue);
+            case CalculationType.Add:
                 stat.PreviousValue = 0;
                 break;
-            case CalculationType.Add:
-                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].AddBaseValue(statusName, -stat.AddedValue);
-                stat.AddedValue = 0;
-                break;
             case CalculationType.Multiply:
-                character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].AddBaseValue(statusName, -stat.MultipliedValue);
                 stat.MultipliedValue = 0;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
+
     public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
         float appliedValue = stat.Value * (IsStackable ? StackCount : 1);
-        int index = character.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(stat.RawName);
-        float status = character.StatusAbility.AbilityInfo.StatusesMap[SkillStatusName].GetStatuses()[index].Value;
+
+        if(!character.TryGetStatusAbility(SkillStatusName, out StatusBaseAbility statusBaseAbility)) 
+            return;
+
+        float status = statusBaseAbility.GetBaseValue(stat.RawName);
         float modifierStatus = stat.CalculationType switch
         {
             CalculationType.None => 0,
@@ -73,25 +78,26 @@ public class PassiveAbility : Effect, IPassiveAbility
                 => status * appliedValue,
             _ => throw new ArgumentOutOfRangeException()
         };
-        AddSkillStatus(character, stat, stat.RawName, modifierStatus);
+
+        ModifySkillStatus(character, stat, stat.RawName, modifierStatus, true);
     }
 
     public void ResetStatus(Character character, EffectAbilityStat stat)
     {
-        RemoveSkillStatus(character, stat, stat.RawName);
+        ModifySkillStatus(character, stat, stat.RawName, stat.PreviousValue, false);
+        ResetAddedValue(stat);
     }
+
     public void AddStackCount()
     {
         if (!IsStackable) return;
-        StackCount++;
-        if(StackCount > MaxStackCount) StackCount = MaxStackCount;
+        StackCount = Math.Min(StackCount + 1, MaxStackCount);
     }
 
     public void SubtractStackCount()
     {
         if (!IsStackable) return;
-        StackCount--;
-        if (StackCount <= 0) StackCount = 1;
+        StackCount = Math.Max(StackCount - 1, 1);
     }
 
     public void ResetStackCount()
@@ -100,18 +106,17 @@ public class PassiveAbility : Effect, IPassiveAbility
         StackCount = 1;
     }
 
-   public void UpdateForTeam(Character[] team, EffectAbilityStat stat , ApplyTargetType targetType)
+    public void UpdateForTeam(Character[] team, EffectAbilityStat stat, ApplyTargetType targetType)
     {
-        if(team is null || team.Length == 0) return;
+        if (team is null || team.Length == 0) return;
         
-        bool lengthValidation = team.Length >= ApplyTargetCount;
-        int teamLength = !lengthValidation ? team.Length : ApplyTargetCount;
-        
+        int teamLength = Math.Min(team.Length, ApplyTargetCount);
+
         for (var index = 0; index < teamLength; index++)
         {
             Character member = null;
-            if (targetType is ApplyTargetType.RandomAll or ApplyTargetType.RandomEnemyTeam
-                or ApplyTargetType.RandomPlayerTeam)
+
+            if (targetType is ApplyTargetType.RandomAll or ApplyTargetType.RandomEnemyTeam or ApplyTargetType.RandomPlayerTeam)
             {
                 int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                 UnityEngine.Random.InitState(seed);
@@ -120,68 +125,61 @@ public class PassiveAbility : Effect, IPassiveAbility
                 CalculateTeamStatus(member, stat);
                 continue;
             }
+
             member = team[index];
             CalculateTeamStatus(member, stat);
         }
     }
+
     public void UpdateAbility(Character[] ourTeam, Character[] enemyTeam)
     {
-        for (var x = 0; x < EffectAbilities.Count; x++)
+        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.abtilityStats))
         {
-            EffectAbilityInfo effectAbilityInfo = EffectAbilities[x];
-            for (var y = 0; y < effectAbilityInfo.abtilityStats.Count; y++)
+            switch (stat.ApplyTargetType)
             {
-                EffectAbilityStat stat = effectAbilityInfo.abtilityStats[y];
-                switch (stat.ApplyTargetType)
-                {
-                    case ApplyTargetType.None:
-                        break;
-                    case ApplyTargetType.RandomPlayerTeam:
-                    case ApplyTargetType.PlayerTeam:
-                        UpdateForTeam(ourTeam, stat, ApplyTargetType);
-                        break;
-                    case ApplyTargetType.RandomEnemyTeam:
-                    case ApplyTargetType.EnemyTeam:
-                        UpdateForTeam(enemyTeam, stat, ApplyTargetType);
-                        break;
-                    case ApplyTargetType.RandomAll:
-                    case ApplyTargetType.All:
-                        UpdateForTeam(ourTeam, stat, ApplyTargetType);
-                        UpdateForTeam(enemyTeam, stat, ApplyTargetType);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case ApplyTargetType.None:
+                    break;
+                case ApplyTargetType.RandomPlayerTeam:
+                case ApplyTargetType.PlayerTeam:
+                    UpdateForTeam(ourTeam, stat, ApplyTargetType);
+                    break;
+                case ApplyTargetType.RandomEnemyTeam:
+                case ApplyTargetType.EnemyTeam:
+                    UpdateForTeam(enemyTeam, stat, ApplyTargetType);
+                    break;
+                case ApplyTargetType.RandomAll:
+                case ApplyTargetType.All:
+                    UpdateForTeam(ourTeam, stat, ApplyTargetType);
+                    UpdateForTeam(enemyTeam, stat, ApplyTargetType);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
 
     public void UpdateAbility(Character player, Character enemy)
-    { 
-        for (var x = 0; x < EffectAbilities.Count; x++)
+    {
+        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.abtilityStats))
         {
-            EffectAbilityInfo effectAbilityInfo = EffectAbilities[x];
-            for (var y = 0; y < effectAbilityInfo.abtilityStats.Count; y++)
+            switch (stat.ApplyTargetType)
             {
-                EffectAbilityStat stat = effectAbilityInfo.abtilityStats[y];
-                switch (stat.ApplyTargetType)
-                {
-                    case ApplyTargetType.None:
-                        break;
-                    case ApplyTargetType.Player:
-                        CalculateTeamStatus(player, stat);
-                        break;
-                    case ApplyTargetType.Enemy:
-                        CalculateTeamStatus(enemy, stat);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case ApplyTargetType.None:
+                    break;
+                case ApplyTargetType.Player:
+                    CalculateTeamStatus(player, stat);
+                    break;
+                case ApplyTargetType.Enemy:
+                    CalculateTeamStatus(enemy, stat);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
+
     public bool HitTheChance(float tryChance)
     {
-        return  tryChance <= Chance;
+        return tryChance <= Chance;
     }
 }

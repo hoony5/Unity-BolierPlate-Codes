@@ -1,63 +1,64 @@
 ﻿using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [System.Serializable]
 public class StatusBaseAbility
 {
-    [field:SerializeField]  public string Name { get; private set; }
-    [field: SerializeField] protected List<StatusItemInfo> statusItems = new List<StatusItemInfo>(128);
+    [field:SerializeField]  public string Name { get; set; }
+    [field: SerializeField] protected SerializedDictionary<string, StatusItemInfo> statusItems = new SerializedDictionary<string, StatusItemInfo>(128);
     public StatusBaseAbility(){}
     public StatusBaseAbility(string name) => Name = name;
-    public void SetStatusesBaseInfo(List<StatusItemInfo> list)
-    {
-        statusItems = list;
-    }
-    
     public void Clear()
     {
         statusItems.Clear();
     }
     protected void ClearValues()
     {
-        for (var index = 0; index < statusItems.Count; index++)
+        foreach (KeyValuePair<string, StatusItemInfo> status in statusItems)
         {
-            statusItems[index].SetValue(0);
+            status.Value.SetValue(0);
         }
     }
 
-    public List<StatusItemInfo> GetStatuses()
+    public float GetBaseValue(string statusName)
     {
-        return statusItems;
+        if (!statusItems.ContainsKey(statusName))
+        {
+            Debug.LogError($"{statusName} is not in {Name} status");
+            return 0;
+        }
+        
+        return statusItems[statusName].Value;
     }
-
     public void SetBaseValue(string statusName, float value)
     {
-        foreach (StatusItemInfo stat in statusItems)
+        if (!statusItems.ContainsKey(statusName))
         {
-            if (stat.RawName.Equals(statusName))
-            {
-                stat.SetValue(value);
-            }
+            Debug.LogError($"{statusName} is not in {Name} status");
+            return;
         }
+        
+        statusItems[statusName].SetValue(value);
     }
     public void AddBaseValue(string statusName, float value)
     {
-        foreach (StatusItemInfo stat in statusItems)
+        if (!statusItems.ContainsKey(statusName))
         {
-            if (stat.RawName.Equals(statusName))
-            {
-                stat.AddValue(value);
-            }
+            Debug.LogError($"{statusName} is not in {Name} status");
+            return;
         }
+        
+        statusItems[statusName].AddValue(value);
     }
     public void MultiplyBaseValue(string statusName, float value)
     {
-        foreach (StatusItemInfo stat in statusItems)
+        if (!statusItems.ContainsKey(statusName))
         {
-            if (stat.RawName.Equals(statusName))
-            {
-                stat.MultiplyValue(value);
-            }
+            Debug.LogError($"{statusName} is not in {Name} status");
+            return;
         }
+        
+        statusItems[statusName].MultiplyValue(value);
     }
 }

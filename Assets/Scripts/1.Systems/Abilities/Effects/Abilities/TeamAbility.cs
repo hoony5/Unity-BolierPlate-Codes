@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -20,21 +21,23 @@ public class TeamAbility : Effect, ITeamAbility
     private void AddTeamStatus(Character character, EffectAbilityStat stat,
         string statusName, float value)
     {
+        if(!character.TryGetStatusAbility(BuffOrDebuff ? BuffStatusName : DebuffStatusName, out StatusBaseAbility statusBaseAbility)) 
+            return;
         switch (stat.CalculationType)
         {
             case CalculationType.None:
             case CalculationType.Equalize:
                 if(BuffOrDebuff)
-                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].SetBaseValue(statusName, value);
+                    statusBaseAbility.SetBaseValue(statusName, value);
                 else
-                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].SetBaseValue(statusName, value);
+                    statusBaseAbility.SetBaseValue(statusName, value);
                 break;
             case CalculationType.Add:
             case CalculationType.Multiply:
                 if(BuffOrDebuff)
-                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].AddBaseValue(statusName, value);
+                    statusBaseAbility.AddBaseValue(statusName, value);
                 else
-                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].AddBaseValue(statusName, value);
+                    statusBaseAbility.AddBaseValue(statusName, value);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -42,30 +45,21 @@ public class TeamAbility : Effect, ITeamAbility
     }
     private void RemoveTeamStatus(Character character, EffectAbilityStat stat, string statusName)
     {
+        if(!character.TryGetStatusAbility(BuffOrDebuff ? BuffStatusName : DebuffStatusName, out StatusBaseAbility statusBaseAbility)) 
+            return;
         switch (stat.CalculationType)
         {
             case CalculationType.None:
             case CalculationType.Equalize:
-                if(BuffOrDebuff)
-                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].SetBaseValue(statusName, stat.PreviousValue);
-                else
-                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].SetBaseValue(statusName, stat.PreviousValue);
+                statusBaseAbility.SetBaseValue(statusName, stat.PreviousValue);
                 stat.PreviousValue = 0;
                 break;
             case CalculationType.Add:
-                if(BuffOrDebuff)
-                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].AddBaseValue(statusName, -stat.AddedValue);
-                else
-                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].AddBaseValue(statusName, -stat.AddedValue);
-
+                statusBaseAbility.AddBaseValue(statusName, -stat.AddedValue);
                 stat.AddedValue = 0;
                 break;
             case CalculationType.Multiply:
-                if(BuffOrDebuff)
-                    character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].AddBaseValue(statusName, -stat.MultipliedValue);
-                else
-                    character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].AddBaseValue(statusName, -stat.MultipliedValue);
-                
+                statusBaseAbility.AddBaseValue(statusName, -stat.MultipliedValue);
                 stat.MultipliedValue = 0;
                 break;
             default:
@@ -75,10 +69,9 @@ public class TeamAbility : Effect, ITeamAbility
      public void CalculateTeamStatus(Character character, EffectAbilityStat stat)
     {
         float appliedValue = stat.Value * (IsStackable ? StackCount : 1);
-        int index = character.StatusAbility.AbilityInfo.AllStatusInfos.GetStatusIndex(stat.RawName);
-        float status = BuffOrDebuff ? 
-            character.StatusAbility.AbilityInfo.StatusesMap[BuffStatusName].GetStatuses()[index].Value :
-            character.StatusAbility.AbilityInfo.StatusesMap[DebuffStatusName].GetStatuses()[index].Value;
+        if(!character.TryGetStatusAbility(BuffOrDebuff ? BuffStatusName : DebuffStatusName, out StatusBaseAbility statusBaseAbility)) 
+            return;
+        float status = statusBaseAbility.GetBaseValue(stat.RawName);
         
         float modifierStatus = stat.CalculationType switch
         {
@@ -146,57 +139,47 @@ public class TeamAbility : Effect, ITeamAbility
     }
     public void UpdateAbility(Character[] ourTeam, Character[] enemyTeam)
     {
-        for (var x = 0; x < EffectAbilities.Count; x++)
+        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.abtilityStats))
         {
-            EffectAbilityInfo effectAbilityInfo = EffectAbilities[x];
-            for (var y = 0; y < effectAbilityInfo.abtilityStats.Count; y++)
+            switch (stat.ApplyTargetType)
             {
-                EffectAbilityStat stat = effectAbilityInfo.abtilityStats[y];
-                switch (stat.ApplyTargetType)
-                {
-                    case ApplyTargetType.None:
-                        break;
-                    case ApplyTargetType.RandomPlayerTeam:
-                    case ApplyTargetType.PlayerTeam:
-                        UpdateForTeam(ourTeam, stat, ApplyTargetType);
-                        break;
-                    case ApplyTargetType.RandomEnemyTeam:
-                    case ApplyTargetType.EnemyTeam:
-                        UpdateForTeam(enemyTeam, stat, ApplyTargetType);
-                        break;
-                    case ApplyTargetType.RandomAll:
-                    case ApplyTargetType.All:
-                        UpdateForTeam(ourTeam, stat, ApplyTargetType);
-                        UpdateForTeam(enemyTeam, stat, ApplyTargetType);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case ApplyTargetType.None:
+                    break;
+                case ApplyTargetType.RandomPlayerTeam:
+                case ApplyTargetType.PlayerTeam:
+                    UpdateForTeam(ourTeam, stat, ApplyTargetType);
+                    break;
+                case ApplyTargetType.RandomEnemyTeam:
+                case ApplyTargetType.EnemyTeam:
+                    UpdateForTeam(enemyTeam, stat, ApplyTargetType);
+                    break;
+                case ApplyTargetType.RandomAll:
+                case ApplyTargetType.All:
+                    UpdateForTeam(ourTeam, stat, ApplyTargetType);
+                    UpdateForTeam(enemyTeam, stat, ApplyTargetType);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
 
     public void UpdateAbility(Character player, Character enemy)
-    { 
-        for (var x = 0; x < EffectAbilities.Count; x++)
+    {
+        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.abtilityStats))
         {
-            EffectAbilityInfo effectAbilityInfo = EffectAbilities[x];
-            for (var y = 0; y < effectAbilityInfo.abtilityStats.Count; y++)
+            switch (stat.ApplyTargetType)
             {
-                EffectAbilityStat stat = effectAbilityInfo.abtilityStats[y];
-                switch (stat.ApplyTargetType)
-                {
-                    case ApplyTargetType.None:
-                        break;
-                    case ApplyTargetType.Player:
-                        CalculateTeamStatus(player, stat);
-                        break;
-                    case ApplyTargetType.Enemy:
-                        CalculateTeamStatus(enemy, stat);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case ApplyTargetType.None:
+                    break;
+                case ApplyTargetType.Player:
+                    CalculateTeamStatus(player, stat);
+                    break;
+                case ApplyTargetType.Enemy:
+                    CalculateTeamStatus(enemy, stat);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

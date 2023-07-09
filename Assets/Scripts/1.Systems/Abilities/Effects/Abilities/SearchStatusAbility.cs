@@ -18,9 +18,8 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
     
     public bool FindCharacterStatus(Character other, float threshold = 0.01f)
     {
-        for(var i = 0 ; i < SearchStats.Count; i++)
+        foreach (SearchStatusItem stat in SearchStats)
         {
-            SearchStatusItem stat = SearchStats[i];
             stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
         
             if (!stat.isMeetCondition)

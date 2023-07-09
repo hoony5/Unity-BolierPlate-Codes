@@ -9,7 +9,7 @@ public static class BattleLogicUtil
     {
         return !cannotAttack && chance <= hitRate - avoidanceRate;
     }
-    
+
     /// <summary>
     /// ratio is percentage 4.5% => 4.5
     /// </summary>
@@ -59,44 +59,39 @@ public static class BattleLogicUtil
     #endregion
 
     #region Effects Calcul
-
-    /// Battle Hierarchy
-    /// Effect
-    /// 1. wait until Threshold passed - external
-    /// 1.1 is Hit? 
-    /// 2. Detect Area
-    /// 3. apply duration
-    /// 4.Search Tag on the colliders
-    /// 4-1 .Search State on the Searched Tags
-    /// 4-2 .Search Status on the Searched Tags
-    /// 5. Get Searched Targets
-    /// 6. Motivated
-    /// 7.1 Check Condition for Motivation
-    /// 7.2 if Motivated, Get Motivated Targets
-    /// 8. Get Motivated Targets
-    /// 9. Apply Team Effect
-    /// 10. Done
-    /// Passive
-    /// 1. Check Only Battle or Global
-    /// 2. Apply it content type by content type
-    public static bool ApplyEffect(this Character from, Character other, IAbility effect, BattleEnvironment current)
+    public static bool ApplyEffect(this Character from, Character to, IAbility effect, BattleEnvironment current)
     {
+        float chance = NumberEx.RandomRangeByInt().IntToFloat(); // -> move to battleEnvironment
+        if (!effect.HitTheChance(chance))
+        {
+#if UNITY_EDITOR
+            DebugEx.Yellow($"Chance Missed");
+#endif
+            return false;
+        }
         switch (effect)
         {
             /// Mono Effect
             case CastAbility castAbility:
+                bool stayPressButton = castAbility.HasThresholdPassed( 0/* theshold */);
                 break;
             case DurationAbility durationAbility:
+                bool timeIsPassed = durationAbility.HasTimePassed(0/* duration : time */);
                 break;
             case AreaAbility areaAbility:
+                // bool isCorrectTarget = areaAbility.DetectObjectOnValidateArea(other, 0,  /* ref new Collider[0] */);
                 break;
             case MotivateAbility motivateAbility:
+                motivateAbility.SetMotivationActive(from, to);
                 break;
             case PassiveAbility passiveAbility:
+                passiveAbility.UpdateAbility(from, to);
                 break;
             case SearchStatusAbility searchStatusAbility:
+                // divide type searchStatusAbility.
                 break;
             case TeamAbility teamAbility:
+                teamAbility.UpdateAbility(from, to);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(effect));

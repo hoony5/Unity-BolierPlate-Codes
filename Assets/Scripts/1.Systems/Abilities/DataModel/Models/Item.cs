@@ -4,10 +4,10 @@ using UnityEngine;
 [Serializable]
 public class Item : ModuleController
 {
-    [field: SerializeField] public string Name { get; private set; }
+    [field: SerializeField] public string Name { get;  set; }
     [field: SerializeField] public Transform Transform { get; set; }
-    [field: SerializeField] public int Count { get; private set; }
-    [field: SerializeField] public ItemAttributes ItemAttributes { get; private set; }
+    [field: SerializeField] public int Count { get;  set; }
+    [field: SerializeField] public ItemAttributes ItemAttributes { get;  set; }
 
     public Item(string name)
     {

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 [System.Serializable]
 public class UsableStatusItem : StatusItem , IUsable
 {
-    [field:SerializeField] public UnityEvent OnUse { get; private set; }
+    [field:SerializeField] public UnityEvent OnUse { get; set; }
 
     public UsableStatusItem(StatusItem item)
     {

@@ -4,12 +4,12 @@ using UnityEngine;
 [System.Serializable]
 public class BattleFormulaInfo
 {
-    [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public bool UseClampValue { get; private set; }
-    [field: SerializeField] public List<FormulaStat> FormulaStats { get; private set; }
-    [field: SerializeField] public int Min { get; private set; }
-    [field: SerializeField] public int Max { get; private set; }
-    [field: SerializeField] public string Description { get; private set; }
+    [field: SerializeField] public string Name { get; set; }
+    [field: SerializeField] public bool UseClampValue { get; set; }
+    [field: SerializeField] public List<FormulaStat> FormulaStats { get; set; }
+    [field: SerializeField] public int Min { get; set; }
+    [field: SerializeField] public int Max { get; set; }
+    [field: SerializeField] public string Description { get; set; }
     
     public BattleFormulaInfo(string name, bool useClampValue, int min, int max, string description)
     {
@@ -28,11 +28,6 @@ public class BattleFormulaInfo
             result += stat.GetCalculatedValue(character, other);
         }
 
-        if (UseClampValue)
-        {
-            result = Mathf.Clamp(result, Min, Max);
-        }
-
-        return result;
+        return UseClampValue? Mathf.Clamp(result, Min, Max) : result;
     }
 }

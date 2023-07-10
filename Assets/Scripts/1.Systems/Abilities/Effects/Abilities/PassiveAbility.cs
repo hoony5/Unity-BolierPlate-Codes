@@ -133,7 +133,7 @@ public class PassiveAbility : Effect, IPassiveAbility
 
     public void UpdateAbility(Character[] ourTeam, Character[] enemyTeam)
     {
-        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.abtilityStats))
+        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.AbtilityStats))
         {
             switch (stat.ApplyTargetType)
             {
@@ -160,7 +160,7 @@ public class PassiveAbility : Effect, IPassiveAbility
 
     public void UpdateAbility(Character player, Character enemy)
     {
-        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.abtilityStats))
+        foreach (EffectAbilityStat stat in EffectAbilities.SelectMany(effectAbilityInfo => effectAbilityInfo.AbtilityStats))
         {
             switch (stat.ApplyTargetType)
             {
@@ -178,7 +178,7 @@ public class PassiveAbility : Effect, IPassiveAbility
         }
     }
 
-    public bool HitTheChance(float tryChance)
+    public bool IsHitChance(float tryChance)
     {
         return tryChance <= Chance;
     }

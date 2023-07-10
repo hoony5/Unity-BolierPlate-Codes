@@ -1,74 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
+using UnityEngine;
 
 [System.Serializable]
-[ToDo("이곳은 UI에서 보여지는 Effect 정보를 관리하는 공간 - 총 26개")]
 public class EffectDashBoard
 {
-    public List<string> PositiveBattleEffect {get; private set;}
-    public List<string> NegativeBattleEffect {get; private set;}
-    public List<string> PositiveGlobalEffect {get; private set;}
-    public List<string> NegativeGlobalEffect {get;private set;}
+    [field:SerializeField]public SerializedDictionary<string, ushort> PositiveBattleEffect {get; private set;}
+    [field:SerializeField]public SerializedDictionary<string, ushort> NegativeBattleEffect {get; private set;}
+    [field:SerializeField]public SerializedDictionary<string, ushort> PositiveGlobalEffect {get; private set;}
+    [field:SerializeField]public SerializedDictionary<string, ushort> NegativeGlobalEffect {get;private set;}
     
     public void Init(int capacity = 32)
     {
-        PositiveBattleEffect = new List<string>(capacity);
-        NegativeBattleEffect = new List<string>(capacity);
-        PositiveGlobalEffect = new List<string>(capacity);
-        NegativeGlobalEffect = new List<string>(capacity);
+        PositiveBattleEffect = new SerializedDictionary<string, ushort>(capacity);
+        NegativeBattleEffect = new SerializedDictionary<string, ushort>(capacity);
+        PositiveGlobalEffect = new SerializedDictionary<string, ushort>(capacity);
+        NegativeGlobalEffect = new SerializedDictionary<string, ushort>(capacity);
     }
 
     public bool ExistPositiveBattleEffect(string effectName)
     {
-        for(var i = 0 ; i < PositiveBattleEffect.Count; i++)
-        {
-            if (PositiveBattleEffect[i] == effectName)
-                return true;
-        }
-        return false;
+        return PositiveBattleEffect.ContainsKey(effectName);
     }
 
     public bool ExistNegativeBattleEffect(string effectName)
     {
-        for(var i = 0 ; i < NegativeBattleEffect.Count; i++)
-        {
-            if (NegativeBattleEffect[i] == effectName)
-                return true;
-        }
-
-        return false;
+        return NegativeBattleEffect.ContainsKey(effectName);
     }
 
     public bool ExistPositiveGlobalEffect(string effectName)
     {
-        for(var i = 0 ; i < PositiveGlobalEffect.Count; i++)
-        {
-            if (PositiveGlobalEffect[i] == effectName)
-                return true;
-        }
-
-        return false;
+        return PositiveGlobalEffect.ContainsKey(effectName);
     }
     public bool ExistNegativeGlobalEffect(string effectName)
     {
-        for(var i = 0 ; i < NegativeGlobalEffect.Count; i++)
-        {
-            if (NegativeGlobalEffect[i] == effectName)
-                return true;
-        }
-
-        return false;
+        return NegativeGlobalEffect.ContainsKey(effectName);
     }
 
     public void AddGlobalEffect(EffectType effectType, string effectName)
     {
         switch (effectType)
         {
-            case EffectType.Positive when !PositiveGlobalEffect.Contains(effectName):
-                PositiveGlobalEffect.Add(effectName);
+            case EffectType.Positive:
+                PositiveGlobalEffect[effectName]++;
                 break;
-            case EffectType.Negative when !NegativeGlobalEffect.Contains(effectName):
-                NegativeGlobalEffect.Add(effectName);
+            case EffectType.Negative:
+                NegativeGlobalEffect[effectName]++;
                 break;
             case EffectType.None:
                 break;
@@ -81,11 +59,11 @@ public class EffectDashBoard
     {
         switch (effectType)
         {
-            case EffectType.Positive when !PositiveBattleEffect.Contains(effectName):
-                PositiveBattleEffect.Add(effectName);
+            case EffectType.Positive:
+                PositiveBattleEffect[effectName]++;
             break;
-            case EffectType.Negative when !NegativeBattleEffect.Contains(effectName):
-                NegativeBattleEffect.Add(effectName);
+            case EffectType.Negative:
+                NegativeBattleEffect[effectName]++;
             break;
             case EffectType.None:
                 break;
@@ -93,15 +71,15 @@ public class EffectDashBoard
                 throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null);
         }
     }
-    public void RemoveGlobalEffect(EffectType effectType, string effectName)
+    public void SubtractGlobalEffect(EffectType effectType, string effectName)
     {
         switch (effectType)
         {
-            case EffectType.Positive when PositiveGlobalEffect.Contains(effectName):
-                PositiveGlobalEffect.Remove(effectName);
+            case EffectType.Positive:
+                PositiveGlobalEffect[effectName]--;
                 break;
-            case EffectType.Negative when NegativeGlobalEffect.Contains(effectName):
-                NegativeGlobalEffect.Remove(effectName);
+            case EffectType.Negative:
+                NegativeGlobalEffect[effectName]--;
                 break;
             case EffectType.None:
                 break;
@@ -110,15 +88,15 @@ public class EffectDashBoard
         }
     }
 
-    public void RemoveBattleEffect(EffectType effectType, string effectName)
+    public void SubtractBattleEffect(EffectType effectType, string effectName)
     {
         switch (effectType)
         {
-            case EffectType.Positive when PositiveBattleEffect.Contains(effectName):
-                PositiveBattleEffect.Remove(effectName);
+            case EffectType.Positive:
+                PositiveBattleEffect[effectName]--;
             break;
-            case EffectType.Negative when NegativeBattleEffect.Contains(effectName):
-                NegativeBattleEffect.Remove(effectName);
+            case EffectType.Negative:
+                NegativeBattleEffect[effectName]--;
             break;
             case EffectType.None:
                 break;
@@ -126,15 +104,15 @@ public class EffectDashBoard
                 throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null);
         }
     }
-    public void ClearGlobalEffect(EffectType effectType)
+    public void ClearGlobalEffect(EffectType effectType, string effectName)
     {
         switch (effectType)
         {
             case EffectType.Positive:
-                PositiveGlobalEffect.Clear();
+                PositiveGlobalEffect[effectName] = 0;
                 break;
             case EffectType.Negative:
-                NegativeGlobalEffect.Clear();
+                NegativeGlobalEffect[effectName] = 0;
                 break;
             case EffectType.None:
                 break;
@@ -143,15 +121,15 @@ public class EffectDashBoard
         }
     }
 
-    public void ClearBattleEffect(EffectType effectType)
+    public void ClearBattleEffect(EffectType effectType, string effectName)
     {
         switch (effectType)
         {
             case EffectType.Positive:
-                PositiveBattleEffect.Clear();
+                PositiveBattleEffect[effectName] = 0;
             break;
             case EffectType.Negative:
-                NegativeBattleEffect.Clear();
+                NegativeBattleEffect[effectName] = 0;
             break;
             case EffectType.None:
                 break;

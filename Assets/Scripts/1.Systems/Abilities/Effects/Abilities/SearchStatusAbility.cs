@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbility,ISearchTagAbility
+public class SearchStatusAbility : Effect, ISearchStatusAbility, ISearchStateAbility, ISearchTagAbility
 {
+    [field:SerializeField] public SearchType SearchType { get; set; }
     [field:SerializeField] public bool IsStackable { get; set; }
     [field:SerializeField] public int StackCount { get; set; }
     [field:SerializeField] public int MaxStackCount { get; set; }
@@ -15,13 +17,31 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
     [field:SerializeField] public List<SearchStatusItem> SearchStats { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
-    
+
+    public bool IsHitChance(float chance) => chance <= Chance;
+
+    public bool SearchTarget(Character other, string index)
+    {
+        switch (SearchType)
+        {
+            case SearchType.None:
+                return false;
+            case SearchType.Status:
+                return FindCharacterStatus(other);
+            case SearchType.State:
+                return FindCharacterState(other, index);
+            case SearchType.Tag:
+                return FindTag(other);
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
     public bool FindCharacterStatus(Character other, float threshold = 0.01f)
     {
         foreach (SearchStatusItem stat in SearchStats)
         {
-            stat.isMeetCondition = stat.statusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.statusItemInfo.RawName) < threshold;
-        
+            stat.isMeetCondition = stat.StatusItemInfo.Value - other.StatusAbility.GetStatusValue(stat.StatusItemInfo.RawName) < threshold;
+
             if (!stat.isMeetCondition)
                 return false;
         }
@@ -35,7 +55,7 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
         bool negativeBattleEffect = character.StatusAbility.EffectDashBoard.ExistNegativeBattleEffect(stateName);
         bool positiveGlobalEffect = character.StatusAbility.EffectDashBoard.ExistPositiveGlobalEffect(stateName);
         bool negativeGlobalEffect = character.StatusAbility.EffectDashBoard.ExistNegativeGlobalEffect(stateName);
-        
+
         return positiveGlobalEffect || negativeGlobalEffect || positiveBattleEffect || negativeBattleEffect;
     }
 
@@ -43,27 +63,35 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility,ISearchStateAbil
     {
         return other.Transform is not null && other.Transform.CompareTag(SearchTag);
     }
-    public bool HitTheChance(float tryChance)
-    {
-        return  tryChance <= Chance;
-    }
+
     public void AddStackCount()
     {
-        if (!IsStackable) return;
-        StackCount++;
-        if(StackCount > MaxStackCount) StackCount = MaxStackCount;
+        if (CanChangeStackCount())
+        {
+            StackCount++;
+            if (StackCount > MaxStackCount) StackCount = MaxStackCount;
+        }
     }
 
     public void SubtractStackCount()
     {
-        if (!IsStackable) return;
-        StackCount--;
-        if (StackCount <= 0) StackCount = 1;
+        if (CanChangeStackCount())
+        {
+            StackCount--;
+            if (StackCount <= 0) StackCount = 1;
+        }
     }
 
     public void ResetStackCount()
     {
-        if (!IsStackable) return;
-        StackCount = 1;
+        if (CanChangeStackCount())
+        {
+            StackCount = 1;
+        }
+    }
+
+    private bool CanChangeStackCount()
+    {
+        return IsStackable;
     }
 }

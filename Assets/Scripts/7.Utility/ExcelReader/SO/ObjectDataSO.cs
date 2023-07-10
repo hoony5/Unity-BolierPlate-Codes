@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Utility.ExcelReader
 {
+    [System.Serializable]
     public abstract class ObjectDataSO<T> : ScriptableObject
     {
         [SerializeField, SerializedDictionary("Database TypeName" , "Object Infos")]
@@ -14,10 +15,8 @@ namespace Utility.ExcelReader
         [SerializeField]
         protected ConcurrentDictionary<string, SerializedDictionary<string,T>> databaseAsync =
             new ConcurrentDictionary<string, SerializedDictionary<string,T>>();
-
-        [SerializeField]
-        protected SerializedDictionary<string, ObjectDataSO<T>> referenceDictionary =
-            new SerializedDictionary<string, ObjectDataSO<T>>();
+        
+        protected SerializedDictionary<string, T> referenceDatabase = new SerializedDictionary<string, T>(); 
         protected virtual void Init()
         {
             databaseAsync.Clear();
@@ -31,19 +30,20 @@ namespace Utility.ExcelReader
             Init();
         }
 
-        public virtual bool ContainsKey(string key) => database.ContainsKey(key);
-        public virtual bool TryGetValue(string key, out SerializedDictionary<string,T> result)
+        protected virtual bool ContainsKey(string key) => database.ContainsKey(key);
+        protected virtual bool TryGetValue(string key, out SerializedDictionary<string,T> result)
         {
             return database.TryGetValue(key, out result);
         }
-        public virtual bool TryGetValueAsync(string key, out SerializedDictionary<string,T> result)
+        protected virtual bool TryGetValueAsync(string key, out SerializedDictionary<string,T> result)
         {
             return databaseAsync.TryGetValue(key, out result);
         }
-        public virtual bool ContainsRefKey(string key) => referenceDictionary.ContainsKey(key);
-        public virtual bool TryGetRefValue(string key, out ObjectDataSO<T> result)
+
+        protected virtual bool ContainsRefKey(string key) => referenceDatabase.ContainsKey(key);
+        protected virtual bool TryGetRefValue(string key, out T result)
         {
-            return referenceDictionary.TryGetValue(key, out result);
+            return referenceDatabase.TryGetValue(key, out result);
         }
     }
 }

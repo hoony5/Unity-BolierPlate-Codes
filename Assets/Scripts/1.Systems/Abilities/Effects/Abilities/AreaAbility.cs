@@ -13,7 +13,7 @@ public class AreaAbility : Effect, IAreaAbility
     [field:SerializeField] public float Chance { get; set; }
     [field:SerializeField] public List<EffectAbilityInfo> EffectAbilities { get; set; }
     [field:SerializeField] public string Description { get; set; }
-    public bool HitTheChance(float tryChance)
+    public bool IsHitChance(float tryChance)
     {
         return  tryChance <= Chance;
     }

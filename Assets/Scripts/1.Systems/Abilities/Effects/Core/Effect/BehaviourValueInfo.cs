@@ -4,14 +4,14 @@ using UnityEngine;
 [System.Serializable]
 public class BehaviourValueInfo
 {
-    [field:SerializeField] public string BehaviourName;
-    [field:SerializeField] public int Level;
-    [field: SerializeField] public int MaxLevel;
-    [field: SerializeField] public int CurrentExp;
-    [field:SerializeField] public int[] MaxExps ;
-    [field:SerializeField] public float[] BaseValues;
-    [field:SerializeField] public float[] CoolTimes;
-    [field:SerializeField] public float ValuePerLevel;
+    [field:SerializeField] public string BehaviourName { get; set; }
+    [field:SerializeField] public int Level { get; set; }
+    [field:SerializeField] public int MaxLevel { get; set; }
+    [field:SerializeField] public int CurrentExp { get; set; }
+    [field:SerializeField] public int[] MaxExps  { get; set; }
+    [field:SerializeField] public float[] BaseValues { get; set; }
+    [field:SerializeField] public float[] CoolTimes { get; set; }
+    [field:SerializeField] public float ValuePerLevel { get; set; }
 
     public void ClearValues()
     {

@@ -19,24 +19,21 @@ public class MotivateAbility : Effect, IMotivatedAbility
     
     public void SetMotivationActive(Character character, Character orOther)
     {
-        if(orOther is null) return;
-        if(MotivationInfo.MotivationStatusInfos is null) return;
-        if(MotivationInfo.MotivationStatusInfos.Count == 0) return;
+        if(orOther is null || MotivationInfo.MotivationStatusInfos?.Count == 0) return;
     
         foreach (MotivationStatusInfo motivationData in MotivationInfo.MotivationStatusInfos.Where(IsValidMotivationData))
         {
             motivationData.MotivationActive = DetermineMotivationActive(character, orOther, motivationData);
 
-            if (!motivationData.MotivationActive) continue;
-        
-            ApplyMotivationStatus(character, orOther, motivationData);
+            if (motivationData.MotivationActive) 
+                ApplyMotivationStatus(character, orOther, motivationData);
         }
     }
 
     private bool IsValidMotivationData(MotivationStatusInfo motivationData)
     {
-        return motivationData.MotivationComparerType is not ComparerType.None 
-               && motivationData.ApplyTargetType is not ApplyTargetType.None;
+        return motivationData.MotivationComparerType != ComparerType.None 
+               && motivationData.ApplyTargetType != ApplyTargetType.None;
     }
 
     private bool DetermineMotivationActive(Character character, Character orOther, MotivationStatusInfo motivationData)
@@ -49,7 +46,6 @@ public class MotivateAbility : Effect, IMotivatedAbility
             _ => false
         };
     }
-
 
     private void AddMotivationStatus(Character character, MotivationStatusInfo motivationStatusInfo,
         string statusName, float value)
@@ -71,6 +67,7 @@ public class MotivateAbility : Effect, IMotivatedAbility
                 throw new ArgumentOutOfRangeException();
         }
     }
+
     private void RemoveMotivationStatus(Character character, MotivationStatusInfo motivationStatusInfo, string statusName)
     {
         if (!character.TryGetStatusAbility(MotivationStatusName, out StatusBaseAbility statusBaseAbility))
@@ -95,6 +92,7 @@ public class MotivateAbility : Effect, IMotivatedAbility
                 throw new ArgumentOutOfRangeException();
         }
     }
+
     public void ApplyMotivationStatus(Character character, Character enemy, MotivationStatusInfo motivationStatusInfo)
     {
         //Calculate 
@@ -177,6 +175,7 @@ public class MotivateAbility : Effect, IMotivatedAbility
                 ? motivationStatusInfo.CurrentStatName
                 : motivationStatusInfo.MaxStatName);
     }
+
     public void AddStackCount()
     {
         if (!IsStackable) return;
@@ -196,81 +195,47 @@ public class MotivateAbility : Effect, IMotivatedAbility
         if (!IsStackable) return;
         StackCount = 1;
     }
+
+    public bool IsMotivated(Character character, Character orOther, Func<float, float, bool> comparison)
+    {
+        if (MotivationInfo.MotivationStatusInfos?.Count == 0) return false;
+
+        Character target;
+        float criteriaValue = 0;
+        for (var i = 0; i < MotivationInfo.MotivationStatusInfos.Count; i++)
+        {
+            MotivationStatusInfo motivationData = MotivationInfo.MotivationStatusInfos[i];
+            target = motivationData.HasReflectMyStatus ? character : orOther;
+            
+            if(motivationData.ReflectValueUnitType is DataUnitType.Percentage)
+                criteriaValue = character.StatusAbility.GetStatusValue(motivationData.MaxStatName) * motivationData.ReflectValue * 0.01f;
+            if(motivationData.ReflectValueUnitType is DataUnitType.Numeric)
+                criteriaValue = motivationData.ReflectValue;
+            
+            bool isFulfillCondition =  comparison(target.StatusAbility.GetStatusValue(motivationData.CurrentStatName), criteriaValue);
+
+            if (!isFulfillCondition) return false;
+        }
+
+        return true;
+    }
+
     public bool IsMotivatedWhenGreater(Character character, Character orOther)
     {
-        if (MotivationInfo.MotivationStatusInfos is null) return false;
-        if (MotivationInfo.MotivationStatusInfos.Count == 0) return false;
-
-        Character target;
-        float criteriaValue = 0;
-        for (var i = 0; i < MotivationInfo.MotivationStatusInfos.Count; i++)
-        {
-            MotivationStatusInfo motivationData = MotivationInfo.MotivationStatusInfos[i];
-            target = motivationData.HasReflectMyStatus ? character : orOther;
-            
-            if(motivationData.ReflectValueUnitType is DataUnitType.Percentage)
-                criteriaValue = character.StatusAbility.GetStatusValue(motivationData.MaxStatName) * motivationData.ReflectValue * 0.01f;
-            if(motivationData.ReflectValueUnitType is DataUnitType.Numeric)
-                criteriaValue = motivationData.ReflectValue;
-            
-            bool isFulfillCondition =  target.StatusAbility.GetStatusValue(motivationData.CurrentStatName) > criteriaValue;
-
-            if (!isFulfillCondition) return false;
-        }
-
-        return true;
+        return IsMotivated(character, orOther, (x, y) => x > y);
     }
+
     public bool IsMotivatedWhenLess(Character character, Character orOther)
     {
-      
-        if (MotivationInfo.MotivationStatusInfos is null) return false;
-        if (MotivationInfo.MotivationStatusInfos.Count == 0) return false;
-
-        Character target;
-        float criteriaValue = 0;
-        for (var i = 0; i < MotivationInfo.MotivationStatusInfos.Count; i++)
-        {
-            MotivationStatusInfo motivationData = MotivationInfo.MotivationStatusInfos[i];
-            target = motivationData.HasReflectMyStatus ? character : orOther;
-            
-            if(motivationData.ReflectValueUnitType is DataUnitType.Percentage)
-                criteriaValue = character.StatusAbility.GetStatusValue(motivationData.MaxStatName) * motivationData.ReflectValue * 0.01f;
-            if(motivationData.ReflectValueUnitType is DataUnitType.Numeric)
-                criteriaValue = motivationData.ReflectValue;
-            
-            bool isFulfillCondition =  target.StatusAbility.GetStatusValue(motivationData.CurrentStatName) < criteriaValue;
-
-            if (!isFulfillCondition) return false;
-        }
-
-        return true;
+        return IsMotivated(character, orOther, (x, y) => x < y);
     }
+
     public bool IsMotivatedWhenApproximately(Character character, Character orOther, float threshold = 0.01f)
     {
-        
-        if (MotivationInfo.MotivationStatusInfos is null) return false;
-        if (MotivationInfo.MotivationStatusInfos.Count == 0) return false;
-
-        Character target;
-        float criteriaValue = 0;
-        for (var i = 0; i < MotivationInfo.MotivationStatusInfos.Count; i++)
-        {
-            MotivationStatusInfo motivationData = MotivationInfo.MotivationStatusInfos[i];
-            target = motivationData.HasReflectMyStatus ? character : orOther;
-            
-            if(motivationData.ReflectValueUnitType is DataUnitType.Percentage)
-                criteriaValue = character.StatusAbility.GetStatusValue(motivationData.MaxStatName) * motivationData.ReflectValue * 0.01f;
-            if(motivationData.ReflectValueUnitType is DataUnitType.Numeric)
-                criteriaValue = motivationData.ReflectValue;
-            
-            bool isFulfillCondition =  target.StatusAbility.GetStatusValue(motivationData.CurrentStatName) - criteriaValue < threshold;
-
-            if (!isFulfillCondition) return false;
-        }
-
-        return true;
+        return IsMotivated(character, orOther, (x, y) => Mathf.Abs(x - y) < threshold);
     }
-    public bool HitTheChance(float tryChance)
+
+    public bool IsHitChance(float tryChance)
     {
         return  tryChance <= Chance;
     }

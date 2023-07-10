@@ -1,15 +1,15 @@
-﻿using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class SearchStatusItem
 {
-    public StatusItemInfo statusItemInfo;
-    [FormerlySerializedAs("searchUnit")] public DataUnitType  searchUnitType;
+    [field:SerializeField] public StatusItemInfo StatusItemInfo { get; set; }
+    [field:SerializeField] public DataUnitType  SearchUnitType { get; set; }
     public bool isMeetCondition;
 
     public SearchStatusItem(StatusItemInfo statusItemInfo, DataUnitType searchUnitType)
     {
-        this.statusItemInfo = statusItemInfo;
-        this.searchUnitType = searchUnitType;
+        this.StatusItemInfo = statusItemInfo;
+        this.SearchUnitType = searchUnitType;
     }
 }

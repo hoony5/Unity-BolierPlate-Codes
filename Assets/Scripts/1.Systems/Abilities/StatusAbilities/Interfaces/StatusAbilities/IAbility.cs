@@ -4,7 +4,7 @@ public interface IAbility
 {
     bool IsStackable { get; set; }
     ApplyTargetType ApplyTargetType { get; set; }
-    bool HitTheChance(float tryChance);
+    bool IsHitChance(float tryChance);
     int ApplyTargetCount { get; set; }
     int StackCount { get; set; }
     int MaxStackCount { get; set; }

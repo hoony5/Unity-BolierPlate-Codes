@@ -3,17 +3,17 @@ using UnityEngine;
 [System.Serializable]
 public class Character : ModuleController, IGrowable
 {
-    [field: SerializeField] public int Level { get; private set; }
-    [field: SerializeField] public int MaxLevel { get; private set; }
-    [field: SerializeField] public int CurrentExp { get; private set; }
-    [field: SerializeField] public int MaxExp { get; private set; }
-    [field:SerializeField] public int CurrentEnergy { get; private set; }
-    [field: SerializeField] public Transform Transform { get; private set; }
-    [field: SerializeField] public CharacterType CharacterType { get; private set; }
-    [field: SerializeField] public Status StatusAbility { get; private set; }
+    [field: SerializeField] public int Level { get;  set; }
+    [field: SerializeField] public int MaxLevel { get;  set; }
+    [field: SerializeField] public int CurrentExp { get;  set; }
+    [field: SerializeField] public int MaxExp { get;  set; }
+    [field:SerializeField] public int CurrentEnergy { get;  set; }
+    [field: SerializeField] public Transform Transform { get;  set; }
+    [field: SerializeField] public CharacterType CharacterType { get;  set; }
+    [field: SerializeField] public Status StatusAbility { get;  set; }
 
-    [field: SerializeField] public PlayerAttributes Attributes { get; private set; }
-    [field: SerializeField] public CharacterBehaviour Behaviour { get; private set; }
+    [field: SerializeField] public PlayerAttributes Attributes { get;  set; }
+    [field: SerializeField] public CharacterBehaviour Behaviour { get;  set; }
 
     public Character()
     {

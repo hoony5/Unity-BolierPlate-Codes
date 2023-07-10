@@ -8,7 +8,7 @@ public class StatusItemInfo
 {
     [field: SerializeField] public string RawName { get; set; }
     [field: SerializeField] public string DisplayName { get; set; }
-    [field: SerializeField] public float Value { get; private set; }
+    [field: SerializeField] public float Value { get; set; }
     [field: SerializeField] public int Index { get; set; }
     public StatusItemInfo(){ }
     public StatusItemInfo(string rawName, string displayName, int index)

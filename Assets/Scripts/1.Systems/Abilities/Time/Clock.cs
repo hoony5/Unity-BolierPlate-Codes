@@ -2,15 +2,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[ToDo("싱글톤으로 해야하나?")]
-public class Clock : MonoBehaviour
+public class Clock : Singleton<Clock>
 {
-    private static Clock _instance;
-    public static Clock Instance => _instance;
-    
+    private const int InitialTimersCapacity = 64;
+
     [SerializeField] private bool isRunning;
     [SerializeField] private bool creatingOnAwake;
-    [SerializeField] private List<Timer> timers = new List<Timer>(64);
+    [SerializeField] private List<Timer> timers = new List<Timer>(InitialTimersCapacity);
     [SerializeField] private ushort maxCount;
 
     public async Task DispathcerTest()
@@ -18,17 +16,6 @@ public class Clock : MonoBehaviour
         Debug.Log($"before");
         await Task.Yield();
         Debug.Log($"after");
-    }
-    [ToDo("싱글톤에 대한 고민이 필요하다.")]
-    private void Awake()
-    {
-        if (_instance is null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this);
-            return;
-        }
-        DestroyImmediate(this);
     }
 
     private void Start()
@@ -41,10 +28,8 @@ public class Clock : MonoBehaviour
     {   
         if (!isRunning || timers.Count == 0) return;
 
-        int timersCount = timers.Count;
-        for (var index = 0; index < timersCount; index++)
+        foreach (Timer timer in timers)
         {
-            Timer timer = timers[index];
             bool canContinued = !timer.CheckCountPerSecond(Time.deltaTime);
             if(canContinued) continue;
             if(!timer.IsEnd()) continue;
@@ -54,10 +39,8 @@ public class Clock : MonoBehaviour
 
     public void Reset()
     {
-        int timersCount = timers.Count;
-        for (var index = 0; index < timersCount; index++)
+        foreach (var timer in timers)
         {
-            Timer timer = timers[index];
             timer.Reset();
             timer.ReleaseOwner();
         }
@@ -70,10 +53,9 @@ public class Clock : MonoBehaviour
     
     public Timer GetFreeTimer()
     {
-        var timersCount = timers.Count;
-        for (var index = 0; index < timersCount; index++)
+        foreach (var timer in timers)
         {
-            if (timers[index].Owner is null) return timers[index];
+            if (timer.Owner is null) return timer;
         }
 
         int startCount = timers.Count;

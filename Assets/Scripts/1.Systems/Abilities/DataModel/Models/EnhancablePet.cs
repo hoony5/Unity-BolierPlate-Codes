@@ -5,11 +5,11 @@ using UnityEngine;
 [Serializable]
 public class EnhancablePet : Pet, IEnhancable
 {
-    [field:SerializeField] public bool IsDisabled { get; private set; }
-    [field:SerializeField] public int Level { get; private set; }
-    [field:SerializeField] public int MaxLevel { get; private set; }
-    [field:SerializeField] public int CurrentExp { get; private set; }
-    [field:SerializeField] public int MaxExp { get; private set; }
+    [field:SerializeField] public bool IsDisabled { get;  set; }
+    [field:SerializeField] public int Level { get;  set; }
+    [field:SerializeField] public int MaxLevel { get;  set; }
+    [field:SerializeField] public int CurrentExp { get;  set; }
+    [field:SerializeField] public int MaxExp { get;  set; }
     
     public EnhancablePet(Pet pet)
     {

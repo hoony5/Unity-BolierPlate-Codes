@@ -1,41 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [System.Serializable]
 public class BattleEnvironment
 {
-    public int areaMask;
-    public float hitRate;
-    public float duration;
-    public float threshold;
-    public Collider[] effectTargets;
-    private Dictionary<string, Timer> effectTimers;
+    [field:SerializeField] public int AreaMask { get; private set; }
+    [field:SerializeField] public float HitRate { get; private set; }
+    [field:SerializeField] public float Duration { get; private set; }
+    [field:SerializeField] public float Threshold { get; private set; }
+    [field:SerializeField] public Collider[] EffectTargets { get; private set; }
+    [field: SerializeField] private SerializedDictionary<string, Timer> EffectTimers { get; set; }
 
     public BattleEnvironment()
     {
-        effectTargets = Array.Empty<Collider>();
-        effectTimers = new Dictionary<string, Timer>(24);
+        EffectTargets = Array.Empty<Collider>();
+        EffectTimers = new SerializedDictionary<string, Timer>(24);
     }
 
     public void Reset()
     {
-        areaMask = -1;
-        hitRate = 0;
-        duration = 0;
-        threshold = 0;
-        effectTargets = Array.Empty<Collider>();
-        if(effectTimers is null) 
-            effectTimers = new Dictionary<string, Timer>();
+        AreaMask = -1;
+        HitRate = 0;
+        Duration = 0;
+        Threshold = 0;
+        EffectTargets = Array.Empty<Collider>();
+        if(EffectTimers is null) 
+            EffectTimers = new SerializedDictionary<string, Timer>();
         else
-            effectTimers.Clear();
+            EffectTimers.Clear();
     }
     
     public void SetEffectTimer(string effectName, Timer timer)
     {
-        if(effectTimers.ContainsKey(effectName))
-            effectTimers[effectName] = timer;
-        else
-            effectTimers.Add(effectName, timer);
+        EffectTimers[effectName] = timer;
     }
 }

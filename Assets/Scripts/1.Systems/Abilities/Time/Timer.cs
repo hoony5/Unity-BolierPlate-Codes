@@ -26,7 +26,7 @@ public class Timer
     /// </summary>
     [field:SerializeField] public float Duration { get; private set; }
 
-    private List<Action<Object>> onTime;
+    private List<Action<Object>> onTime = new List<Action<Object>>(32);
     
     public Timer(ushort index, float maxTime, float duration, bool isLoop)
     {
@@ -38,9 +38,7 @@ public class Timer
         IsLoop = isLoop;
         IsPause = false;
         Index = index;
-        onTime = new List<Action<Object>>(32);
     }
-
     private bool checkLimitedTimers()
     {
         if(_runningTime >= MaxTime)

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using Utility.ExcelReader;
 
-public static class RowDataToObject
+public static class RowDataToObjectEx
 {
-    public static Dictionary<string, T> ConvertAll<T>(this ExcelSheetInfo sheetInfo, bool usingUnityJsonFormat = false)
+    public static SerializedDictionary<string, T> ConvertAll<T>(this ExcelSheetInfo sheetInfo, bool usingUnityJsonFormat = false)
     {
         Type getType = Type.GetType(sheetInfo.TypeName);
         
@@ -22,7 +23,7 @@ public static class RowDataToObject
             return null;
         }
 
-        Dictionary<string, T> result = new Dictionary<string, T>(sheetInfo.RowDataDict.Values.Count);
+        SerializedDictionary<string, T> result = new SerializedDictionary<string, T>(sheetInfo.RowDataDict.Values.Count);
         foreach (RowData rowData in sheetInfo.RowDataDict.Values)
         {
             T instance = JsonConvert.DeserializeObject<T>(CreateJsonFormat_Internal(rowData, usingUnityJsonFormat));

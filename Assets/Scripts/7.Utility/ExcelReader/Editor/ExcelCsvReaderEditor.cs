@@ -1,9 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using Utility.ExcelReader;
-using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 
 public class ExcelCsvReaderEditor : EditorWindow
 {

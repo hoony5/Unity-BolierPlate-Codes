@@ -3,28 +3,15 @@
 [System.Serializable]
 public class FormulaStat
 {
-    [field:SerializeField] public string FormulaName { get; private set; }
-    [field:SerializeField] public string StatusName { get; private set; }
-    [field:SerializeField] public ReflectStatTarget ReflectStatTarget { get; private set; }
-    [field:SerializeField] public float ReflectValue { get; private set; }
-    [field:SerializeField] public DataUnitType DataUnitType { get; private set; }
-    [field:SerializeField] private float[] BaseValues { get; set; }
-    [field:SerializeField] public int Level { get; private set; }
-    [field:SerializeField] public int MaxLevel { get; private set; }
-    [field:SerializeField] public float CalculatedValue { get; private set; }
-
-    public FormulaStat(string formulaName,string statusName, ReflectStatTarget reflectStatTarget, float reflectValue, DataUnitType dataUnitType, float[] baseValues, int maxLevel)
-    {
-        FormulaName = formulaName;
-        StatusName = statusName;
-        ReflectStatTarget = reflectStatTarget;
-        ReflectValue = reflectValue;
-        DataUnitType = dataUnitType;
-        BaseValues = baseValues;
-        Level = 1;
-        MaxLevel = maxLevel;
-    }
-
+    [field:SerializeField] public string FormulaName { get;  set; }
+    [field:SerializeField] public string StatusName { get;  set; }
+    [field:SerializeField] public ReflectStatTarget ReflectStatTarget { get;  set; }
+    [field:SerializeField] public float ReflectValue { get;  set; }
+    [field:SerializeField] public DataUnitType DataUnitType { get;  set; }
+    [field:SerializeField]  float[] BaseValues { get; set; }
+    [field:SerializeField] public int Level { get;  set; }
+    [field:SerializeField] public int MaxLevel { get;  set; }
+    [field:System.NonSerialized] public float CalculatedValue { get;  set; }
     public void SetLevel(int lv)
     {
         Level = lv;

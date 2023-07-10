@@ -17,7 +17,7 @@ public class DurationAbility : Effect, IDurationAbility
     {
         return currentDuration >= Duration;
     }
-    public bool HitTheChance(float tryChance)
+    public bool IsHitChance(float tryChance)
     {
         return  tryChance <= Chance;
     }

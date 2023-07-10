@@ -3,11 +3,11 @@
 [System.Serializable]
 public class Equipment : ModuleController, IEquipable, IDissolvable
 {
-    [field: SerializeField] public string Name { get; protected set; }
-    [field: SerializeField] public Transform Transform { get; protected set; }
-    [field: SerializeField] public int Count { get; protected set; }
-    [field:SerializeField] public Status StatusAbility { get; protected set; }
-    [field: SerializeField] public EquipmentAttributes Attributes { get; protected set; }
+    [field: SerializeField] public string Name { get;  set; }
+    [field: SerializeField] public Transform Transform { get;  set; }
+    [field: SerializeField] public int Count { get;  set; }
+    [field:SerializeField] public Status StatusAbility { get;  set; }
+    [field: SerializeField] public EquipmentAttributes Attributes { get;  set; }
     public void SetAttributes(EquipmentAttributes equipmentAttributes)
     {
         Attributes = equipmentAttributes;

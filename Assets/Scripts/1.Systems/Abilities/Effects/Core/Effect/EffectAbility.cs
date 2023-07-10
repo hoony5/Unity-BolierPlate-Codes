@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 public class EffectAbility
 {
-    public string effectName;
-    public List<EffectAbilityInfo> abilityInfos;
+    [field:SerializeField]public string EffectName { get; set; }
+    [field:SerializeField]public List<EffectAbilityInfo> AbilityInfos { get; set; }
 
     public EffectAbility(string effectName, List<EffectAbilityInfo> abilityInfos)
     {
-        this.effectName = effectName;
-        this.abilityInfos = abilityInfos;
+        this.EffectName = effectName;
+        this.AbilityInfos = abilityInfos;
     }
 }

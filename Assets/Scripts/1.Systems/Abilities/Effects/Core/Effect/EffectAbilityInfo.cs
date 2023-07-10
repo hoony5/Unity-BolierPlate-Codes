@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 public class EffectAbilityInfo
 {
-    public string abilityName;
-    public List<EffectAbilityStat> abtilityStats;
+    [field:SerializeField] public string AbilityName { get; set; }
+    [field:SerializeField] public List<EffectAbilityStat> AbtilityStats { get; set; }
 
     public EffectAbilityInfo(string abilityName)
     {
-        this.abilityName = abilityName;
+        this.AbilityName = abilityName;
         if (abilityName == "Empty") return;
-        abtilityStats = new List<EffectAbilityStat>(16);
+        AbtilityStats = new List<EffectAbilityStat>(16);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class StatusBaseAbility
 {
     [field:SerializeField]  public string Name { get; set; }
-    [field: SerializeField] protected SerializedDictionary<string, StatusItemInfo> statusItems = new SerializedDictionary<string, StatusItemInfo>(128);
+    [field:SerializeField] protected SerializedDictionary<string, StatusItemInfo> statusItems = new SerializedDictionary<string, StatusItemInfo>(128);
     public StatusBaseAbility(){}
     public StatusBaseAbility(string name) => Name = name;
     public void Clear()

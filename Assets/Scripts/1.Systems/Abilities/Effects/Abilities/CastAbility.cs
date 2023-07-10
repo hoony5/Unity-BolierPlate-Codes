@@ -17,7 +17,7 @@ public class CastAbility : Effect, IThresholdAbility
     {
         return  threshold >= Threshold;
     }
-    public bool HitTheChance(float tryChance)
+    public bool IsHitChance(float tryChance)
     {
         return  tryChance <= Chance;
     }

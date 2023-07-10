@@ -3,11 +3,10 @@
 [System.Serializable]
 public class StatusItem : ModuleController
 {
-    [field: SerializeField] public string Name { get; protected set; }
-    [field: SerializeField] public Transform Transform { get; set; }
-    [field: SerializeField] public int Count { get; protected set; }
-    [field: SerializeField] public StatusItemAttributes Attributes { get; protected set; }
-    [field:SerializeField] public Status StatusAbility { get; protected set; }
+    [field: SerializeField] public string Name { get;  set; }
+    [field: SerializeField] public int Count { get;  set; }
+    [field: SerializeField] public StatusItemAttributes Attributes { get;  set; }
+    [field:SerializeField] public Status StatusAbility { get;  set; }
     public void SetAttributes(StatusItemAttributes statusItemAttributes)
     {
         Attributes = statusItemAttributes;

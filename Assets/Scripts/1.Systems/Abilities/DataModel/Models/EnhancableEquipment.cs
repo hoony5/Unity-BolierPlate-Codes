@@ -3,11 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public class EnhancableEquipment : Equipment , IEnhancable
 {
-    [field:SerializeField] public bool IsDisabled { get; private set; }
-    [field:SerializeField] public int Level { get; private set; }
-    [field:SerializeField] public int MaxLevel { get; private set; }
-    [field:SerializeField] public int CurrentExp { get; private set; }
-    [field:SerializeField] public int MaxExp { get; private set; }
+    [field:SerializeField] public bool IsDisabled { get;  set; }
+    [field:SerializeField] public int Level { get;  set; }
+    [field:SerializeField] public int MaxLevel { get;  set; }
+    [field:SerializeField] public int CurrentExp { get;  set; }
+    [field:SerializeField] public int MaxExp { get;  set; }
 
     public EnhancableEquipment(Equipment equipment)
     {

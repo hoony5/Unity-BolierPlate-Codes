@@ -20,7 +20,7 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility, ISearchStateAbi
 
     public bool IsHitChance(float chance) => chance <= Chance;
 
-    public bool SearchTarget(Character other, string index)
+    public bool SearchTarget(Character other)
     {
         switch (SearchType)
         {
@@ -29,7 +29,7 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility, ISearchStateAbi
             case SearchType.Status:
                 return FindCharacterStatus(other);
             case SearchType.State:
-                return FindCharacterState(other, index);
+                return FindCharacterState(other);
             case SearchType.Tag:
                 return FindTag(other);
             default:
@@ -49,12 +49,12 @@ public class SearchStatusAbility : Effect, ISearchStatusAbility, ISearchStateAbi
         return true;
     }
 
-    public bool FindCharacterState(Character character, string stateName)
+    public bool FindCharacterState(Character character)
     {
-        bool positiveBattleEffect = character.StatusAbility.EffectDashBoard.ExistPositiveBattleEffect(stateName);
-        bool negativeBattleEffect = character.StatusAbility.EffectDashBoard.ExistNegativeBattleEffect(stateName);
-        bool positiveGlobalEffect = character.StatusAbility.EffectDashBoard.ExistPositiveGlobalEffect(stateName);
-        bool negativeGlobalEffect = character.StatusAbility.EffectDashBoard.ExistNegativeGlobalEffect(stateName);
+        bool positiveBattleEffect = character.StatusAbility.EffectDashBoard.ExistPositiveBattleEffect(SearchState);
+        bool negativeBattleEffect = character.StatusAbility.EffectDashBoard.ExistNegativeBattleEffect(SearchState);
+        bool positiveGlobalEffect = character.StatusAbility.EffectDashBoard.ExistPositiveGlobalEffect(SearchState);
+        bool negativeGlobalEffect = character.StatusAbility.EffectDashBoard.ExistNegativeGlobalEffect(SearchState);
 
         return positiveGlobalEffect || negativeGlobalEffect || positiveBattleEffect || negativeBattleEffect;
     }

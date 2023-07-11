@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
+// structure is => DataManager (core) => ModelDataManager + ReferenceDataManager
+//              => ModelDataManager (Center) => Cache ModelSO
+//             => ReferenceDataManager (Sub) => Cache AbilitySO & BattleBehaviourSO 
+//             => SOCreator (Factory) => ModelSO = AbilitySO + BattleBehaviourSO or ModelSO = BattleBehaviourSO or ModelSO = AbilitySO
 [Serializable]
-public class DataManager : Singleton<DataManager>
+public class ModelDataManager : MonoBehaviour
 {
     [field: SerializeField] private SerializedDictionary<string, BattleBehaviourSO> BattleBehaviourSos { get; set; }
     [field: SerializeField] private SerializedDictionary<string, UsableStatusItemSO> UsableStatusItemSos { get; set; }

@@ -2,35 +2,37 @@
 
 public class BattleLogic
 {
-    private IEnumerator AttackRoutine()
+    private IEnumerator AttackRoutine(Character from, Character to)
+    {
+        
+        yield break;
+    }
+    private IEnumerator ReactRoutine(Character from, Character to)
     {
         yield break;
     }
-    private IEnumerator ReactRoutine()
-    {
-        yield break;
-    }
-    private IEnumerator PlayAnimRoutine()
-    {
-        yield break;
-    }
-    
-    private IEnumerator UIRoutine()
+    private IEnumerator PlayAnimRoutine(Character player)
     {
         yield break;
     }
     
-    private IEnumerator SFXRoutine()
+    private IEnumerator UIRoutine(Character a, Character b)
     {
         yield break;
     }
     
-    private IEnumerator VFXRoutine()
+    [ToDo("")]
+    private IEnumerator SFXRoutine(Character a, Character b)
     {
         yield break;
     }
     
-    private IEnumerator ResultRoutine()
+    private IEnumerator VFXRoutine(Character a, Character b)
+    {
+        yield break;
+    }
+    
+    private IEnumerator ResultRoutine(Character player)
     {
         yield break;
     }

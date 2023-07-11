@@ -65,17 +65,24 @@ public class TodoListWindow : EditorWindow
         foreach (var kvp in todoDict)
         {
             string fileName = Path.GetFileName(kvp.Key);
+            if (kvp.Key == null) continue;
+
             string pathWithoutFileName = kvp.Key.Replace(fileName, "");
             string[] pathElements = pathWithoutFileName.Split('/');
             string stylizedPathWithoutFileName = "";
-            
+
             for (int pathElementIndex = 0;
                  pathElementIndex < pathElements.Length - 1;
                  pathElementIndex++)
             {
-                stylizedPathWithoutFileName += $"<color={colors[pathElementIndex % colors.Length]}>{pathElements[pathElementIndex]} ▶</color>";
+                stylizedPathWithoutFileName +=
+                    $"<color={colors[pathElementIndex % colors.Length]}>{pathElements[pathElementIndex]} ▶</color>";
             }
-            EditorGUILayout.LabelField($"<b>{index}</b>. {stylizedPathWithoutFileName}{fileName}  (Todo Count : <color=yellow>{kvp.Value.Count}</color>)", new GUIStyle(GUI.skin.label){richText = true});
+
+            EditorGUILayout.LabelField(
+                $"<b>{index}</b>. {stylizedPathWithoutFileName}{fileName}  (Todo Count : <color=yellow>{kvp.Value.Count}</color>)",
+                new GUIStyle(GUI.skin.label) { richText = true });
+
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Open", GUILayout.Height(24)))
@@ -83,7 +90,7 @@ public class TodoListWindow : EditorWindow
                 AssetDatabase.OpenAsset(AssetDatabase.LoadAssetAtPath<MonoScript>(kvp.Key));
             }
 
-            bool show = showDetails.ContainsKey(kvp.Key) ? showDetails[kvp.Key] : false;
+            bool show = showDetails.TryGetValue(kvp.Key, out bool detail) && detail;
 
             string label = show ? "Hide Detail" : "View Detail";
 
@@ -95,7 +102,7 @@ public class TodoListWindow : EditorWindow
 
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(15);
-            
+
             index++;
             if (!show) continue;
             EditorGUI.indentLevel += 2;
@@ -106,16 +113,18 @@ public class TodoListWindow : EditorWindow
                 (string targetName, string message, int order) todo = orderedArray[i];
                 string color = "green";
                 if (i < 3) color = "red";
-                if (2 < i  && i < 6) color = "yellow";
-                EditorGUILayout.LabelField($"<color={color}><b>{todo.order}</b></color>. {todo.targetName} {(todo.message.Length >= 30 ? " ▼ Read here " : todo.message.Replace('▲', '◀'))}",
+                if (2 < i && i < 6) color = "yellow";
+                EditorGUILayout.LabelField(
+                    $"<color={color}><b>{todo.order}</b></color>. {todo.targetName} {(todo.message.Length >= 30 ? " ▼ Read here " : todo.message.Replace('▲', '◀'))}",
                     new GUIStyle(GUI.skin.label) { richText = true });
 
                 EditorGUILayout.EndHorizontal();
 
                 if (todo.message.Length < 30) continue;
-                    
+
                 EditorGUILayout.Space(5);
-                elementScrollPositions[kvp.Key][i] = EditorGUILayout.BeginScrollView(elementScrollPositions[kvp.Key][i], GUILayout.Height(200f), GUILayout.ExpandWidth(true));
+                elementScrollPositions[kvp.Key][i] = EditorGUILayout.BeginScrollView(elementScrollPositions[kvp.Key][i],
+                    GUILayout.Height(200f), GUILayout.ExpandWidth(true));
                 todo.message = EditorGUILayout.TextArea(todo.message.Replace('◀', '▲'),
                     new GUIStyle(GUI.skin.textArea)
                     {
@@ -126,6 +135,7 @@ public class TodoListWindow : EditorWindow
                 EditorGUILayout.EndScrollView();
                 EditorGUILayout.Space(10);
             }
+
             EditorGUILayout.Space(15);
 
             EditorGUI.indentLevel -= 2;

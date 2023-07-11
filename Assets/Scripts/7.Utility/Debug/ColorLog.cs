@@ -8,271 +8,271 @@ using Object = UnityEngine.Object;
 using UnityEditor;
 #endif
 
-public class DebugEx : Debug
+public class ColorLog : Debug
 {
     #region Color
     public static void Cyan(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=cyan> {title} :: {message}</color>");
         else
             Log($"<color=cyan> {title} :: {message}</color>", context);
     }
     public static void Black(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=black> {title} :: {message}</color>");
         else
             Log($"<color=black> {title} :: {message}</color>", context);
     }
     public static void Brown(object title, object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=brown> {title} :: {message}</color>");
         else
             Log($"<color=brown> {title} :: {message}</color>", context);
     }
     public static void DBlue(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=blue > {title} :: {message}</color>");
         else
             Log($"<color=blue> {title} :: {message}</color>", context);
     }
     public static void Magenta(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=magenta> {title} :: {message}</color>");
         else
             Log($"<color=magenta> {title} :: {message}</color>", context);
     }
     public static void Green(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=green> {title} :: {message}</color>");
         else
             Log($"<color=green> {title} :: {message}</color>", context);
     }
     public static void Gray(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=gray> {title} :: {message}</color>");
         else
             Log($"<color=gray> {title} :: {message}</color>", context);
     }
     public static void LBlue(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=lightblue> {title} :: {message}</color>");
         else
             Log($"<color=lightblue> {title} :: {message}</color>", context);
     }
     public static void Lime(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=lime> {title} :: {message}</color>");
         else
             Log($"<color=lime> {title} :: {message}</color>", context);
     }
     public static void Maroon(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=maroon> {title} :: {message}</color>");
         else
             Log($"<color=maroon> {title} :: {message}</color>", context);
     }
     public static void Navy(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=navy> {title} :: {message}</color>");
         else
             Log($"<color=navy> {title} :: {message}</color>", context);
     }
     public static void Olive(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=olive> {title} :: {message}</color>");
         else
             Log($"<color=olive> {title} :: {message}</color>", context);
     }
     public static void Orange(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=orange> {title} :: {message}</color>");
         else
             Log($"<color=orange> {title} :: {message}</color>", context);
     }
     public static void Purple(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=purple> {title} :: {message}</color>");
         else
             Log($"<color=purple> {title} :: {message}</color>", context);
     }
     public static void Red(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=red> {title} :: {message}</color>");
         else
             Log($"<color=red> {title} :: {message}</color>", context);
     }
     public static void Silver(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=silver> {title} :: {message}</color>");
         else
             Log($"<color=silver> {title} :: {message}</color>", context);
     }
     public static void LogTeal(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=teal> {title} :: {message}</color>");
         else
             Log($"<color=teal> {title} :: {message}</color>", context);
     }
     public static void White(object title, object message, Object context = null)
     {
-        if(context != null)
+        if(context is null)
             Log($"<color=white> {title} :: {message}</color>");
         else
             Log($"<color=white> {title} :: {message}</color>", context);
     }
     public static void Yellow(object title, object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=yellow> {title} :: {message}</color>");
         else
             Log($"<color=yellow> {title} :: {message}</color>", context);
     }
     public static void Cyan(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=cyan>{message}</color>");
         else
             Log($"<color=cyan>{message}</color>", context);
     }
     public static void Black(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=black>{message}</color>");
         else
             Log($"<color=black>{message}</color>", context);
     }
     public static void Brown(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=brown>{message}</color>");
         else
             Log($"<color=brown>{message}</color>", context);
     }
     public static void DBlue(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=blue >{message}</color>");
         else
             Log($"<color=blue>{message}</color>", context);
     }
     public static void Magenta(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=magenta>{message}</color>");
         else
             Log($"<color=magenta>{message}</color>", context);
     }
     public static void Green(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=green>{message}</color>");
         else
             Log($"<color=green>{message}</color>", context);
     }
     public static void Gray(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=gray>{message}</color>");
         else
             Log($"<color=gray>{message}</color>", context);
     }
     public static void LBlue(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=lightblue>{message}</color>");
         else
             Log($"<color=lightblue>{message}</color>", context);
     }
     public static void Lime(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=lime>{message}</color>");
         else
             Log($"<color=lime>{message}</color>", context);
     }
     public static void Maroon(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=maroon>{message}</color>");
         else
             Log($"<color=maroon>{message}</color>", context);
     }
     public static void Navy(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=navy>{message}</color>");
         else
             Log($"<color=navy>{message}</color>", context);
     }
     public static void Olive(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=olive>{message}</color>");
         else
             Log($"<color=olive>{message}</color>", context);
     }
     public static void Orange(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=orange>{message}</color>");
         else
             Log($"<color=orange>{message}</color>", context);
     }
     public static void Purple(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=purple>{message}</color>");
         else
             Log($"<color=purple>{message}</color>", context);
     }
     public static void Red(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=red>{message}</color>");
         else
             Log($"<color=red>{message}</color>", context);
     }
     public static void Silver(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=silver>{message}</color>");
         else
             Log($"<color=silver>{message}</color>", context);
     }
     public static void LogTeal(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=teal>{message}</color>");
         else
             Log($"<color=teal>{message}</color>", context);
     }
     public static void White(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=white>{message}</color>");
         else
             Log($"<color=white>{message}</color>", context);
     }
     public static void Yellow(object message, Object context = null)
     {
-        if (context != null)
+        if (context is null)
             Log($"<color=yellow>{message}</color>");
         else
             Log($"<color=yellow>{message}</color>", context);
@@ -525,7 +525,7 @@ public static class LayerMaskExtensions
 {
     public static bool ContainsLayer(this LayerMask layerMask, int layer)
     {
-        return (layerMask.value & (1 << layer)) != 0;
+        return (layerMask.value & (1 << layer)) is 0;
     }
 }
 

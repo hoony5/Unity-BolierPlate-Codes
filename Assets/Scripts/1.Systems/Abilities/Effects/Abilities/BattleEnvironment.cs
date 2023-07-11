@@ -9,7 +9,7 @@ public class BattleEnvironment
     [field:SerializeField] public float HitRate { get; private set; }
     [field:SerializeField] public float Duration { get; private set; }
     [field:SerializeField] public float Threshold { get; private set; }
-    [field:SerializeField] public Collider[] EffectTargets { get; private set; }
+    [field:SerializeField] public Collider[] EffectTargets { get; set; }
     [field: SerializeField] private SerializedDictionary<string, Timer> EffectTimers { get; set; }
 
     public BattleEnvironment()
